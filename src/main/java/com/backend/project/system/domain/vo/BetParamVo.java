@@ -17,7 +17,7 @@ public class BetParamVo implements Serializable {
 
     private Double betAmountZero;
 
-    private Double oddsZero;
+    private Double oddsZero = 0d;
 
     private Double reward0;
 
@@ -41,7 +41,7 @@ public class BetParamVo implements Serializable {
 
     private Double betAmountFour;
 
-    private Double oddsFour;
+    private Double oddsFour = 0d;
 
     private Double reward4;
 
