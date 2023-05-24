@@ -39,6 +39,30 @@ public class BetParamVo implements Serializable {
 
     private Double reward3;
 
+    private Double betAmountFour;
+
+    private Double oddsFour;
+
+    private Double reward4;
+
+    private Double betAmountFive;
+
+    private Double oddsFive;
+
+    private Double reward5;
+
+    private Double betAmountSix;
+
+    private Double oddsSix;
+
+    private Double reward6;
+
+    private Double betAmountSeven;
+
+    private Double oddsSeven;
+
+    private Double reward7;
+
     private Double betAmountHg;
 
     private Double oddsHg;
