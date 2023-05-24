@@ -49,7 +49,7 @@ public class LotterySchedule {
     /**
      * task - polling history data
      */
-    @Scheduled(cron="0 31 02 20 4 ?")
+//    @Scheduled(cron="0 31 02 20 4 ?")
     private void pollingLotteryHistoryData() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             String baseDate = "2023-04-18";
@@ -114,7 +114,7 @@ public class LotterySchedule {
     /**
      * task - create blank record for number analyze
      */
-    @Scheduled(cron="5 0 0 * * ?")
+//    @Scheduled(cron="5 0 0 * * ?")
 //    @Scheduled(cron="0 12 21 * * ?")
     private void createNumberAnalyze() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
@@ -130,7 +130,7 @@ public class LotterySchedule {
     /**
      * task - repair data
      */
-    @Scheduled(cron="0 42 0 15 4 ?")
+//    @Scheduled(cron="0 42 0 15 4 ?")
     private void repairData() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
@@ -156,7 +156,7 @@ public class LotterySchedule {
     /**
      * task - calculate real-time lottery data
      */
-    @Scheduled(cron="0/15 * * * * ?")
+//    @Scheduled(cron="0/15 * * * * ?")
 //    @Scheduled(fixedDelay = 1000L)
 //    @Scheduled(cron="0 19 22 13 4 ?")
     private void lotteryDataCalculate() {

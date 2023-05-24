@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 投注参数信息vo类
  */
 @Data
-public class BetParamVo implements Serializable {
+public class BetParamVo extends BetHGVo implements Serializable {
 
     /**
      * 投注金额基数

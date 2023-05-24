@@ -35,6 +35,7 @@ public class DecodeFilter implements Filter {
             "/system/open/api/getPreOrder",
             "/system/open/api/orderConfirm",
             "/ws/*",
+            "/system/open/api/ball/betCheck",
     };
 
     private String[] noCheckMethod = new String[]{//无需验证方法
@@ -51,6 +52,7 @@ public class DecodeFilter implements Filter {
             "/system/open/api/getPreOrder",
             "/system/open/api/orderConfirm",
             "/ws/*",
+            "/system/open/api/ball/betCheck",
     };
 
     @Override
@@ -114,7 +116,7 @@ public class DecodeFilter implements Filter {
                         return;
                     }
                 }
-                if (length > 1 && StringUtils.isNotBlank(data)) {
+                /*if (length > 1 && StringUtils.isNotBlank(data)) {
                     try {
                         data = AesUtil.aesDecryptCbc(data);
                         log.info("解密后的参数：" + data);
@@ -128,7 +130,7 @@ public class DecodeFilter implements Filter {
                                 "}");
                         return;
                     }
-                }
+                }*/
                 if (StringUtils.isBlank(data) || "{}".equals(data.trim()) || "undefined".equals(data.trim())) {
                     //data = "{\"isAsc\": \"asc\",\"orderByColumn\": \"id\"}";
                     //data = "{\"pageNum\": 1,\"pageSize\": 3}";
