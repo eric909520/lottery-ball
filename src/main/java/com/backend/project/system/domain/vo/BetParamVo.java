@@ -10,6 +10,11 @@ import java.io.Serializable;
 @Data
 public class BetParamVo implements Serializable {
 
+    /**
+     * 投注金额基数
+     */
+    private Double betBaseAmount;
+
     private Double betAmountZero;
 
     private Double oddsZero;
