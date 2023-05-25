@@ -67,8 +67,6 @@ public class BetParamVo extends BetHGVo implements Serializable {
 
     private Double oddsHg;
 
-    private Double rewardHG3;
-
-    private Double rewardHGOther;
+    private Double rewardHG;
 
 }
