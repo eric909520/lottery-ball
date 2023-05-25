@@ -74,8 +74,8 @@ public class AdaptationAmount {
         Double rewardFive = betParamVo.getReward5();
         Double rewardSix = betParamVo.getReward6();
         Double rewardSeven = betParamVo.getReward7();
-        if(rewardZero != null && rewardThree == null){
-            if(rewardThree == null ){
+        if(rewardZero != null && rewardZero >= 0 && rewardThree == null && rewardThree <= 0){
+            if(rewardThree == null && rewardThree <= 0){
                 if(rewardZero < 0 && rewardOne < 0 && rewardTwo <0 && rewardHG < 0) {
                    log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " HG:" + rewardHG);
                  return null;
@@ -131,7 +131,7 @@ public class AdaptationAmount {
         /**
          * 0 1 2 3
          */
-        if(rewardZero != null && rewardThree != null){
+        if(rewardZero != null && rewardZero > 0 && rewardThree != null && rewardThree > 0){
             if(rewardZero < 0 && rewardOne < 0 && rewardTwo < 0 && rewardThree < 0 && rewardHG < 0) {
                 log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " 3球："+ rewardThree +" HG:" + rewardHG);
                 return null;
@@ -231,7 +231,7 @@ public class AdaptationAmount {
         /**
          *  4 5 6 7+
          */
-        if(rewardFour != null){
+        if(rewardFour != null && rewardFour > 0){
             if(rewardFour < 0 && rewardFive < 0 && rewardSix < 0 && rewardSeven < 0 && rewardHG < 0 && rewardHG < 0) {
                 log.info("收益均为负数 无法投注：4球："+rewardFour +" 5球："+rewardFive +" 6球："+ rewardSix + " 7球："+ rewardSeven +" HG:" + rewardHG);
                 return null;
