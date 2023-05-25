@@ -24,10 +24,10 @@ public class AdaptationAmount {
             Double betTwoAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsTwo());
             betParamVo.setBetAmountTwo(betTwoAmount);
 
-            Double HGBet = CalcUtil.div(betZeroAmount, betParamVo.getOddsHg()+1);
+            Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
             betParamVo.setBetAmountHg(HGBet);
 
-            if(betParamVo.getOddsThree() != null){
+            if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
                 Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
                 betParamVo.setBetAmountThree(betThreeAmount);
             }
@@ -62,9 +62,7 @@ public class AdaptationAmount {
      * @return
      */
     public static  BetParamVo AdaptationBet (BetParamVo betParamVo){
-        /**
-         * 0 1 2
-         */
+
         Double rewardZero = betParamVo.getReward0();
         Double rewardOne = betParamVo.getReward1();
         Double rewardTwo = betParamVo.getReward2();
@@ -74,8 +72,11 @@ public class AdaptationAmount {
         Double rewardFive = betParamVo.getReward5();
         Double rewardSix = betParamVo.getReward6();
         Double rewardSeven = betParamVo.getReward7();
-        if(rewardZero != null && rewardZero >= 0 && rewardThree == null && rewardThree <= 0){
-            if(rewardThree == null && rewardThree <= 0){
+        /**
+         * 0 1 2
+         */
+        if(betParamVo.getOddsZero() > 0 && betParamVo.getOddsThree() == 0){
+            if(rewardThree == null || rewardThree <= 0){
                 if(rewardZero < 0 && rewardOne < 0 && rewardTwo <0 && rewardHG < 0) {
                    log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " HG:" + rewardHG);
                  return null;
@@ -131,7 +132,7 @@ public class AdaptationAmount {
         /**
          * 0 1 2 3
          */
-        if(rewardZero != null && rewardZero > 0 && rewardThree != null && rewardThree > 0){
+        if(rewardZero > 0 && rewardThree > 0){
             if(rewardZero < 0 && rewardOne < 0 && rewardTwo < 0 && rewardThree < 0 && rewardHG < 0) {
                 log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " 3球："+ rewardThree +" HG:" + rewardHG);
                 return null;
