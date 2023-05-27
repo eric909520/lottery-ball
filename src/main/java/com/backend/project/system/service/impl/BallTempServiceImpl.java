@@ -53,6 +53,7 @@ public class BallTempServiceImpl implements IBallTempService {
         /** 4、大2/2.5, 体彩小 012,皇冠 大2/2.5, 2球皇冠输一半 */
         Double 大2_25 = betParamVo.get大2_25();
         if (大2_25 != null && 大2_25 != 0) {
+            log.info("体彩小 012, 皇冠 大2/2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大2_25);
             betParamVo.setBetAmountHg(betParamVo.get大2_25Amount());
             SP012_HG大2_25(betParamVo);
@@ -102,8 +103,12 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param betParamVo
      */
     public void SP012_HG大2(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
         // 体彩参数
         double betAmountZero = betParamBase.getBetAmountZero();
         double oddsZero = betParamBase.getOddsZero();
@@ -176,8 +181,13 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param betParamVo
      */
     public void SP012_HG大35(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
+
         // 体彩参数
         // 体彩返水比例
         double betAmountZero = betParamBase.getBetAmountZero();
@@ -373,8 +383,12 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param betParamVo
      */
     public void SP012_HG大2_25(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
         // 体彩参数
         double betAmountZero = betParamBase.getBetAmountZero();
         double oddsZero = betParamBase.getOddsZero();
@@ -558,8 +572,12 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param betParamVo
      */
     public void SP4567_HG小35(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
         // 体彩参数
         double betAmountFour = betParamBase.getBetAmountFour();
         double oddsFour = betParamBase.getOddsFour();
@@ -654,8 +672,12 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param betParamVo
      */
     public void SP4567_HG小35_4(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
         // 体彩参数
         double betAmountFour = betParamBase.getBetAmountFour();
         double oddsFour = betParamBase.getOddsFour();
