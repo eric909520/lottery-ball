@@ -5,6 +5,7 @@ import com.backend.framework.web.domain.AjaxResult;
 import com.backend.project.system.domain.vo.BetHGVo;
 import com.backend.project.system.domain.vo.BetParamVo;
 import com.backend.project.system.service.IBallService;
+import com.backend.project.system.service.IBallTempService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,9 @@ public class BallOpenApiController extends BaseController {
     @Resource
     private IBallService ballService;
 
+    @Resource
+    private IBallTempService ballTempService;
+
     /**
      * 投注测试
      */
@@ -31,6 +35,21 @@ public class BallOpenApiController extends BaseController {
     public AjaxResult betCheck(@RequestBody BetParamVo betParamVo) {
         try {
             ballService.betCheck(betParamVo);
+
+            return AjaxResult.success();
+        } catch (Exception e) {
+            log.info("API - betCheck exception ----->>>>", e);
+            return AjaxResult.error();
+        }
+    }
+
+    /**
+     * 投注测试
+     */
+    @PostMapping(value = "/betCheckTemp")
+    public AjaxResult betCheckTemp(@RequestBody BetParamVo betParamVo) {
+        try {
+            ballTempService.betCheck(betParamVo);
 
             return AjaxResult.success();
         } catch (Exception e) {

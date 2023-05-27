@@ -31,7 +31,6 @@ public class AdaptationAmount {
                 Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
                 betParamVo.setBetAmountThree(betThreeAmount);
             }
-            return betParamVo;
         }
         /**
          * 4 5 6 7+
@@ -51,9 +50,8 @@ public class AdaptationAmount {
 
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
             betParamVo.setBetAmountHg(HGBet);
-            return  betParamVo;
         }
-        return null;
+        return  betParamVo;
     }
 
     /**
