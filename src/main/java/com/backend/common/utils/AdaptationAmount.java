@@ -16,20 +16,20 @@ public class AdaptationAmount {
          */
         if(betParamVo.getOddsZero() != 0 && betParamVo.getOddsZero() != null){
             Double betZeroAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsZero());
-            betParamVo.setBetAmountZero(betZeroAmount);
+            betParamVo.setBetAmountZero(Rounding(betZeroAmount));
 
             Double betOneAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsOne());
-            betParamVo.setBetAmountOne(betOneAmount);
+            betParamVo.setBetAmountOne(Rounding(betOneAmount));
 
             Double betTwoAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsTwo());
-            betParamVo.setBetAmountTwo(betTwoAmount);
+            betParamVo.setBetAmountTwo(Rounding(betTwoAmount));
 
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
-            betParamVo.setBetAmountHg(HGBet);
+            betParamVo.setBetAmountHg(Rounding(HGBet));
 
             if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
                 Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
-                betParamVo.setBetAmountThree(betThreeAmount);
+                betParamVo.setBetAmountThree(Rounding(betThreeAmount));
             }
         }
         /**
@@ -37,19 +37,19 @@ public class AdaptationAmount {
          */
         if(betParamVo.getOddsFour()!= 0 && betParamVo.getOddsFour() != null){
             Double betFourAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFour());
-            betParamVo.setBetAmountFour(betFourAmount);
+            betParamVo.setBetAmountFour(Rounding(betFourAmount));
 
             Double betFiveAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFive());
-            betParamVo.setBetAmountFour(betFiveAmount);
+            betParamVo.setBetAmountFive(Rounding(betFiveAmount));
 
             Double betSixAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSix());
-            betParamVo.setBetAmountSix(betSixAmount);
+            betParamVo.setBetAmountSix(Rounding(betSixAmount));
 
             Double betSevenAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSeven());
-            betParamVo.setBetAmountFour(betSevenAmount);
+            betParamVo.setBetAmountSeven(Rounding(betSevenAmount));
 
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
-            betParamVo.setBetAmountHg(HGBet);
+            betParamVo.setBetAmountHg(Rounding(HGBet));
         }
         return  betParamVo;
     }
@@ -342,6 +342,10 @@ public class AdaptationAmount {
     }
 
 
+         public static  Double Rounding(Double d){
+             Integer round = Math.round(d.intValue() / 10) * 10;
+             return round.doubleValue();
+         }
 
 
 
