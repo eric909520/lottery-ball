@@ -38,31 +38,19 @@ public class AAA {
         /** 0球数据 */
         double bonusZero = CalcUtil.mul(betAmountZero, oddsZero); // 奖金
         Double reward0 = CalcUtil.sub(CalcUtil.add(bonusZero, rebateSPAmount, rebateHGAmountAll), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        System.out.println("0球数据++++++++++");
-        System.out.println("奖金：" + bonusZero);
-        System.out.println("体彩返水：" + rebateSPAmount);
-        System.out.println("皇冠返水：" + rebateHGAmountAll);
-        System.out.println("收益：" + reward0);
-        System.out.println("-----------------------------------------------------------------");
+        System.out.println("0球收益：" + reward0);
+        System.out.println("-------------------");
 
         /** 1球数据 */
         double bonusOne = CalcUtil.mul(betAmountOne, oddsOne); // 奖金
         Double reward1 = CalcUtil.sub(CalcUtil.add(bonusOne, rebateSPAmount, rebateHGAmountAll), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        System.out.println("1球数据++++++++++");
-        System.out.println("奖金：" + bonusOne);
-        System.out.println("体彩返水：" + rebateSPAmount);
-        System.out.println("皇冠返水：" + rebateHGAmountAll);
-        System.out.println("收益：" + reward1);
+        System.out.println("1球收益：" + reward1);
         System.out.println("-----------------------------------------------------------------");
 
         /** 2球数据 */
         double bonusTwo = CalcUtil.mul(betAmountTwo, oddsTwo); // 奖金
         Double reward2 = CalcUtil.sub(CalcUtil.add(bonusTwo, rebateSPAmount, rebateHGAmountAll), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        System.out.println("2球数据++++++++++");
-        System.out.println("奖金：" + bonusTwo);
-        System.out.println("体彩返水：" + rebateSPAmount);
-        System.out.println("皇冠返水：" + rebateHGAmountAll);
-        System.out.println("收益：" + reward2);
+        System.out.println("2球收益：" + reward2);
         System.out.println("-----------------------------------------------------------------");
 
         /** 皇冠中球 */

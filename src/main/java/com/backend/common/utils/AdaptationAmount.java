@@ -10,26 +10,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdaptationAmount {
 
-    public static String adaptation(BetParamVo betParamVo){
+    public static BetParamVo adaptation(BetParamVo betParamVo){
+        BetParamVo betParamTemp = new BetParamVo();
         /**
          * 0 1 2 3
          */
         if(betParamVo.getOddsZero() != 0 && betParamVo.getOddsZero() != null){
             Double betZeroAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsZero());
-            betParamVo.setBetAmountZero(Rounding(betZeroAmount));
+            betParamTemp.setBetAmountZero(Rounding(betZeroAmount));
 
             Double betOneAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsOne());
-            betParamVo.setBetAmountOne(Rounding(betOneAmount));
+            betParamTemp.setBetAmountOne(Rounding(betOneAmount));
 
             Double betTwoAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsTwo());
-            betParamVo.setBetAmountTwo(Rounding(betTwoAmount));
+            betParamTemp.setBetAmountTwo(Rounding(betTwoAmount));
 
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
-            betParamVo.setBetAmountHg(Rounding(HGBet));
+            betParamTemp.setBetAmountHg(Rounding(HGBet));
 
             if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
                 Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
-                betParamVo.setBetAmountThree(Rounding(betThreeAmount));
+                betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
             }
         }
         /**
@@ -37,22 +38,21 @@ public class AdaptationAmount {
          */
         if(betParamVo.getOddsFour()!= 0 && betParamVo.getOddsFour() != null){
             Double betFourAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFour());
-            betParamVo.setBetAmountFour(Rounding(betFourAmount));
+            betParamTemp.setBetAmountFour(Rounding(betFourAmount));
 
             Double betFiveAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFive());
-            betParamVo.setBetAmountFive(Rounding(betFiveAmount));
+            betParamTemp.setBetAmountFive(Rounding(betFiveAmount));
 
             Double betSixAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSix());
-            betParamVo.setBetAmountSix(Rounding(betSixAmount));
+            betParamTemp.setBetAmountSix(Rounding(betSixAmount));
 
             Double betSevenAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSeven());
-            betParamVo.setBetAmountSeven(Rounding(betSevenAmount));
+            betParamTemp.setBetAmountSeven(Rounding(betSevenAmount));
 
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
-            betParamVo.setBetAmountHg(Rounding(HGBet));
+            betParamTemp.setBetAmountHg(Rounding(HGBet));
         }
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(betParamVo);
-        return  jsonObject.toJSONString();
+        return betParamTemp;
     }
 
     /**
@@ -360,7 +360,5 @@ public class AdaptationAmount {
         betParamVo.setOddsFive(4.8);
         betParamVo.setOddsSix(4.8);
         betParamVo.setOddsSeven(4.8);
-        String adaptation = AdaptationAmount.adaptation(betParamVo);
-        System.out.println(adaptation);
     }
 }
