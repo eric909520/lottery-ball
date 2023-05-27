@@ -2,28 +2,18 @@ package com.backend.project.system.service.impl;
 
 import com.backend.common.utils.AdaptationAmount;
 import com.backend.common.utils.CalcUtil;
-import com.backend.common.utils.DateUtils;
-import com.backend.project.system.domain.LotteryData;
-import com.backend.project.system.domain.NumberAnalyze;
 import com.backend.project.system.domain.vo.BetParamVo;
-import com.backend.project.system.mapper.LotteryDataMapper;
-import com.backend.project.system.schedule.LotterySchedule;
 import com.backend.project.system.service.IBallService;
-import com.backend.project.system.service.ILotteryService;
+import com.backend.project.system.service.IBallTempService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.*;
-
 /**
- *
- *
  * @author
  */
 @Slf4j
 @Service
-public class BallServiceImpl implements IBallService {
+public class BallTempServiceImpl implements IBallTempService {
 
     // 体彩固定返水比例
     private final static double rebateSP = 0.12;
@@ -77,13 +67,13 @@ public class BallServiceImpl implements IBallService {
             SP012_HG大25_3(betParamVo);
         }
 
-        /** 6、大3/3.5, 体彩小 0123,皇冠 大3/3.5 */
+        /** 6、大3/3.5, 体彩小 0123,皇冠 大3/3.5 ,3球体彩赢，皇冠输一半*/
         Double 大3_35 = betParamVo.get大3_35();
         if (大3_35 != null && 大3_35 != 0) {
             log.info("体彩小 0123, 皇冠大3/3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大3_35);
             betParamVo.setBetAmountHg(betParamVo.get大3_35Amount());
-            SP012_HG大35(betParamVo);
+            SP012_HG大3_35(betParamVo);
         }
 
         /** 7、小3.5, 体彩大 4567+,皇冠 小3.5 */
@@ -95,7 +85,7 @@ public class BallServiceImpl implements IBallService {
             SP4567_HG小35(betParamVo);
         }
 
-        /** 8、小3.5/4, 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠赢一半 */
+        /** 8、小3.5/4, 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠输一半 */
         Double 小35_4 = betParamVo.get小35_4();
         if (小35_4 != null && 小35_4 != 0) {
             log.info("体彩大 4567+, 皇冠小3.5/4 ------------------------------------------------------");
@@ -112,8 +102,8 @@ public class BallServiceImpl implements IBallService {
      * @param betParamVo
      */
     public void SP012_HG大2(BetParamVo betParamVo) {
-        BetParamVo betParamBase = betParamVo;
-//        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+//        BetParamVo betParamBase = betParamVo;
+        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
         // 体彩参数
         double betAmountZero = betParamBase.getBetAmountZero();
         double oddsZero = betParamBase.getOddsZero();
@@ -125,6 +115,7 @@ public class BallServiceImpl implements IBallService {
         double oddsTwo = betParamBase.getOddsTwo();
 
         // 皇冠参数
+        // 皇冠返水比例
         double betAmountLarge = betParamBase.getBetAmountHg();
         double oddsLarge = betParamBase.getOddsHg();
 
@@ -133,6 +124,12 @@ public class BallServiceImpl implements IBallService {
 
         log.info("体彩赔率：0球：" + betParamBase.getOddsZero() + ", 1球：" + betParamBase.getOddsOne()
                 + ", 2球：" + betParamBase.getOddsTwo() + ", 皇冠赔率：" + betParamBase.getOddsHg());
+        log.info("投注额：0球：" + betParamBase.getBetAmountZero() + ", 1球：" + betParamBase.getBetAmountOne()
+                + ", 2球：" + betParamBase.getBetAmountTwo() + ", 皇冠：" + betParamBase.getBetAmountHg());
+        log.info("体彩总投注：" + CalcUtil.add(betParamBase.getBetAmountZero(), betParamBase.getBetAmountOne(), betParamBase.getBetAmountTwo())
+                + ", 皇冠总投注：" + betParamBase.getBetAmountHg());
+
+        Double betAmountAll = CalcUtil.add(betParamBase.getBetAmountZero(), betParamBase.getBetAmountOne(), betParamBase.getBetAmountTwo(), betParamBase.getBetAmountHg());
 
         /** 体彩中球 */
         // 皇冠返水
@@ -141,92 +138,40 @@ public class BallServiceImpl implements IBallService {
         /** 0球数据 */
         double bonusZero = CalcUtil.mul(betAmountZero, oddsZero); // 奖金
         Double reward0 = CalcUtil.sub(CalcUtil.add(bonusZero, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        betParamBase.setReward0(reward0);
+        log.info("0球数据++++++++++");
+        log.info("奖金：" + bonusZero);
+        log.info("体彩返水：" + rebateSPAmount + ", 皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward0 + ", 收益率：" + CalcUtil.divide(reward0, betAmountAll, 1));
 
         /** 1球数据 */
         double bonusOne = CalcUtil.mul(betAmountOne, oddsOne); // 奖金
         Double reward1 = CalcUtil.sub(CalcUtil.add(bonusOne, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        betParamBase.setReward1(reward1);
+        log.info("1球数据++++++++++");
+        log.info("奖金：" + bonusOne);
+        log.info("体彩返水：" + rebateSPAmount + ", 皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward1 + ", 收益率：" + CalcUtil.divide(reward1, betAmountAll, 1));
 
         /** 2球数据 */
         double bonusTwo = CalcUtil.mul(betAmountTwo, oddsTwo); // 奖金
         Double reward2 = CalcUtil.sub(CalcUtil.add(bonusTwo, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountLarge);
-        betParamBase.setReward2(reward2);
+        log.info("2球数据++++++++++");
+        log.info("奖金：" + bonusTwo);
+        log.info("体彩返水：" + rebateSPAmount + ", 皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward2 + ", 收益率：" + CalcUtil.divide(reward2, betAmountAll, 1));
 
         /** 皇冠中球 */
         double bonusLarge = CalcUtil.mul(betAmountLarge, oddsLarge); // 奖金
         // 皇冠返水 - 皇冠中球返水 按出奖金额作为基础金额
         double rebateHGAmount1 = CalcUtil.mul(bonusLarge, rebateHG);
         Double rewardLarge = CalcUtil.sub(CalcUtil.add(bonusLarge, rebateSPAmount, rebateHGAmount1), betAmountZero, betAmountOne, betAmountTwo);
-        betParamBase.setRewardHG(rewardLarge);
-
-        BetParamVo betParamNew = AdaptationAmount.AdaptationBet(betParamBase);
-
-        /**
-         * 数据重新计算
-         */
-        double betAmountLargeNew = betParamNew.getBetAmountHg();
-        /** 体彩中球 */
-        // 体彩返水
-        double rebateSPAmountNew = CalcUtil.mul(CalcUtil.add(betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo()), rebateSP);
-        // 皇冠返水
-        double rebateHGAmountNew = CalcUtil.mul(betParamNew.getBetAmountHg(), rebateHG);
-
-        /** 0球数据 */
-        double bonusZeroNew = CalcUtil.mul(betParamNew.getBetAmountZero(), oddsZero); // 奖金
-        Double reward0New = CalcUtil.sub(CalcUtil.add(bonusZeroNew, rebateSPAmountNew, rebateHGAmountNew), betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo(), betAmountLargeNew);
-        betParamBase.setReward0(reward0New);
-
-        /** 1球数据 */
-        double bonusOneNew = CalcUtil.mul(betParamNew.getBetAmountOne(), oddsOne); // 奖金
-        Double reward1New = CalcUtil.sub(CalcUtil.add(bonusOneNew, rebateSPAmountNew, rebateHGAmountNew), betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo(), betAmountLargeNew);
-        betParamBase.setReward1(reward1New);
-
-        /** 2球数据 */
-        double bonusTwoNew = CalcUtil.mul(betParamNew.getBetAmountTwo(), oddsTwo); // 奖金
-        Double reward2New = CalcUtil.sub(CalcUtil.add(bonusTwoNew, rebateSPAmountNew, rebateHGAmountNew), betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo(), betAmountLargeNew);
-        betParamBase.setReward2(reward2New);
-
-        /** 皇冠中球 */
-        double bonusLargeNew = CalcUtil.mul(betAmountLargeNew, oddsLarge); // 奖金
-        // 皇冠返水 - 皇冠中球返水 按出奖金额作为基础金额
-        double rebateHGAmount1New = CalcUtil.mul(bonusLargeNew, rebateHG);
-        Double rewardLargeNew = CalcUtil.sub(CalcUtil.add(bonusLargeNew, rebateSPAmountNew, rebateHGAmount1New), betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo());
-        betParamBase.setRewardHG(rewardLargeNew);
-
-        Double betAmountAll = CalcUtil.add(betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo(), betParamNew.getBetAmountHg());
-
-        log.info("投注额：0球：" + betParamNew.getBetAmountZero() + ", 1球：" + betParamNew.getBetAmountOne()
-                + ", 2球：" + betParamNew.getBetAmountTwo() + ", 皇冠：" + betParamNew.getBetAmountHg());
-
-        log.info("体彩总投注：" + CalcUtil.add(betParamNew.getBetAmountZero(), betParamNew.getBetAmountOne(), betParamNew.getBetAmountTwo())
-                + ", 皇冠总投注：" + betParamNew.getBetAmountHg());
-
-        log.info("0球数据++++++++++");
-        log.info("奖金：" + bonusZeroNew);
-        log.info("体彩返水：" + rebateSPAmountNew + ", 皇冠返水：" + rebateHGAmountNew);
-        log.info("收益：" + reward0New + ", 收益率：" + CalcUtil.divide(reward0New, betAmountAll, 3));
-
-        log.info("1球数据++++++++++");
-        log.info("奖金：" + bonusOneNew);
-        log.info("体彩返水：" + rebateSPAmountNew + ", 皇冠返水：" + rebateHGAmountNew);
-        log.info("收益：" + reward1New + ", 收益率：" + CalcUtil.divide(reward1New, betAmountAll, 3));
-
-        log.info("2球数据++++++++++");
-        log.info("奖金：" + bonusTwoNew);
-        log.info("体彩返水：" + rebateSPAmountNew + ", 皇冠返水：" + rebateHGAmountNew);
-        log.info("收益：" + reward2New + ", 收益率：" + CalcUtil.divide(reward2New, betAmountAll, 3));
-
         log.info("皇冠中球数据++++++++++");
-        log.info("奖金：" + bonusLargeNew);
-        log.info("体彩返水：" + rebateSPAmountNew + ", 皇冠返水：" + rebateHGAmount1New);
-        log.info("收益：" + rewardLargeNew + ", 收益率：" + CalcUtil.divide(rewardLargeNew, betAmountAll, 3));
-
-
+        log.info("奖金：" + bonusLarge);
+        log.info("体彩返水：" + rebateSPAmount + ", 皇冠返水：" + rebateHGAmount1);
+        log.info("收益：" + rewardLarge + ", 收益率：" + CalcUtil.divide(rewardLarge, betAmountAll, 1));
     }
 
     /**
-     * 大3.5 || 大3/3.5
+     * 大3.5
      * 体彩小 0123,皇冠 大3.5 全输全赢
      * @param betParamVo
      */
@@ -321,6 +266,108 @@ public class BallServiceImpl implements IBallService {
     }
 
     /**
+     * 大3/3.5
+     * 体彩小 0123,皇冠 大3/3.5 3球体彩赢，皇冠输一半
+     * @param betParamVo
+     */
+    public void SP012_HG大3_35(BetParamVo betParamVo) {
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
+        // 体彩参数
+        // 体彩返水比例
+        double betAmountZero = betParamBase.getBetAmountZero();
+        double oddsZero = betParamBase.getOddsZero();
+
+        double betAmountOne = betParamBase.getBetAmountOne();
+        double oddsOne = betParamBase.getOddsOne();
+
+        double betAmountTwo = betParamBase.getBetAmountTwo();
+        double oddsTwo = betParamBase.getOddsTwo();
+
+        double betAmountThree = betParamBase.getBetAmountThree();
+        double oddsThree = betParamBase.getOddsThree();
+
+        // 皇冠参数
+        double betAmountLarge = betParamBase.getBetAmountHg();
+        double oddsLarge = betParamBase.getOddsHg();
+
+        // 体彩返水
+        double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountZero, betAmountOne, betAmountTwo, betAmountThree), rebateSP);
+
+        log.info("体彩赔率：0球：" + betParamBase.getOddsZero() + ", 1球：" + betParamBase.getOddsOne()
+                + ", 2球：" + betParamBase.getOddsTwo() + ", 3球：" + betParamBase.getOddsThree() + ", 皇冠赔率：" + betParamBase.getOddsHg());
+        log.info("投注额：0球：" + betParamBase.getBetAmountZero() + ", 1球：" + betParamBase.getBetAmountOne()
+                + ", 2球：" + betParamBase.getBetAmountTwo() + ", 3球：" + betParamBase.getBetAmountThree() + ", 皇冠：" + betParamBase.getBetAmountHg());
+        log.info("体彩总投注：" + CalcUtil.add(betParamBase.getBetAmountZero(), betParamBase.getBetAmountOne(), betParamBase.getBetAmountTwo(), betParamBase.getBetAmountThree())
+                + ", 皇冠总投注：" + betParamBase.getBetAmountHg());
+
+        Double betAmountAll = CalcUtil.add(betParamBase.getBetAmountZero(), betParamBase.getBetAmountOne(), betParamBase.getBetAmountTwo(), betParamBase.getBetAmountThree(), betParamBase.getBetAmountHg());
+
+        /** 体彩中球 */
+        Double rewardHg = CalcUtil.div(betAmountLarge, 2);
+        // 皇冠返水
+        double rebateHGAmount = CalcUtil.mul(betAmountLarge, rebateHG);
+        Double rebateHGAmountHalf = CalcUtil.div(rebateHGAmount, 2);
+
+
+        /** 0球数据 */
+        double bonusZero = CalcUtil.mul(betAmountZero, oddsZero); // 奖金
+        Double reward0 = CalcUtil.sub(CalcUtil.add(bonusZero, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountThree, betAmountLarge);
+        betParamBase.setReward0(reward0);
+        log.info("0球数据++++++++++");
+        log.info("奖金：" + bonusZero);
+        log.info("体彩返水：" + rebateSPAmount);
+        log.info("皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward0 + ", 收益率：" + CalcUtil.divide(reward0, betAmountAll, 3));
+
+        /** 1球数据 */
+        double bonusOne = CalcUtil.mul(betAmountOne, oddsOne); // 奖金
+        Double reward1 = CalcUtil.sub(CalcUtil.add(bonusOne, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountThree, betAmountLarge);
+        betParamBase.setReward1(reward1);
+        log.info("1球数据++++++++++");
+        log.info("奖金：" + bonusOne);
+        log.info("体彩返水：" + rebateSPAmount);
+        log.info("皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward1 + ", 收益率：" + CalcUtil.divide(reward1, betAmountAll, 3));
+
+        /** 2球数据 */
+        double bonusTwo = CalcUtil.mul(betAmountTwo, oddsTwo); // 奖金
+        Double reward2 = CalcUtil.sub(CalcUtil.add(bonusTwo, rebateSPAmount, rebateHGAmount), betAmountZero, betAmountOne, betAmountTwo, betAmountThree, betAmountLarge);
+        betParamBase.setReward2(reward2);
+        log.info("2球数据++++++++++");
+        log.info("奖金：" + bonusTwo);
+        log.info("体彩返水：" + rebateSPAmount);
+        log.info("皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward2 + ", 收益率：" + CalcUtil.divide(reward2, betAmountAll, 3));
+
+        /** 3球数据 */
+        double bonusThree = CalcUtil.mul(betAmountThree, oddsThree); // 奖金
+        Double reward3 = CalcUtil.sub(CalcUtil.add(bonusThree, rebateSPAmount, rebateHGAmountHalf), betAmountZero, betAmountOne, betAmountTwo, betAmountThree, rewardHg);
+        betParamBase.setReward3(reward3);
+        log.info("3球数据++++++++++");
+        log.info("奖金：" + bonusThree);
+        log.info("体彩返水：" + rebateSPAmount);
+        log.info("皇冠返水：" + rebateHGAmount);
+        log.info("收益：" + reward3 + ", 收益率：" + CalcUtil.divide(reward3, betAmountAll, 3));
+
+        /** 皇冠中球 */
+        double bonusLarge = CalcUtil.mul(betAmountLarge, oddsLarge); // 奖金
+        // 皇冠返水 - 皇冠中球返水 按出奖金额作为基础金额
+        double rebateHGAmount1 = CalcUtil.mul(bonusLarge, rebateHG);
+        Double rewardLarge = CalcUtil.sub(CalcUtil.add(bonusLarge, rebateSPAmount, rebateHGAmount1), betAmountZero, betAmountOne, betAmountTwo, betAmountThree);
+        betParamBase.setRewardHG(rewardLarge);
+        log.info("皇冠中球数据++++++++++");
+        log.info("奖金：" + bonusLarge);
+        log.info("体彩返水：" + rebateSPAmount);
+        log.info("皇冠返水：" + rebateHGAmount1);
+        log.info("收益：" + rewardLarge + ", 收益率：" + CalcUtil.divide(rewardLarge, betAmountAll, 3));
+    }
+
+    /**
      * 大2/2。5
      * 体彩小 012,皇冠 大2/2。5, 2球皇冠输一半
      * @param betParamVo
@@ -329,18 +376,18 @@ public class BallServiceImpl implements IBallService {
 //        BetParamVo betParamBase = betParamVo;
         BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
         // 体彩参数
-        double betAmountZero = betParamVo.getBetAmountZero();
-        double oddsZero = betParamVo.getOddsZero();
+        double betAmountZero = betParamBase.getBetAmountZero();
+        double oddsZero = betParamBase.getOddsZero();
 
-        double betAmountOne = betParamVo.getBetAmountOne();
-        double oddsOne = betParamVo.getOddsOne();
+        double betAmountOne = betParamBase.getBetAmountOne();
+        double oddsOne = betParamBase.getOddsOne();
 
-        double betAmountTwo = betParamVo.getBetAmountTwo();
-        double oddsTwo = betParamVo.getOddsTwo();
+        double betAmountTwo = betParamBase.getBetAmountTwo();
+        double oddsTwo = betParamBase.getOddsTwo();
 
         // 皇冠参数
-        double betAmountLarge = betParamVo.getBetAmountHg();
-        double oddsLarge = betParamVo.getOddsHg();
+        double betAmountLarge = betParamBase.getBetAmountHg();
+        double oddsLarge = betParamBase.getOddsHg();
 
         // 体彩返水
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountZero, betAmountOne, betAmountTwo), rebateSP);
@@ -410,24 +457,28 @@ public class BallServiceImpl implements IBallService {
      * @param betParamVo
      */
     public void SP012_HG大25_3(BetParamVo betParamVo) {
-//        BetParamVo betParamBase = betParamVo;
-        BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
+        BetParamVo betParamBase;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            betParamBase = AdaptationAmount.adaptation(betParamVo);
+        } else {
+            betParamBase = betParamVo;
+        }
         // 体彩参数
-        double betAmountZero = betParamVo.getBetAmountZero();
-        double oddsZero = betParamVo.getOddsZero();
+        double betAmountZero = betParamBase.getBetAmountZero();
+        double oddsZero = betParamBase.getOddsZero();
 
-        double betAmountOne = betParamVo.getBetAmountOne();
-        double oddsOne = betParamVo.getOddsOne();
+        double betAmountOne = betParamBase.getBetAmountOne();
+        double oddsOne = betParamBase.getOddsOne();
 
-        double betAmountTwo = betParamVo.getBetAmountTwo();
-        double oddsTwo = betParamVo.getOddsTwo();
+        double betAmountTwo = betParamBase.getBetAmountTwo();
+        double oddsTwo = betParamBase.getOddsTwo();
 
-        double betAmountThree = betParamVo.getBetAmountThree();
-        double oddsThree = betParamVo.getOddsThree();
+        double betAmountThree = betParamBase.getBetAmountThree();
+        double oddsThree = betParamBase.getOddsThree();
 
         // 皇冠参数
-        double betAmountLarge = betParamVo.getBetAmountHg();
-        double oddsLarge = betParamVo.getOddsHg();
+        double betAmountLarge = betParamBase.getBetAmountHg();
+        double oddsLarge = betParamBase.getOddsHg();
 
         // 体彩返水
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountZero, betAmountOne, betAmountTwo, betAmountThree), rebateSP);
@@ -443,7 +494,7 @@ public class BallServiceImpl implements IBallService {
 
         /** 体彩中球 */
         // 皇冠出奖
-        Double rewardHG = CalcUtil.div(betAmountLarge, 2);
+        Double rewardHG = CalcUtil.div(CalcUtil.mul(betAmountLarge, oddsLarge), 2);
         // 皇冠返水
         double rebateHGAmountHalf = CalcUtil.mul(rewardHG, rebateHG);
         double rebateHGAmountAll = CalcUtil.mul(betAmountLarge, rebateHG);
@@ -480,7 +531,7 @@ public class BallServiceImpl implements IBallService {
         
         /** 3球数据 */
         double bonusThree = betAmountThree * oddsThree; // 奖金
-        Double reward3 = CalcUtil.sub(CalcUtil.add(bonusThree, rebateSPAmount, rebateHGAmountHalf, rewardHG), betAmountZero, betAmountOne, betAmountThree, betAmountTwo, betAmountThree);
+        Double reward3 = CalcUtil.sub(CalcUtil.add(bonusThree, rebateSPAmount, rebateHGAmountHalf, rewardHG), betAmountZero, betAmountOne, betAmountTwo, betAmountThree);
         betParamBase.setReward3(reward3);
         log.info("3球数据++++++++++");
         log.info("奖金：" + bonusThree);
@@ -510,21 +561,21 @@ public class BallServiceImpl implements IBallService {
 //        BetParamVo betParamBase = betParamVo;
         BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
         // 体彩参数
-        double betAmountFour = betParamVo.getBetAmountFour();
-        double oddsFour = betParamVo.getOddsFour();
+        double betAmountFour = betParamBase.getBetAmountFour();
+        double oddsFour = betParamBase.getOddsFour();
 
-        double betAmountFive = betParamVo.getBetAmountFive();
-        double oddsFive = betParamVo.getOddsFive();
+        double betAmountFive = betParamBase.getBetAmountFive();
+        double oddsFive = betParamBase.getOddsFive();
 
-        double betAmountSix = betParamVo.getBetAmountSix();
-        double oddsSix = betParamVo.getOddsSix();
+        double betAmountSix = betParamBase.getBetAmountSix();
+        double oddsSix = betParamBase.getOddsSix();
 
-        double betAmountSeven = betParamVo.getBetAmountSeven();
-        double oddsSeven = betParamVo.getOddsSeven();
+        double betAmountSeven = betParamBase.getBetAmountSeven();
+        double oddsSeven = betParamBase.getOddsSeven();
 
         // 皇冠参数
-        double betAmountSmall = betParamVo.getBetAmountHg();
-        double oddsSmall = betParamVo.getOddsHg();
+        double betAmountSmall = betParamBase.getBetAmountHg();
+        double oddsSmall = betParamBase.getOddsHg();
 
         // 体彩返水
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountFour, betAmountFive, betAmountSix, betAmountSeven), rebateSP);
@@ -599,28 +650,28 @@ public class BallServiceImpl implements IBallService {
 
     /**
      * 小3.5/4
-     * 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠赢一半
+     * 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠输一半
      * @param betParamVo
      */
     public void SP4567_HG小35_4(BetParamVo betParamVo) {
 //        BetParamVo betParamBase = betParamVo;
         BetParamVo betParamBase = AdaptationAmount.adaptation(betParamVo);
         // 体彩参数
-        double betAmountFour = betParamVo.getBetAmountFour();
-        double oddsFour = betParamVo.getOddsFour();
+        double betAmountFour = betParamBase.getBetAmountFour();
+        double oddsFour = betParamBase.getOddsFour();
 
-        double betAmountFive = betParamVo.getBetAmountFive();
-        double oddsFive = betParamVo.getOddsFive();
+        double betAmountFive = betParamBase.getBetAmountFive();
+        double oddsFive = betParamBase.getOddsFive();
 
-        double betAmountSix = betParamVo.getBetAmountSix();
-        double oddsSix = betParamVo.getOddsSix();
+        double betAmountSix = betParamBase.getBetAmountSix();
+        double oddsSix = betParamBase.getOddsSix();
 
-        double betAmountSeven = betParamVo.getBetAmountSeven();
-        double oddsSeven = betParamVo.getOddsSeven();
+        double betAmountSeven = betParamBase.getBetAmountSeven();
+        double oddsSeven = betParamBase.getOddsSeven();
 
         // 皇冠参数
-        double betAmountSmall = betParamVo.getBetAmountHg();
-        double oddsSmall = betParamVo.getOddsHg();
+        double betAmountSmall = betParamBase.getBetAmountHg();
+        double oddsSmall = betParamBase.getOddsHg();
 
         // 体彩返水
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountFour, betAmountFive, betAmountSix, betAmountSeven), rebateSP);
