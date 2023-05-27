@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AdaptationAmount {
 
-    public static BetParamVo adaptation(BetParamVo betParamVo){
+    public static String adaptation(BetParamVo betParamVo){
         /**
          * 0 1 2 3
          */
@@ -51,7 +51,8 @@ public class AdaptationAmount {
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
             betParamVo.setBetAmountHg(Rounding(HGBet));
         }
-        return  betParamVo;
+        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(betParamVo);
+        return  jsonObject.toJSONString();
     }
 
     /**
@@ -359,9 +360,7 @@ public class AdaptationAmount {
         betParamVo.setOddsFive(4.8);
         betParamVo.setOddsSix(4.8);
         betParamVo.setOddsSeven(4.8);
-        BetParamVo adaptation = AdaptationAmount.adaptation(betParamVo);
-
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(adaptation);
-        System.out.println(jsonObject);
+        String adaptation = AdaptationAmount.adaptation(betParamVo);
+        System.out.println(adaptation);
     }
 }
