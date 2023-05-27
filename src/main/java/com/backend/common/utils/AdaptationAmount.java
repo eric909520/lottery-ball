@@ -74,11 +74,13 @@ public class AdaptationAmount {
          * 0 1 2
          */
         if(betParamVo.getOddsZero() > 0 && betParamVo.getOddsThree() == 0){
-            if(rewardThree == null || rewardThree <= 0){
-                if(rewardZero < 0 && rewardOne < 0 && rewardTwo <0 && rewardHG < 0) {
-                   log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " HG:" + rewardHG);
-                 return null;
-                }
+            if(rewardZero < 0 && rewardOne < 0 && rewardTwo < 0 && rewardHG < 0) {
+                log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " HG:" + rewardHG);
+                return null;
+            }
+            if(rewardZero > 0 && rewardOne > 0 && rewardTwo > 0 && rewardHG > 0) {
+                log.info("收益均为正 无需调整：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " HG:" + rewardHG);
+                return betParamVo;
             }
             // 0球单负
             if(rewardZero < 0 && rewardOne > 0 && rewardTwo > 0 && rewardHG > 0){
@@ -130,10 +132,14 @@ public class AdaptationAmount {
         /**
          * 0 1 2 3
          */
-        if(rewardZero > 0 && rewardThree > 0){
+        if(betParamVo.getOddsZero() > 0 && betParamVo.getOddsThree() > 0){
             if(rewardZero < 0 && rewardOne < 0 && rewardTwo < 0 && rewardThree < 0 && rewardHG < 0) {
                 log.info("收益均为负数 无法投注：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " 3球："+ rewardThree +" HG:" + rewardHG);
                 return null;
+            }
+            if(rewardZero > 0 && rewardOne > 0 && rewardTwo > 0 && rewardThree > 0 && rewardHG > 0) {
+                log.info("收益均为正 无需调整：0球："+rewardZero +" 1球："+rewardOne +" 2球："+ rewardTwo + " 3球："+ rewardThree + " HG:" + rewardHG);
+                return betParamVo;
             }
             // 0球负
             if(rewardZero < 0 && rewardOne > 0 && rewardTwo > 0 && rewardThree >0 && rewardHG > 0){
@@ -230,10 +236,14 @@ public class AdaptationAmount {
         /**
          *  4 5 6 7+
          */
-        if(rewardFour != null && rewardFour > 0){
+        if(betParamVo.getOddsFour() > 0){
             if(rewardFour < 0 && rewardFive < 0 && rewardSix < 0 && rewardSeven < 0 && rewardHG < 0 && rewardHG < 0) {
                 log.info("收益均为负数 无法投注：4球："+rewardFour +" 5球："+rewardFive +" 6球："+ rewardSix + " 7球："+ rewardSeven +" HG:" + rewardHG);
                 return null;
+            }
+            if(rewardFour > 0 && rewardFive > 0 && rewardSix > 0 && rewardSeven > 0 && rewardHG > 0 && rewardHG > 0) {
+                log.info("收益均为正 无需调配：4球："+rewardFour +" 5球："+rewardFive +" 6球："+ rewardSix + " 7球："+ rewardSeven +" HG:" + rewardHG);
+                return betParamVo;
             }
             // 4球负
             if(rewardFour < 0 && rewardFive > 0 && rewardSix > 0 && rewardSeven > 0 && rewardHG > 0){
