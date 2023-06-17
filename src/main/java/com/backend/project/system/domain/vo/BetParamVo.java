@@ -69,4 +69,17 @@ public class BetParamVo extends BetHGVo implements Serializable {
 
     private Double rewardHG;
 
+    /**
+     * 单关参数
+     */
+    // 胜
+    private Double betAmountWin;
+
+    private Double oddsWin;
+
+    // 负
+    private Double betAmountLose;
+
+    private Double oddsLose;
+
 }

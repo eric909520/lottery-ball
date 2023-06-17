@@ -71,4 +71,28 @@ public class BetHGVo implements Serializable {
 
     private Double 小35_4Amount;
 
+    /**
+     * 单关参数
+     */
+    /** 让球赔率 */
+    // 主队加
+    private Double homeAdd05;
+
+    private Double homeAdd05Amount;
+
+    // 主队减
+    private Double homeCut05;
+
+    private Double homeCut05Amount;
+
+    // 客队加
+    private Double visitAdd05;
+
+    private Double visitAdd05Amount;
+
+    // 客队减
+    private Double visitCut05;
+
+    private Double visitCut05Amount;
+
 }

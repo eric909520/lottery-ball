@@ -44,12 +44,27 @@ public class BallOpenApiController extends BaseController {
     }
 
     /**
-     * 投注测试
+     * 投注测试 - 012
      */
     @PostMapping(value = "/betCheckTemp")
     public AjaxResult betCheckTemp(@RequestBody BetParamVo betParamVo) {
         try {
             ballTempService.betCheck(betParamVo);
+
+            return AjaxResult.success();
+        } catch (Exception e) {
+            log.info("API - betCheck exception ----->>>>", e);
+            return AjaxResult.error();
+        }
+    }
+
+    /**
+     * 投注测试 - 单关胜平负
+     */
+    @PostMapping(value = "/betCheckSingle")
+    public AjaxResult betCheckSingle(@RequestBody BetParamVo betParamVo) {
+        try {
+            ballTempService.betCheckSingle(betParamVo);
 
             return AjaxResult.success();
         } catch (Exception e) {

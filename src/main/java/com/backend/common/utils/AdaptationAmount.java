@@ -56,6 +56,62 @@ public class AdaptationAmount {
     }
 
     /**
+     * 单关打法金额调配
+     * @param betAmountSp
+     * @param oddsHg
+     * @param betAmountHg
+     * @param rewardSp
+     * @param rewardHg
+     * @return
+     */
+    public static Double amountDeployment(Double betAmountSp, Double oddsHg, Double betAmountHg, Double rewardSp, Double rewardHg) {
+        if (rewardSp <0 && rewardHg <0) {
+            return null;
+        } else if (rewardSp <0 || rewardHg <0) { // 单边收益负
+            // 收益差
+            Double rewardSub = CalcUtil.add(rewardSp, rewardHg);
+            if (rewardSub < 0) {
+                // 两边收益和小于0
+                return null;
+            } else if (rewardSub < CalcUtil.div(betAmountSp, 500)){
+                // 单边收益小于千分之二，收益过低
+                return null;
+            } else {
+                // 收益大于千分之一，可调配金额
+                Double hgBetAmountSub = CalcUtil.div(rewardSub, oddsHg);
+                if (rewardSp < 0) {
+                    // 体彩收益小于0，皇冠投注额减少
+                    betAmountHg = CalcUtil.sub(betAmountHg, hgBetAmountSub);
+                } else if (rewardHg < 0) {
+                    // 皇冠收益小于0，皇冠投注额增加
+                    betAmountHg = CalcUtil.add(betAmountHg, hgBetAmountSub);
+                }
+            }
+        } else if (rewardSp >0 && rewardHg >0) {
+            Double rewardAll = CalcUtil.add(rewardSp, rewardHg);
+            if (rewardAll < CalcUtil.div(betAmountSp, 1000)){
+                // 两边总收益小于千分之一，收益过低
+                return null;
+            }
+            // 可调配金额
+            if (rewardSp < rewardHg) {
+                // 皇冠收益大于体彩收益，皇冠投注额减少
+                // 收益差
+                Double rewardSub = CalcUtil.sub(rewardHg, rewardSp);
+                Double hgBetAmountSub = CalcUtil.div(rewardSub, oddsHg);
+                betAmountHg = CalcUtil.sub(betAmountHg, hgBetAmountSub);
+            } else if (rewardSp > rewardHg) {
+                // 体彩收益大于皇冠收益，皇冠投注额增加
+                // 收益差
+                Double rewardSub = CalcUtil.sub(rewardSp, rewardHg);
+                Double hgBetAmountSub = CalcUtil.div(rewardSub, oddsHg);
+                betAmountHg = CalcUtil.add(betAmountHg, hgBetAmountSub);
+            }
+        }
+        return betAmountHg;
+    }
+
+    /**
      * 调整投注金额
      * @param betParamVo
      * @return

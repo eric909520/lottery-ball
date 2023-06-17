@@ -9,6 +9,17 @@ import com.backend.project.system.domain.vo.BetParamVo;
  */
 public interface IBallTempService {
 
+    /**
+     * 012
+     * @param betParamVo
+     */
     public void betCheck(BetParamVo betParamVo);
+
+    /**
+     * 单关
+     * @param betParamVo
+     */
+    public void betCheckSingle(BetParamVo betParamVo);
+
 
 }
