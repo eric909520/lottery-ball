@@ -170,13 +170,15 @@ public class BallTempServiceImpl implements IBallTempService {
             log.info("    体彩 @主队胜, 皇冠 @和局 @客胜 -----------------------------");
             SPWin_HGTieAndLose(betParamVo);
             log.info("");
-
-
+            /** 体彩平，皇冠（主队胜、客队胜） */
+            log.info("    体彩 @平, 皇冠 @主胜 @客胜 -----------------------------");
+            SPTie_HGWinAndLose(betParamVo);
+            log.info("");
+            /** 体彩主队负，皇冠（和局、主队胜） */
+            log.info("    体彩 @主负, 皇冠 @平 @主胜 -----------------------------");
+            SPLose_HGWinAndTie(betParamVo);
+            log.info("");
         }
-
-        /** 体彩平，皇冠（主队胜、客队胜） */
-
-        /** 体彩主队负，皇冠（和局、主队胜） */
 
 
         Double homeCut05 = betParamVo.getHomeCut05();
@@ -246,16 +248,270 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgTie), rebateHG);
         Double rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgTie);
 
-        log.info("体彩投注：主胜 @" + oddsWin + ", 投 " + betAmountSp.intValue() + ", 收益：" + rewardSp);
-        log.info("皇冠投注：和局 @" + oddsHgTie + ", 投" + betAmountHgTie.intValue() + ", 收益：" + rewardHgTie);
-        log.info("皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit);
 
         // TODO 调配金额
+//        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgVisit >0 ){
+        //如果皇冠和收益大于体彩收益20+
+        if(rewardHgTie - rewardSp > 20){
+            Double differ = rewardHgTie - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgTie = betAmountHgTie - revision;
+        }
+        if(rewardSp - rewardHgTie > 20){
+            Double differ = rewardSp - rewardHgTie;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgTie = betAmountHgTie + revision;
+        }
+        //如果皇冠客队胜收益大于体彩收益20+
+        if(rewardHgVisit - rewardSp > 20){
+            Double differ = rewardHgVisit - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getVisit());
+            betAmountHgVisit= betAmountHgVisit - revision;
+        }
+        if(rewardSp - rewardHgVisit > 20){
+            Double differ = rewardHgVisit - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getVisit());
+            betAmountHgVisit= betAmountHgVisit + revision;
+        }
+        // 皇冠全输返水
+        rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgVisit), rebateHG);
+        // 体彩收益
+        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgVisit);
 
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgTie = CalcUtil.mul(CalcUtil.sub(oddsHgTie, 1), betAmountHgTie);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgTie, betAmountHgVisit), rebateHG);
+        rewardHgTie = CalcUtil.sub(CalcUtil.add(bonusHgTie, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgVisit);
 
+        /** 皇冠客胜收益:皇冠客胜奖金 - 皇冠和局本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgVisit = CalcUtil.mul(CalcUtil.sub(oddsHgVisit, 1), betAmountHgVisit);
+        // 皇冠奖金返水 = 客胜奖金 + 和局本金
+        rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgTie), rebateHG);
+        rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgTie);
+        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgVisit > 0) {
+            log.info("调整后 体彩投注：主胜 @" + oddsWin + ", 投 " + betAmountSp.intValue() + ", 收益：" + rewardSp              + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+            log.info("调整后 皇冠投注：和局 @" + oddsHgTie + ", 投" + betAmountHgTie.intValue() + ", 收益：" + rewardHgTie       + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgTie, betAmountHgTie, 4), 100) + "％");
+            log.info("调整后 皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgVisit, betAmountHgVisit, 4), 100) + "％");
+        }
 
+//        }else {
+//            log.info("体彩主队胜，皇冠（和局、客队胜）收益为负 不可打");
+//        }
 
     }
+
+    /** 体彩平，皇冠（主队胜、客队胜） */
+    public void SPTie_HGWinAndLose(BetParamVo betParamVo) {
+        Double oddsTie = betParamVo.getOddsTie();
+        Double betAmountSp = betParamVo.getBetBaseAmount();
+        Double oddsHgHome = betParamVo.getHome();
+        Double oddsHgVisit = betParamVo.getVisit();
+        // 计算投注金额基数
+        Double baseAmount = CalcUtil.mul(oddsTie, betAmountSp);
+        // 计算皇冠投注金额
+        Double betAmountHgHome = CalcUtil.div(baseAmount, oddsHgHome);
+        Double betAmountHgVisit = CalcUtil.div(baseAmount, oddsHgVisit);
+
+        // 体彩返水
+        Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
+
+        /** 体彩中奖收益:体彩奖金 - 皇冠本金 + 体彩返水 + 皇冠返水 */
+        // 体彩奖金
+        Double bonusSp = CalcUtil.mul(CalcUtil.sub(oddsTie, 1), betAmountSp);
+        // 皇冠全输返水
+        Double rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgHome, betAmountHgVisit), rebateHG);
+        // 体彩收益
+        Double rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgHome, betAmountHgVisit);
+
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgHome = CalcUtil.mul(CalcUtil.sub(oddsHgHome, 1), betAmountHgHome);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        Double rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgHome, betAmountHgVisit), rebateHG);
+        Double rewardHgHome = CalcUtil.sub(CalcUtil.add(bonusHgHome, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgVisit);
+
+        /** 皇冠客胜收益:皇冠客胜奖金 - 皇冠主胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgVisit = CalcUtil.mul(CalcUtil.sub(oddsHgVisit, 1), betAmountHgVisit);
+        // 皇冠奖金返水 = 客胜奖金 + 和局本金
+        Double rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgHome), rebateHG);
+        Double rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgHome);
+
+
+
+        // TODO 调配金额
+//        if(rewardSp > 0 && rewardHgHome > 0 && rewardHgVisit >0 ){
+        //如果皇冠和收益大于体彩收益20+
+        if(rewardHgHome - rewardSp > 20){
+            Double differ = rewardHgHome - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgHome = betAmountHgHome - revision;
+        }
+        if(rewardSp - rewardHgHome > 20){
+            Double differ = rewardHgHome - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgHome = betAmountHgHome + revision;
+        }
+        //如果皇冠客队胜收益大于体彩收益20+
+        if(rewardHgVisit - rewardSp > 20){
+            Double differ = rewardHgVisit - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getHome());
+            betAmountHgVisit= betAmountHgVisit - revision;
+        }
+        if(rewardSp - rewardHgVisit > 20){
+            Double differ = rewardHgVisit - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getHome());
+            betAmountHgVisit= betAmountHgVisit + revision;
+        }
+        // 皇冠全输返水
+        rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgHome, betAmountHgVisit), rebateHG);
+        // 体彩收益
+        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgHome, betAmountHgVisit);
+
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgHome = CalcUtil.mul(CalcUtil.sub(oddsHgHome, 1), betAmountHgHome);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgHome, betAmountHgVisit), rebateHG);
+        rewardHgHome = CalcUtil.sub(CalcUtil.add(bonusHgHome, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgVisit);
+
+        /** 皇冠客胜收益:皇冠客胜奖金 - 皇冠主胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgVisit = CalcUtil.mul(CalcUtil.sub(oddsHgVisit, 1), betAmountHgVisit);
+        // 皇冠奖金返水 = 客胜奖金 + 主胜本金
+        rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgHome), rebateHG);
+        rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgHome);
+        if(rewardSp > 0 && rewardHgHome > 0 && rewardHgVisit > 0){
+            log.info(" 体彩投注：和局 @" + oddsTie + ", 投 " + betAmountSp.intValue() + ", 收益：" + rewardSp              + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+            log.info(" 皇冠投注：主胜 @" + oddsHgHome + ", 投" + betAmountHgHome.intValue() + ", 收益：" + rewardHgHome    + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgHome, betAmountHgHome, 4), 100) + "％");
+            log.info(" 皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgVisit, betAmountHgVisit, 4), 100) + "％");
+        }
+
+//        }else {
+//            log.info("体彩平，皇冠（主队胜、客队胜） 收益为负 不可打");
+//        }
+
+    }
+    /** 体彩主队负，皇冠（和局、主队胜） */
+    public void SPLose_HGWinAndTie(BetParamVo betParamVo) {
+        Double oddsLose = betParamVo.getOddsLose();
+        Double betAmountSp = betParamVo.getBetBaseAmount();
+        Double oddsHgTie = betParamVo.getTie();
+        Double oddsHgHome = betParamVo.getHome();
+        // 计算投注金额基数
+        Double baseAmount = CalcUtil.mul(oddsLose, betAmountSp);
+        // 计算皇冠投注金额
+        Double betAmountHgTie = CalcUtil.div(baseAmount, oddsHgTie);
+        Double betAmountHgHome = CalcUtil.div(baseAmount, oddsHgHome);
+
+        // 体彩返水
+        Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
+
+        /** 体彩中奖收益:体彩奖金 - 皇冠本金 + 体彩返水 + 皇冠返水 */
+        // 体彩奖金
+        Double bonusSp = CalcUtil.mul(CalcUtil.sub(oddsLose, 1), betAmountSp);
+        // 皇冠全输返水
+        Double rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgHome), rebateHG);
+        // 体彩收益
+        Double rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgHome);
+
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgTie = CalcUtil.mul(CalcUtil.sub(oddsHgTie, 1), betAmountHgTie);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        Double rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgTie, betAmountHgHome), rebateHG);
+        Double rewardHgTie = CalcUtil.sub(CalcUtil.add(bonusHgTie, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgHome);
+
+        /** 皇冠主胜收益:皇冠客胜奖金 - 皇冠主胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgHome = CalcUtil.mul(CalcUtil.sub(oddsHgHome, 1), betAmountHgHome);
+        // 皇冠奖金返水 = 客胜奖金 + 和局本金
+        Double rebateHgBonusHome = CalcUtil.mul(CalcUtil.add(bonusHgHome, betAmountHgTie), rebateHG);
+        Double rewardHgHome = CalcUtil.sub(CalcUtil.add(bonusHgHome, rebateSpAmount, rebateHgBonusHome), betAmountSp, betAmountHgTie);
+
+
+        // TODO 调配金额
+        revision(betParamVo, oddsLose, betAmountSp, oddsHgTie, oddsHgHome, betAmountHgTie, betAmountHgHome, rebateSpAmount, bonusSp, rewardSp, rewardHgTie, rewardHgHome);
+
+    }
+
+    private static void revision(BetParamVo betParamVo, Double oddsLose, Double betAmountSp, Double oddsHgTie, Double oddsHgHome, Double betAmountHgTie, Double betAmountHgHome, Double rebateSpAmount, Double bonusSp, Double rewardSp, Double rewardHgTie, Double rewardHgHome) {
+        Double rebateHgAmount;
+        Double bonusHgHome;
+        Double rebateHgBonusTie;
+        Double rebateHgBonusHome;
+        Double bonusHgTie;
+//        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgHome >0 ){
+        //如果皇冠和收益大于体彩收益20+
+        if(rewardHgTie - rewardSp > 20){
+            Double differ = rewardHgTie - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgTie = betAmountHgTie - revision;
+        }
+        if(rewardSp - rewardHgTie > 20){
+            Double differ = rewardHgTie - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getTie());
+            betAmountHgTie = betAmountHgTie + revision;
+        }
+        //如果皇冠主队胜收益大于体彩收益20+
+        if(rewardHgHome - rewardSp > 20){
+            Double differ = rewardHgHome - rewardSp;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getHome());
+            betAmountHgHome = betAmountHgHome - revision;
+        }
+        if(rewardSp - rewardHgHome > 20){
+            Double differ = rewardSp - rewardHgHome;
+            //需要调整的金额
+            Double revision = CalcUtil.div(differ, betParamVo.getHome());
+            betAmountHgHome = betAmountHgHome + revision;
+        }
+        // 皇冠全输返水
+        rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgHome), rebateHG);
+        // 体彩收益
+        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgHome);
+
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgTie = CalcUtil.mul(CalcUtil.sub(oddsHgTie, 1), betAmountHgTie);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgTie, betAmountHgHome), rebateHG);
+        rewardHgTie = CalcUtil.sub(CalcUtil.add(bonusHgTie, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgHome);
+
+        /** 皇冠客胜收益:皇冠客胜奖金 - 皇冠主胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        bonusHgHome = CalcUtil.mul(CalcUtil.sub(oddsHgHome, 1), betAmountHgHome);
+        // 皇冠奖金返水 = 客胜奖金 + 主胜本金
+        rebateHgBonusHome = CalcUtil.mul(CalcUtil.add(bonusHgHome, betAmountHgTie), rebateHG);
+        rewardHgHome = CalcUtil.sub(CalcUtil.add(bonusHgHome, rebateSpAmount, rebateHgBonusHome), betAmountSp, betAmountHgTie);
+
+
+        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgHome > 0){
+            log.info(" 体彩投注：主负 @" + oddsLose + ", 投 " + betAmountSp.intValue() + ", 收益：" + rewardSp.intValue()  + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+            log.info(" 皇冠投注：和局 @" + oddsHgTie + ", 投" + betAmountHgTie.intValue() + ", 收益：" + rewardHgTie.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgTie, betAmountHgTie, 4), 100) + "％");
+            log.info(" 皇冠投注：主胜 @" + oddsHgHome + ", 投" + betAmountHgHome.intValue() + ", 收益：" + rewardHgHome.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgHome, betAmountHgHome, 4), 100) + "％");
+        }
+
+//        }else {
+//            log.info("体彩主负，皇冠（平、主队胜） 收益为负 不可打");
+//        }
+    }
+
+
+
 
     /**
      * 体彩主队胜，皇冠客队加
