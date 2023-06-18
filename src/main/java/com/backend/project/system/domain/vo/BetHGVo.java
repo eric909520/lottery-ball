@@ -95,4 +95,19 @@ public class BetHGVo implements Serializable {
 
     private Double visitCut05Amount;
 
+    // 主队胜
+    private Double home;
+
+    private Double homeAmount;
+
+    // 和局
+    private Double tie;
+
+    private Double tieAmount;
+
+    // 客队胜
+    private Double visit;
+
+    private Double visitAmount;
+
 }

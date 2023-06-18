@@ -20,7 +20,7 @@ public class BallTempServiceImpl implements IBallTempService {
     private final static double rebateSP = 0.12;
 
     // 皇冠固定返水比例
-    private final static double rebateHG = 0.025;
+    private final static double rebateHG = 0.026;
 
     /**
      * 012
@@ -140,13 +140,13 @@ public class BallTempServiceImpl implements IBallTempService {
             SPWin_HGVisitAdd05(betParamVo);
             log.info("");
         }
-        /** 体彩主队胜，皇冠客队减 */
-        Double visitCut05 = betParamVo.getVisitCut05();
+        /** 体彩主队胜，皇冠客队减 */ // 要补平
+        /*Double visitCut05 = betParamVo.getVisitCut05();
         if (visitCut05 != null && visitCut05 != 0) {
             log.info("    体彩 @主队胜, 皇冠 @客队减05 -----------------------------");
             SPWin_HGVisitCut05(betParamVo);
             log.info("");
-        }
+        }*/
         /** 体彩主队负，皇冠主队加 */
         Double homeAdd05 = betParamVo.getHomeAdd05();
         if (homeAdd05 != null && homeAdd05 != 0) {
@@ -154,13 +154,85 @@ public class BallTempServiceImpl implements IBallTempService {
             SPLose_HGHomeAdd05(betParamVo);
             log.info("");
         }
-        /** 体彩主队负，皇冠主队减 */
-        Double homeCut05 = betParamVo.getHomeCut05();
+        /** 体彩主队负，皇冠主队减 */ // 要补平
+        /*Double homeCut05 = betParamVo.getHomeCut05();
         if (homeCut05 != null && homeCut05 != 0) {
             log.info("    体彩 @主队负, 皇冠 @主队减05 -----------------------------");
             SPLose_HGHomeCut05(betParamVo);
             log.info("");
+        }*/
+
+        /** 体彩主队胜，皇冠（和局、客队胜） */
+        Double home = betParamVo.getHome();
+        Double tie = betParamVo.getTie();
+        Double visit = betParamVo.getVisit();
+        if (home!=0 && tie!=0 && visit!=0) {
+            log.info("    体彩 @主队胜, 皇冠 @和局 @客胜 -----------------------------");
+            SPWin_HGTieAndLose(betParamVo);
+            log.info("");
+
+
         }
+
+        /** 体彩平，皇冠（主队胜、客队胜） */
+
+        /** 体彩主队负，皇冠（和局、主队胜） */
+
+        /** 体彩主队让负，皇冠（主队胜） */
+
+        /** 体彩主队受让胜，皇冠（客队胜） */
+
+
+    }
+
+    /**
+     * 体彩主队胜，皇冠（和局、客队胜）
+     */
+    public void SPWin_HGTieAndLose(BetParamVo betParamVo) {
+        Double oddsWin = betParamVo.getOddsWin();
+        Double betAmountSp = betParamVo.getBetBaseAmount();
+        Double oddsHgTie = betParamVo.getTie();
+        Double oddsHgVisit = betParamVo.getVisit();
+        // 计算投注金额基数
+        Double baseAmount = CalcUtil.mul(oddsWin, betAmountSp);
+        // 计算皇冠投注金额
+        Double betAmountHgTie = CalcUtil.div(baseAmount, oddsHgTie);
+        Double betAmountHgVisit = CalcUtil.div(baseAmount, oddsHgVisit);
+
+        // 体彩返水
+        Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
+
+        /** 体彩中奖收益:体彩奖金 - 皇冠本金 + 体彩返水 + 皇冠返水 */
+        // 体彩奖金
+        Double bonusSp = CalcUtil.mul(CalcUtil.sub(oddsWin, 1), betAmountSp);
+        // 皇冠全输返水
+        Double rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgVisit), rebateHG);
+        // 体彩收益
+        Double rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgVisit);
+
+        /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgTie = CalcUtil.mul(CalcUtil.sub(oddsHgTie, 1), betAmountHgTie);
+        // 皇冠奖金返水 = 和局奖金 + 客胜本金
+        Double rebateHgBonusTie = CalcUtil.mul(CalcUtil.add(bonusHgTie, betAmountHgVisit), rebateHG);
+        Double rewardHgTie = CalcUtil.sub(CalcUtil.add(bonusHgTie, rebateSpAmount, rebateHgBonusTie), betAmountSp, betAmountHgVisit);
+
+        /** 皇冠客胜收益:皇冠客胜奖金 - 皇冠和局本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
+        // 皇冠奖金
+        Double bonusHgVisit = CalcUtil.mul(CalcUtil.sub(oddsHgVisit, 1), betAmountHgVisit);
+        // 皇冠奖金返水 = 客胜奖金 + 和局本金
+        Double rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgTie), rebateHG);
+        Double rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgTie);
+
+        log.info("体彩投注：主胜 @" + oddsWin + ", 投 " + betAmountSp.intValue() + ", 收益：" + rewardSp);
+        log.info("皇冠投注：和局 @" + oddsHgTie + ", 投" + betAmountHgTie.intValue() + ", 收益：" + rewardHgTie);
+        log.info("皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit);
+
+        // TODO 调配金额
+
+
+
+
     }
 
     /**
@@ -174,7 +246,7 @@ public class BallTempServiceImpl implements IBallTempService {
         // 计算投注金额基数
         Double baseAmount = CalcUtil.mul(oddsWin, betAmountSp);
         // 计算皇冠投注金额
-        Double betAmountHg = CalcUtil.div(baseAmount, oddsHg);
+        Double betAmountHg = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -188,7 +260,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         /** 皇冠中奖收益:皇冠奖金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
-        Double bonusHg = CalcUtil.mul(CalcUtil.sub(oddsHg, 1), betAmountHg);
+        Double bonusHg = CalcUtil.mul(oddsHg, betAmountHg);
         // 皇冠奖金返水
         Double rebateHgBonus = CalcUtil.mul(bonusHg, rebateHG);
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
@@ -222,7 +294,7 @@ public class BallTempServiceImpl implements IBallTempService {
         // 计算投注金额基数
         Double baseAmount = CalcUtil.mul(oddsWin, betAmountSp);
         // 计算皇冠投注金额
-        Double betAmountHg = CalcUtil.div(baseAmount, oddsHg);
+        Double betAmountHg = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -236,7 +308,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         /** 皇冠中奖收益:皇冠奖金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
-        Double bonusHg = CalcUtil.mul(CalcUtil.sub(oddsHg, 1), betAmountHg);
+        Double bonusHg = CalcUtil.mul(oddsHg, betAmountHg);
         // 皇冠奖金返水
         Double rebateHgBonus = CalcUtil.mul(bonusHg, rebateHG);
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
@@ -270,7 +342,7 @@ public class BallTempServiceImpl implements IBallTempService {
         // 计算投注金额基数
         Double baseAmount = CalcUtil.mul(oddsLose, betAmountSp);
         // 计算皇冠投注金额
-        Double betAmountHg = CalcUtil.div(baseAmount, oddsHg);
+        Double betAmountHg = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -284,7 +356,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         /** 皇冠中奖收益:皇冠奖金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
-        Double bonusHg = CalcUtil.mul(CalcUtil.sub(oddsHg, 1), betAmountHg);
+        Double bonusHg = CalcUtil.mul(oddsHg, betAmountHg);
         // 皇冠奖金返水
         Double rebateHgBonus = CalcUtil.mul(bonusHg, rebateHG);
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
@@ -318,7 +390,7 @@ public class BallTempServiceImpl implements IBallTempService {
         // 计算投注金额基数
         Double baseAmount = CalcUtil.mul(oddsLose, betAmountSp);
         // 计算皇冠投注金额
-        Double betAmountHg = CalcUtil.div(baseAmount, oddsHg);
+        Double betAmountHg = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -332,7 +404,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         /** 皇冠中奖收益:皇冠奖金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
-        Double bonusHg = CalcUtil.mul(CalcUtil.sub(oddsHg, 1), betAmountHg);
+        Double bonusHg = CalcUtil.mul(oddsHg, betAmountHg);
         // 皇冠奖金返水
         Double rebateHgBonus = CalcUtil.mul(bonusHg, rebateHG);
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);

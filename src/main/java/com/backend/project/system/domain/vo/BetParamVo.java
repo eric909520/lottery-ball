@@ -70,16 +70,41 @@ public class BetParamVo extends BetHGVo implements Serializable {
     private Double rewardHG;
 
     /**
-     * 单关参数
+     * 单关参数 - 体彩
      */
     // 胜
     private Double betAmountWin;
 
     private Double oddsWin;
 
+    // 平
+    private Double betAmountTie;
+
+    private Double oddsTie;
+
     // 负
     private Double betAmountLose;
 
     private Double oddsLose;
+
+    // 让胜 体彩：主队减 胜
+    private Double betAmountRangWin;
+
+    private Double oddsRangWin;
+
+    // 让负 体彩：主队减 负
+    private Double betAmountRangLose;
+
+    private Double oddsRangLose;
+
+    // 受让胜 体彩：主队加 胜
+    private Double betAmountShouWin;
+
+    private Double oddsShouWin;
+
+    // 受让负 体彩：主队加 负
+    private Double betAmountShouLose;
+
+    private Double oddsShouLose;
 
 }
