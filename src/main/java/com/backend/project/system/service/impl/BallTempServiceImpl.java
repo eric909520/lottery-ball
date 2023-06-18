@@ -178,10 +178,6 @@ public class BallTempServiceImpl implements IBallTempService {
 
         /** 体彩主队负，皇冠（和局、主队胜） */
 
-        /** 体彩主队让负，皇冠（主队胜） */
-
-        /** 体彩主队受让胜，皇冠（客队胜） */
-
 
     }
 
