@@ -18,7 +18,7 @@ public class BallTempServiceImpl implements IBallTempService {
     private final static double rebateSP = 0.12;
 
     // 皇冠固定返水比例
-    private final static double rebateHG = 0.025;
+    private final static double rebateHG = 0.026;
 
     /**
      * 012
