@@ -10,13 +10,17 @@ public class BetBasketballParamVo {
 
     private Double betBaseAmount;
 
+    // 体彩主胜
     private Double oddsWin;
 
+    // 体彩客胜
     private Double oddsLose;
 
-    private Double homeWin;
+    // 皇冠主胜
+    private Double visitWin;
 
-    private Double homeLose;
+    // 皇冠客胜
+    private Double visitLose;
 
 
 

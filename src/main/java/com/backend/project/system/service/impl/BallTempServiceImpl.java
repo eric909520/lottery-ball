@@ -1594,50 +1594,47 @@ public class BallTempServiceImpl implements IBallTempService {
      * @param basketballParamVo
      */
    public void betBasketball(BetBasketballParamVo basketballParamVo){
-       {
-           Double oddsWin = basketballParamVo.getOddsWin();
-           Double homeWin = basketballParamVo.getHomeWin();
+       Double oddsWin = basketballParamVo.getOddsWin();
+       Double visitWin = basketballParamVo.getVisitWin();
 
-           Double betBaseAmount = basketballParamVo.getBetBaseAmount();
-           //计算投注金额
-           Double oddsLoseBet = calcBet(betBaseAmount, oddsWin,  homeWin);
-           //体彩盈返水
-           Double rebateSpAmount = CalcUtil.mul(betBaseAmount, rebateSP);
-           //皇冠全输返水
-           Double hgRebate = CalcUtil.mul(oddsLoseBet,rebateHG);
-           //体彩收益
-           Double sl  =CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsWin),betBaseAmount,oddsLoseBet),rebateSpAmount,hgRebate);
-           //皇冠胜返水
-           Double hgWinRebate = CalcUtil.mul(CalcUtil.mul(oddsLoseBet, homeWin), rebateHG);
-           //皇冠收益
-           Double hgWin = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(oddsLoseBet, homeWin),betBaseAmount,oddsLoseBet),rebateSpAmount,hgWinRebate);
-           log.info("          体彩 主胜 @"+oddsWin +"  投注 "+betBaseAmount +"  收益 ："+sl);
-           log.info("          皇冠 客胜 @"+homeWin +"  投注 "+oddsLoseBet +"  收益 ："+hgWin);
-
-
-           log.info("   -------------------------------------------------------      ");
+       Double betBaseAmount = basketballParamVo.getBetBaseAmount();
+       //计算投注金额
+       Double oddsLoseBet = calcBet(betBaseAmount, oddsWin,  visitWin);
+       //体彩盈返水
+       Double rebateSpAmount = CalcUtil.mul(betBaseAmount, rebateSP);
+       //皇冠全输返水
+       Double hgRebate = CalcUtil.mul(oddsLoseBet,rebateHG);
+       //体彩收益
+       Double sl  =CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsWin),betBaseAmount,oddsLoseBet),rebateSpAmount,hgRebate);
+       //皇冠胜返水
+       Double hgWinRebate = CalcUtil.mul(CalcUtil.mul(oddsLoseBet, visitWin), rebateHG);
+       //皇冠收益
+       Double hgWin = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(oddsLoseBet, visitWin),betBaseAmount,oddsLoseBet),rebateSpAmount,hgWinRebate);
+       log.info("          体彩 主胜 @"+oddsWin +"  投注 "+betBaseAmount.intValue() +"  收益 ："+sl + ", 收益率：" + CalcUtil.mul(CalcUtil.div(sl, CalcUtil.add(betBaseAmount, oddsLoseBet), 4), 100) + "%");
+       log.info("          皇冠 客胜 @"+visitWin +"  投注 "+oddsLoseBet.intValue() +"  收益 ："+hgWin + ", 收益率：" + CalcUtil.mul(CalcUtil.div(hgWin, CalcUtil.add(betBaseAmount, oddsLoseBet), 4), 100) + "%");
 
 
-           Double oddsLose = basketballParamVo.getOddsLose();
-           Double homeLose = basketballParamVo.getHomeLose();
+       log.info("   -------------------------------------------------------      ");
 
-           betBaseAmount = basketballParamVo.getBetBaseAmount();
-           //计算投注金额
-           Double homeLoseBet = calcBet(betBaseAmount, oddsLose,  homeLose);
-           //体彩盈返水
-           rebateSpAmount = CalcUtil.mul(betBaseAmount, rebateSP);
-           //皇冠全输返水
-           hgRebate = CalcUtil.mul(homeLoseBet,rebateHG);
-           //体彩收益
-           sl  =CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsLose),betBaseAmount,homeLoseBet),rebateSpAmount,hgRebate);
-           //皇冠胜返水
-           hgWinRebate = CalcUtil.mul(CalcUtil.mul(homeLoseBet, homeLose), rebateHG);
-           //皇冠收益
-           hgWin = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(homeLoseBet, homeLose),betBaseAmount,homeLoseBet),rebateSpAmount,hgWinRebate);
-           log.info("          体彩 主负 @"+oddsLose +"  投注 :"+betBaseAmount +"   收益 ："+sl);
-           log.info("          皇冠 客负 @"+homeLose +"  投注 :"+homeLoseBet +"   收益 ："+hgWin);
 
-       }
+       Double oddsLose = basketballParamVo.getOddsLose();
+       Double visitLose = basketballParamVo.getVisitLose();
+
+       //计算投注金额
+       Double visitLoseBet = calcBet(betBaseAmount, oddsLose,  visitLose);
+       //体彩返水
+       rebateSpAmount = CalcUtil.mul(betBaseAmount, rebateSP);
+       //皇冠全输返水
+       hgRebate = CalcUtil.mul(visitLoseBet,rebateHG);
+       //体彩收益
+       sl  =CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsLose),betBaseAmount,visitLoseBet),rebateSpAmount,hgRebate);
+       //皇冠胜返水
+       hgWinRebate = CalcUtil.mul(CalcUtil.mul(visitLoseBet, visitLose), rebateHG);
+       //皇冠收益
+       hgWin = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(visitLoseBet, visitLose),betBaseAmount,visitLoseBet),rebateSpAmount,hgWinRebate);
+       log.info("          体彩 主负 @"+oddsLose +"  投注 :"+betBaseAmount.intValue() +"   收益 ："+sl + ", 收益率：" + CalcUtil.mul(CalcUtil.div(sl, CalcUtil.add(betBaseAmount, visitLoseBet), 4), 100) + "%");
+       log.info("          皇冠 主胜 @"+visitLose +"  投注 :"+visitLoseBet.intValue() +"   收益 ："+hgWin + ", 收益率：" + CalcUtil.mul(CalcUtil.div(hgWin, CalcUtil.add(betBaseAmount, visitLoseBet), 4), 100) + "%");
+
    }
 
 
