@@ -1,5 +1,6 @@
 package com.backend.project.system.service;
 
+import com.backend.project.system.domain.vo.BetBasketballParamVo;
 import com.backend.project.system.domain.vo.BetParamVo;
 
 /**
@@ -21,5 +22,9 @@ public interface IBallTempService {
      */
     public void betCheckSingle(BetParamVo betParamVo);
 
-
+    /**
+     * 篮球
+     * @param basketballParamVo
+     */
+    void betBasketball(BetBasketballParamVo basketballParamVo);
 }
