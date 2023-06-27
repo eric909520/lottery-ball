@@ -34,9 +34,13 @@ public class AdaptationAmount {
             }
         }
         /**
-         * 4 5 6 7+
+         * 3 4 5 6 7+
          */
         if(betParamVo.getOddsFour()!= 0 && betParamVo.getOddsFour() != null){
+            if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
+                Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
+                betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
+            }
             Double betFourAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFour());
             betParamTemp.setBetAmountFour(Rounding(betFourAmount));
 

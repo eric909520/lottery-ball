@@ -61,10 +61,25 @@ public class BetHGVo implements Serializable {
     /**
      * 体彩大，皇冠小
      */
+    // 小2.5赔率
+    private Double 小25;
+
+    private Double 小25Amount;
+
     // 小3.5赔率
     private Double 小35;
 
     private Double 小35Amount;
+
+    // 小2.5/3赔率
+    private Double 小25_3;
+
+    private Double 小25_3Amount;
+
+    // 小3/3.5赔率
+    private Double 小3_35;
+
+    private Double 小3_35Amount;
 
     // 小3.5/4赔率
     private Double 小35_4;
