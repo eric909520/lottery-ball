@@ -2,6 +2,7 @@ package com.backend.project.system.service.impl;
 
 import com.backend.common.utils.AdaptationAmount;
 import com.backend.common.utils.CalcUtil;
+import com.backend.project.system.domain.vo.BetBKParamVo;
 import com.backend.project.system.domain.vo.BetBasketballParamVo;
 import com.backend.project.system.domain.vo.BetParamVo;
 import com.backend.project.system.service.IBallTempService;
@@ -17,6 +18,9 @@ public class BallTempServiceImpl implements IBallTempService {
 
     // 体彩固定返水比例
     private final static double rebateSP = 0.12;
+
+    //体彩篮球返水
+    private final static double rebateSPBK = 0.15;
 
     // 皇冠固定返水比例
     private final static double rebateHG = 0.026;
@@ -1957,6 +1961,34 @@ public class BallTempServiceImpl implements IBallTempService {
     private Double calcBet(Double betBaseAmount,Double odds,Double visit){
         Double visitBet = CalcUtil.div(CalcUtil.mul(betBaseAmount, odds), visit);
         return visitBet;
+    }
+
+    public void SPBKHandicap(BetBKParamVo betBKParamVo){
+        Double betBaseAmount = betBKParamVo.getBetBaseAmount();
+        //体彩让分/被让分
+        Double oddsHandicap = betBKParamVo.getOddsHandicap();
+        Double oddsWin = betBKParamVo.getOddsWin();
+        Double oddsLose = betBKParamVo.getOddsLose();
+        //皇冠让分/被让分
+        Double visitWinHandicap = betBKParamVo.getVisitHandicap();
+        Double visitWin = betBKParamVo.getVisitWin();
+        Double visitLose = betBKParamVo.getVisitLose();
+        //计算hg投注额
+        Double oddsLoseBet = calcBet(betBaseAmount, oddsWin,  visitWin);
+        //hg全输水
+        Double hgLoseRebate = CalcUtil.mul(oddsLoseBet,rebateHG);
+        //计算体彩水
+        Double SPWinRebate = CalcUtil.mul(betBaseAmount,rebateSPBK);
+        //计算体彩收益
+        Double sl = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsWin),oddsLoseBet),SPWinRebate,hgLoseRebate);
+
+
+
+
+        if(oddsHandicap != 0){
+
+        }
+
     }
 
 
