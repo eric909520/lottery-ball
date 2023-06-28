@@ -6,7 +6,7 @@ import lombok.Data;
  * 篮球投注vo
  */
 @Data
-public class BetBasketballParamVo {
+public class BetBasketballParamVo extends BetBKParamVo {
 
     private Double betBaseAmount;
 
@@ -17,13 +17,9 @@ public class BetBasketballParamVo {
     private Double oddsLose;
 
     // 皇冠主胜
-    private Double visitWin;
+    private Double homeWin;
 
     // 皇冠客胜
-    private Double visitLose;
-
-
-
-
+    private Double visitWin;
 
 }

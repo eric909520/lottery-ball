@@ -9,29 +9,28 @@ import lombok.Data;
 @Data
 public class BetBKParamVo {
 
-    private Double betBaseAmount;
-    //主加主胜
+    // 体彩：主加主胜
     private Double oddsAddWin;
 
-    //主加主负
+    // 体彩：主加客胜
     private Double oddsAddLose;
 
-    //主加客胜
-    private Double visitAddWin;
+    // 体彩：主减主胜
+    private Double oddsCutWin;
 
-    //主加客负
-    private Double visitAddLose;
+    // 体彩：主减客胜
+    private Double oddsCutLose;
 
-    //主减主胜
-    private Double homeSubWin;
+    // 皇冠：主加
+    private Double homeAdd;
 
-    //主减主负
-    private Double homeSUbLose;
+    // 皇冠：客减
+    private Double visitCut;
 
-    //主减客胜
-    private Double visitorSubWin;
+    // 皇冠：主减
+    private Double homeCut;
 
-    //主减客负
-    private Double visitorSubLose;
+    // 皇冠：客加
+    private Double visitAdd;
 
 }
