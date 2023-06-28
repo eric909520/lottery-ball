@@ -1963,31 +1963,28 @@ public class BallTempServiceImpl implements IBallTempService {
         return visitBet;
     }
 
-    public void SPBKHandicap(BetBKParamVo betBKParamVo){
+    public void SPBKOddsAddWin(BetBKParamVo betBKParamVo){
         Double betBaseAmount = betBKParamVo.getBetBaseAmount();
-        //体彩让分/被让分
-        Double oddsHandicap = betBKParamVo.getOddsHandicap();
-        Double oddsWin = betBKParamVo.getOddsWin();
-        Double oddsLose = betBKParamVo.getOddsLose();
-        //皇冠让分/被让分
-        Double visitWinHandicap = betBKParamVo.getVisitHandicap();
-        Double visitWin = betBKParamVo.getVisitWin();
-        Double visitLose = betBKParamVo.getVisitLose();
+
+        Double oddsAddWin = betBKParamVo.getOddsAddWin();
+        Double visitAddWin = betBKParamVo.getVisitAddWin();
+
         //计算hg投注额
-        Double oddsLoseBet = calcBet(betBaseAmount, oddsWin,  visitWin);
+        Double visitAddWinBet = calcBet(betBaseAmount, oddsAddWin,  visitAddWin);
         //hg全输水
-        Double hgLoseRebate = CalcUtil.mul(oddsLoseBet,rebateHG);
+        Double hgLoseRebate = CalcUtil.mul(visitAddWinBet,rebateHG);
         //计算体彩水
-        Double SPWinRebate = CalcUtil.mul(betBaseAmount,rebateSPBK);
+        Double oddsAddWinRebate = CalcUtil.mul(betBaseAmount,rebateSPBK);
         //计算体彩收益
-        Double sl = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsWin),oddsLoseBet),SPWinRebate,hgLoseRebate);
+        Double sl = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betBaseAmount,oddsAddWin),visitAddWinBet),oddsAddWinRebate,hgLoseRebate);
+        log.info("            体彩  主加主胜 : 投注:"+betBaseAmount+" 赔率:"+oddsAddWin +" 收益:"+ sl+"  收益率:"+ CalcUtil.divide(sl,betBaseAmount,4));
+        //计算皇冠出奖
+        Double hgBonus = CalcUtil.mul(visitAddWinBet, visitAddWin);
+        //计算皇冠出奖返水
+        Double hgBonusRebate = CalcUtil.mul(hgBonus,rebateHG);
+        Double add = CalcUtil.add(CalcUtil.sub(hgBonus, betBaseAmount), oddsAddWinRebate, hgBonusRebate);
+        log.info("             皇冠 客加客胜 : 投注:"+visitAddWinBet+" 赔率:"+visitAddWin +" 收益:"+ add +"  收益率:"+ CalcUtil.divide(add,betBaseAmount,4));
 
-
-
-
-        if(oddsHandicap != 0){
-
-        }
 
     }
 
