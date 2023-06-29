@@ -1987,8 +1987,8 @@ public class BallTempServiceImpl implements IBallTempService {
      * 篮球让分
      */
     private void BK_WINLose_RangFen(Double betAmountSp, Double oddsSp, Double oddsHg,Integer flag) {
-        //
-        if(flag == 0){
+        //区分皇冠篮球胜负赔率
+        if(flag == 1){
             oddsHg = CalcUtil.sub(oddsHg,1);
         }
 
