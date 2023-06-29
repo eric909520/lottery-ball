@@ -22,4 +22,16 @@ public class BetBasketballParamVo extends BetBKParamVo {
     // 皇冠客胜
     private Double visitWin;
 
+    //体彩大分
+    private Double oddsBig;
+
+    //体彩小分
+    private Double oddsSmall;
+
+    //hg大分
+    private Double hgBig;
+
+    //hg小分
+    private Double hgSmall;
+
 }

@@ -2,7 +2,6 @@ package com.backend.project.system.service.impl;
 
 import com.backend.common.utils.AdaptationAmount;
 import com.backend.common.utils.CalcUtil;
-import com.backend.project.system.domain.vo.BetBKParamVo;
 import com.backend.project.system.domain.vo.BetBasketballParamVo;
 import com.backend.project.system.domain.vo.BetParamVo;
 import com.backend.project.system.service.IBallTempService;
@@ -1762,7 +1761,7 @@ public class BallTempServiceImpl implements IBallTempService {
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountFour, betAmountFive, betAmountSix, betAmountSeven), rebateSP);
 
         log.info("体彩投注：3球 " + betAmountThree.intValue()+ ", 4球 " + betAmountFour.intValue() + ", 5球 " + betAmountFive.intValue() + ", 6球 " + betAmountSix.intValue() + ", 7+球 " + betAmountSeven.intValue());
-        log.info("皇冠投注：小2.5/3 @" + oddsHg + ", " + betAmountHg.intValue());
+        log.info("皇冠投注：小3/3.5 @" + oddsHg + ", " + betAmountHg.intValue());
         log.info("体彩总投注：" + CalcUtil.add(betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven).intValue()
                 + ", 皇冠总投注：" + betAmountHg.intValue());
         log.info("");
@@ -1966,7 +1965,20 @@ public class BallTempServiceImpl implements IBallTempService {
            log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
            BK_WINLose_RangFen(betAmountSp, oddsAddLose, homeAdd);
        }
-
+       /** 体彩 大，皇冠 小 */
+       Double oddsBig = basketballParamVo.getOddsBig();
+       Double hgSmall = basketballParamVo.getHgSmall();
+       if (oddsBig != 0 && hgSmall != 0) {
+           log.info("       体彩 大, 皇冠 小 ------------------------------------------------------");
+           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+       }
+       /** 体彩 大，皇冠 小 */
+       Double oddsSmall = basketballParamVo.getOddsSmall();
+       Double hgBig = basketballParamVo.getHgBig();
+       if (oddsSmall != 0 && hgBig != 0) {
+           log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
+           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+       }
 
    }
 
@@ -1978,11 +1990,11 @@ public class BallTempServiceImpl implements IBallTempService {
         //计算hg投注额
         Double betAmountHg = calcBet(betAmountSp, oddsSp, oddsHg);
         //hg全输水
-        Double rebateHgAll = CalcUtil.mul(oddsHg, rebateHG);
+        Double rebateHgAll = CalcUtil.mul(betAmountHg, rebateHG);
         //计算体彩水
-        Double rebateSp = CalcUtil.mul(oddsSp, rebateSPBK);
+        Double rebateSp = CalcUtil.mul(betAmountSp, rebateSPBK);
         //计算体彩收益
-        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, oddsSp), oddsHg), rebateSp,rebateHgAll);
+        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, oddsSp), rebateHgAll), rebateSp,rebateHgAll);
         //计算皇冠出奖
         Double hgBonus = CalcUtil.mul(betAmountHg, oddsHg);
         //计算皇冠出奖返水
