@@ -1994,7 +1994,7 @@ public class BallTempServiceImpl implements IBallTempService {
         //计算体彩水
         Double rebateSp = CalcUtil.mul(betAmountSp, rebateSPBK);
         //计算体彩收益
-        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, oddsSp), rebateHgAll), rebateSp,rebateHgAll);
+        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, oddsSp), betAmountHg), rebateSp,rebateHgAll);
         //计算皇冠出奖
         Double hgBonus = CalcUtil.mul(betAmountHg, oddsHg);
         //计算皇冠出奖返水
