@@ -1915,7 +1915,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitWin = basketballParamVo.getVisitWin();
        if (oddsWin != 0 && visitWin != 0) {
            log.info("      体彩 主胜, 皇冠 客胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsWin, visitWin);
+           BK_WINLose_RangFen(betAmountSp, oddsWin, visitWin,1);
        }
 
        /** 体彩客胜，皇冠主胜 */
@@ -1923,7 +1923,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double homeWin = basketballParamVo.getHomeWin();
        if (oddsLose != 0 && homeWin != 0) {
            log.info("      体彩 客胜, 皇冠 主胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsLose, homeWin);
+           BK_WINLose_RangFen(betAmountSp, oddsLose, homeWin,1);
        }
 
        /**
@@ -1934,21 +1934,21 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitAdd = basketballParamVo.getVisitAdd();
        if (oddsCutWin != 0 && visitAdd != 0) {
            log.info("       体彩 主减胜, 皇冠 客加胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutWin, visitAdd);
+           BK_WINLose_RangFen(betAmountSp, oddsCutWin, visitAdd,0);
        }
 
        /** 体彩 主减客胜，皇冠 主胜 */
        Double oddsCutLose = basketballParamVo.getOddsCutLose();
        if (oddsCutLose != 0 && homeWin != 0) {
            log.info("       体彩 主减客胜, 皇冠 主胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeWin);
+           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeWin,0);
        }
 
        /** 体彩 主减客胜，皇冠 主加胜（加任意分/最高赔率） */
        Double homeAdd = basketballParamVo.getHomeAdd();
        if (oddsCutLose != 0 && homeAdd != 0) {
            log.info("       体彩 主减客胜, 皇冠 主加胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeAdd);
+           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeAdd,0);
        }
 
        /** 体彩 主加胜，皇冠 客减胜 */
@@ -1956,28 +1956,28 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitCut = basketballParamVo.getVisitCut();
        if (oddsAddWin != 0 && visitCut != 0) {
            log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsAddWin, visitCut);
+           BK_WINLose_RangFen(betAmountSp, oddsAddWin, visitCut,0);
        }
 
        /** 体彩 主加客胜，皇冠 主加胜 */
        Double oddsAddLose = basketballParamVo.getOddsAddLose();
        if (oddsAddLose != 0 && homeAdd != 0) {
            log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsAddLose, homeAdd);
+           BK_WINLose_RangFen(betAmountSp, oddsAddLose, homeAdd,0);
        }
        /** 体彩 大，皇冠 小 */
        Double oddsBig = basketballParamVo.getOddsBig();
        Double hgSmall = basketballParamVo.getHgSmall();
        if (oddsBig != 0 && hgSmall != 0) {
            log.info("       体彩 大, 皇冠 小 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall,0);
        }
        /** 体彩 大，皇冠 小 */
        Double oddsSmall = basketballParamVo.getOddsSmall();
        Double hgBig = basketballParamVo.getHgBig();
        if (oddsSmall != 0 && hgBig != 0) {
            log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall,0);
        }
 
    }
@@ -1986,7 +1986,12 @@ public class BallTempServiceImpl implements IBallTempService {
      * 篮球胜负
      * 篮球让分
      */
-    private void BK_WINLose_RangFen(Double betAmountSp, Double oddsSp, Double oddsHg) {
+    private void BK_WINLose_RangFen(Double betAmountSp, Double oddsSp, Double oddsHg,Integer flag) {
+        //
+        if(flag == 0){
+            oddsHg = CalcUtil.sub(oddsHg,1);
+        }
+
         //计算hg投注额
         Double betAmountHg = calcBet(betAmountSp, oddsSp, oddsHg);
         //hg全输水
