@@ -71,6 +71,11 @@ public class BetHGVo implements Serializable {
 
     private Double 小35Amount;
 
+    // 小2/2.5赔率
+    private Double 小2_25;
+
+    private Double 小2_25Amount;
+
     // 小2.5/3赔率
     private Double 小25_3;
 

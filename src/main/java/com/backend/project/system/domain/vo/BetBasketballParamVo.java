@@ -28,10 +28,10 @@ public class BetBasketballParamVo extends BetBKParamVo {
     //体彩小分
     private Double oddsSmall;
 
-    //hg大分
-    private Double hgBig;
+    //hg大分 - 体彩基准减1，体彩基准135，皇冠大134
+    private Double hgBigCut1;
 
-    //hg小分
-    private Double hgSmall;
+    //hg小分 - 体彩基准加1，体彩基准135，皇冠小136
+    private Double hgSmallAdd1;
 
 }

@@ -33,127 +33,151 @@ public class BallTempServiceImpl implements IBallTempService {
         /** 大1.5, 体彩小 01,皇冠 大1.5, 全输全赢 */
         Double 大15 = betParamVo.get大15();
         if (大15 != null && 大15 != 0) {
-            log.info("      体彩 01, 皇冠 大1.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 01, 皇冠 大1.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大15);
             betParamVo.setBetAmountHg(betParamVo.get大15Amount());
             SP01_HG大15(betParamVo);
+            log.info("");
         }
 
         /** 1、大2, 体彩小 012,皇冠 大2, 全输全赢 */
         Double 大2 = betParamVo.get大2();
         if (大2 != null && 大2 != 0) {
-            log.info("      体彩 012, 皇冠 大2 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 012, 皇冠 大2 ------------------------------------------------------");
             betParamVo.setOddsHg(大2);
             betParamVo.setBetAmountHg(betParamVo.get大2Amount());
             SP012_HG大2(betParamVo);
+            log.info("");
         }
 
         /** 2、大2.5, 体彩小 012,皇冠 大2.5, 全输全赢 */
         Double 大25 = betParamVo.get大25();
         if (大25 != null && 大25 != 0) {
-            log.info("      体彩 012, 皇冠 大2.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 012, 皇冠 大2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大25);
             betParamVo.setBetAmountHg(betParamVo.get大25Amount());
             SP012_HG大25(betParamVo);
+            log.info("");
         }
 
         /** 大3, 体彩小 0123,皇冠 大3, 全输全赢 */
         Double 大3 = betParamVo.get大3();
         if (大3 != null && 大3 != 0) {
-            log.info("      体彩 0123, 皇冠 大3 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 0123, 皇冠 大3 ------------------------------------------------------");
             betParamVo.setOddsHg(大3);
             betParamVo.setBetAmountHg(betParamVo.get大3Amount());
             SP012_HG大3(betParamVo);
+            log.info("");
         }
 
         /** 3、大3.5, 体彩小 0123,皇冠 大3.5, 全输全赢 */
         Double 大35 = betParamVo.get大35();
         if (大35 != null && 大35 != 0) {
-            log.info("      体彩 0123, 皇冠 大3.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 0123, 皇冠 大3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大35);
             betParamVo.setBetAmountHg(betParamVo.get大35Amount());
             SP012_HG大35(betParamVo);
+            log.info("");
         }
 
         /** 大1.5/2, 体彩小 012,皇冠 大1.5/2, 2球体彩赢，皇冠赢一半 */
         Double 大15_2 = betParamVo.get大15_2();
         if (大15_2 != null && 大15_2 != 0) {
-            log.info("      体彩 012, 皇冠 大1.5/2 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 012, 皇冠 大1.5/2 ------------------------------------------------------");
             betParamVo.setOddsHg(大15_2);
             betParamVo.setBetAmountHg(betParamVo.get大15_2Amount());
             SP012_HG大15_2(betParamVo);
+            log.info("");
         }
 
         /** 4、大2/2.5, 体彩小 012,皇冠 大2/2.5, 2球皇冠输一半 */
         Double 大2_25 = betParamVo.get大2_25();
         if (大2_25 != null && 大2_25 != 0) {
-            log.info("      体彩 012, 皇冠 大2/2.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 012, 皇冠 大2/2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大2_25);
             betParamVo.setBetAmountHg(betParamVo.get大2_25Amount());
             SP012_HG大2_25(betParamVo);
+            log.info("");
         }
 
         /** 5、大2.5/3, 体彩小 0123,皇冠 大2.5/3, 3球体彩赢，皇冠赢一半 */
         Double 大25_3 = betParamVo.get大25_3();
         if (大25_3 != null && 大25_3 != 0) {
-            log.info("      体彩 0123, 皇冠 大2.5/3 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 0123, 皇冠 大2.5/3 ------------------------------------------------------");
             betParamVo.setOddsHg(大25_3);
             betParamVo.setBetAmountHg(betParamVo.get大25_3Amount());
             SP012_HG大25_3(betParamVo);
+            log.info("");
         }
 
         /** 6、大3/3.5, 体彩小 0123,皇冠 大3/3.5 ,3球体彩赢，皇冠输一半*/
         Double 大3_35 = betParamVo.get大3_35();
         if (大3_35 != null && 大3_35 != 0) {
-            log.info("      体彩 0123, 皇冠 大3/3.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 0123, 皇冠 大3/3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大3_35);
             betParamVo.setBetAmountHg(betParamVo.get大3_35Amount());
             SP012_HG大3_35(betParamVo);
+            log.info("");
         }
 
         /** 小2.5, 体彩大 34567+,皇冠 小2.5 */
         Double 小25 = betParamVo.get小25();
         if (小25 != null && 小25 != 0) {
-            log.info("      体彩 34567+, 皇冠 小2.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 34567+, 皇冠 小2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小25);
             betParamVo.setBetAmountHg(betParamVo.get小25Amount());
             SP34567_HG小25(betParamVo);
+            log.info("");
         }
 
         /** 7、小3.5, 体彩大 4567+,皇冠 小3.5 */
         Double 小35 = betParamVo.get小35();
         if (小35 != null && 小35 != 0) {
-            log.info("      体彩 4567+, 皇冠 小3.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 4567+, 皇冠 小3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小35);
             betParamVo.setBetAmountHg(betParamVo.get小35Amount());
             SP4567_HG小35(betParamVo);
+            log.info("");
         }
 
         /** 小2.5/3, 体彩大 34567+,皇冠 小2.5/3 */
         Double 小25_3 = betParamVo.get小25_3();
         if (小25_3 != null && 小25_3 != 0) {
-            log.info("      体彩 34567+, 皇冠 小2.5/3 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 34567+, 皇冠 小2.5/3 ------------------------------------------------------");
             betParamVo.setOddsHg(小25_3);
             betParamVo.setBetAmountHg(betParamVo.get小25_3Amount());
             SP34567_HG小25_3(betParamVo);
+            log.info("");
+        }
+
+        /** 小2/2.5, 体彩大 234567+,皇冠 小2/2.5 */
+        Double 小2_25 = betParamVo.get小2_25();
+        if (小2_25 != null && 小2_25 != 0) {
+            log.info("      @@足球, 体彩 234567+, 皇冠 小2/2.5 ------------------------------------------------------");
+            betParamVo.setOddsHg(小2_25);
+            betParamVo.setBetAmountHg(betParamVo.get小2_25Amount());
+            SP234567_HG小2_25(betParamVo);
+            log.info("");
         }
 
         /** 小3/3.5, 体彩大 34567+,皇冠 小3/3.5 */
         Double 小3_35 = betParamVo.get小3_35();
         if (小3_35 != null && 小3_35 != 0) {
-            log.info("      体彩 34567+, 皇冠 小3/3.5 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 34567+, 皇冠 小3/3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小3_35);
             betParamVo.setBetAmountHg(betParamVo.get小3_35Amount());
             SP34567_HG小3_35(betParamVo);
+            log.info("");
         }
 
         /** 8、小3.5/4, 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠输一半 */
         Double 小35_4 = betParamVo.get小35_4();
         if (小35_4 != null && 小35_4 != 0) {
-            log.info("      体彩 4567+, 皇冠 小3.5/4 ------------------------------------------------------");
+            log.info("      @@足球, 体彩 4567+, 皇冠 小3.5/4 ------------------------------------------------------");
             betParamVo.setOddsHg(小35_4);
             betParamVo.setBetAmountHg(betParamVo.get小35_4Amount());
             SP4567_HG小35_4(betParamVo);
+            log.info("");
         }
     }
 
@@ -166,14 +190,14 @@ public class BallTempServiceImpl implements IBallTempService {
         Double visitAdd05 = betParamVo.getVisitAdd05();
         Double oddsWin = betParamVo.getOddsWin();
         if (oddsWin != 0 && visitAdd05 != 0) {
-            log.info("    体彩 @主队胜, 皇冠 @客队加05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队胜, 皇冠 @客队加05 -----------------------------");
             SPWin_HGVisitAdd05(betParamVo);
             log.info("");
         }
         /** 体彩主队胜，皇冠客队减 */ // 要补平
         /*Double visitCut05 = betParamVo.getVisitCut05();
         if (visitCut05 != null && visitCut05 != 0) {
-            log.info("    体彩 @主队胜, 皇冠 @客队减05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队胜, 皇冠 @客队减05 -----------------------------");
             SPWin_HGVisitCut05(betParamVo);
             log.info("");
         }*/
@@ -181,14 +205,14 @@ public class BallTempServiceImpl implements IBallTempService {
         Double homeAdd05 = betParamVo.getHomeAdd05();
         Double oddsLose = betParamVo.getOddsLose();
         if (oddsLose != 0 && homeAdd05 != 0) {
-            log.info("    体彩 @主队负, 皇冠 @主队加05 -----------------------------");
+            log.info("    @@足球, 体彩 @主队负, 皇冠 @主队加05 -----------------------------");
             SPLose_HGHomeAdd05(betParamVo);
             log.info("");
         }
         /** 体彩主队负，皇冠主队减 */ // 要补平
         /*Double homeCut05 = betParamVo.getHomeCut05();
         if (homeCut05 != null && homeCut05 != 0) {
-            log.info("    体彩 @主队负, 皇冠 @主队减05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队负, 皇冠 @主队减05 -----------------------------");
             SPLose_HGHomeCut05(betParamVo);
             log.info("");
         }*/
@@ -198,15 +222,15 @@ public class BallTempServiceImpl implements IBallTempService {
         Double tie = betParamVo.getTie();
         Double visit = betParamVo.getVisit();
         if (home!=0 && tie!=0 && visit!=0) {
-            log.info("    体彩 @主队胜, 皇冠 @和局 @客胜 -----------------------------");
+            log.info("       @@足球, 体彩 @主队胜, 皇冠 @和局 @客胜 -----------------------------");
             SPWin_HGTieAndLose(betParamVo);
             log.info("");
             /** 体彩平，皇冠（主队胜、客队胜） */
-            log.info("    体彩 @平, 皇冠 @主胜 @客胜 -----------------------------");
+            log.info("       @@足球, 体彩 @平, 皇冠 @主胜 @客胜 -----------------------------");
             SPTie_HGWinAndLose(betParamVo);
             log.info("");
             /** 体彩主队负，皇冠（和局、主队胜） */
-            log.info("    体彩 @主负, 皇冠 @平 @主胜 -----------------------------");
+            log.info("       @@足球, 体彩 @主负, 皇冠 @平 @主胜 -----------------------------");
             SPLose_HGWinAndTie(betParamVo);
             log.info("");
         }
@@ -216,7 +240,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double oddsRangLose = betParamVo.getOddsRangLose();
         /** 体彩主队让球负(体彩主队-)，皇冠（主队减05胜） */
         if (oddsRangLose!=0 && homeCut05 != 0) {
-            log.info("    体彩 @主队让球负, 皇冠 @主队减05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队让球负, 皇冠 @主队减05 -----------------------------");
             SPRangLose_HGHomeCut05(betParamVo);
             log.info("");
         }
@@ -224,7 +248,7 @@ public class BallTempServiceImpl implements IBallTempService {
 //        Double oddsRangWin = betParamVo.getOddsRangWin();
         /** 体彩主队让球胜(体彩主队-)，皇冠（客队加05胜） */ // 要补平
         /*if (oddsRangWin != 0 && visitAdd05 != 0) {
-            log.info("    体彩 @主队让球胜, 皇冠 @客队加05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队让球胜, 皇冠 @客队加05 -----------------------------");
             SPRangWin_HGVisitAdd05(betParamVo);
             log.info("");
         }*/
@@ -233,7 +257,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double oddsShouWin = betParamVo.getOddsShouWin();
         Double visitCut05 = betParamVo.getVisitCut05();
         if (oddsShouWin != 0 && visitCut05 != 0) {
-            log.info("    体彩 @主队受球胜, 皇冠 @客队减05 -----------------------------");
+            log.info("       @@足球, 体彩 @主队受球胜, 皇冠 @客队减05 -----------------------------");
             SPShouWin_HGHomeCut05(betParamVo);
             log.info("");
         }
@@ -575,7 +599,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(betAmountSp, oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(CalcUtil.add(oddsHg, 1), betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
@@ -589,7 +613,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         log.info("体彩投注：主 胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**
@@ -623,7 +647,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(betAmountSp, oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(CalcUtil.add(oddsHg, 1), betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
@@ -637,7 +661,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         log.info("体彩投注：主 让球胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**
@@ -671,7 +695,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(betAmountSp, oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(CalcUtil.add(oddsHg, 1), betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
@@ -685,7 +709,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         log.info("体彩投注：主 受球胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**
@@ -719,7 +743,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(betAmountSp, oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(CalcUtil.add(oddsHg, 1), betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
@@ -733,7 +757,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         log.info("体彩投注：主负 @" + oddsLose + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：主 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**
@@ -767,7 +791,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(betAmountSp, oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(CalcUtil.add(oddsHg, 1), betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
@@ -781,7 +805,7 @@ public class BallTempServiceImpl implements IBallTempService {
 
         log.info("体彩投注：主 让球负 @" + oddsLose + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：主 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, betAmountSp, 4), 100) + "％");
+        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**
@@ -1628,6 +1652,110 @@ public class BallTempServiceImpl implements IBallTempService {
     }
 
     /**
+     * 小2/2.5
+     * 体彩大 234567+,皇冠 小2/2.5, 2球体彩赢，皇冠输一半
+     * @param betParamVo
+     */
+    public void SP234567_HG小2_25(BetParamVo betParamVo) {
+        Double betAmountTwo;
+        Double betAmountThree;
+        Double betAmountFour;
+        Double betAmountFive;
+        Double betAmountSix;
+        Double betAmountSeven;
+        Double betAmountHg;
+        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
+            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+            betAmountTwo = betParamTemp.getBetAmountTwo();
+            betAmountThree = betParamTemp.getBetAmountThree();
+            betAmountFour = betParamTemp.getBetAmountFour();
+            betAmountFive = betParamTemp.getBetAmountFive();
+            betAmountSix = betParamTemp.getBetAmountSix();
+            betAmountSeven = betParamTemp.getBetAmountSeven();
+            betAmountHg = betParamTemp.getBetAmountHg();
+        } else {
+            betAmountTwo = betParamVo.getBetAmountTwo();
+            betAmountThree = betParamVo.getBetAmountThree();
+            betAmountFour = betParamVo.getBetAmountFour();
+            betAmountFive = betParamVo.getBetAmountFive();
+            betAmountSix = betParamVo.getBetAmountSix();
+            betAmountSeven = betParamVo.getBetAmountSeven();
+            betAmountHg = betParamVo.getBetAmountHg();
+        }
+        // 体彩参数
+        double oddsTwo = betParamVo.getOddsTwo();
+        double oddsThree = betParamVo.getOddsThree();
+        double oddsFour = betParamVo.getOddsFour();
+        double oddsFive = betParamVo.getOddsFive();
+        double oddsSix = betParamVo.getOddsSix();
+        double oddsSeven = betParamVo.getOddsSeven();
+        // 皇冠参数
+        double oddsHg = betParamVo.getOddsHg();
+        // 体彩返水
+        double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountFour, betAmountFive, betAmountSix, betAmountSeven), rebateSP);
+
+        log.info("体彩投注：2球 " + betAmountTwo.intValue()+ ", 3球 " + betAmountThree.intValue() + ", 4球 " + betAmountFour.intValue() + ", 5球 " + betAmountFive.intValue() + ", 6球 " + betAmountSix.intValue() + ", 7+球 " + betAmountSeven.intValue());
+        log.info("皇冠投注：小2/2.5 @" + oddsHg + ", " + betAmountHg.intValue());
+        log.info("体彩总投注：" + CalcUtil.add(betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven).intValue()
+                + ", 皇冠总投注：" + betAmountHg.intValue());
+        log.info("");
+
+        Double betAmountAll = CalcUtil.add(betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHg);
+
+        /** 体彩中球 */
+        // 皇冠返水
+        Double betAmountHgHalf = CalcUtil.div(betAmountHg, 2);
+        double rebateHGAmountHalf = CalcUtil.mul(betAmountHgHalf, rebateHG);
+        double rebateHGAmountAll = CalcUtil.mul(betAmountHg, rebateHG);
+
+        /** 2球数据 */
+        double bonusTwo = CalcUtil.mul(betAmountTwo, oddsTwo); // 奖金
+        Double reward2 = CalcUtil.sub(CalcUtil.add(bonusTwo, rebateSPAmount, rebateHGAmountHalf), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHgHalf);
+        betParamVo.setReward3(reward2);
+        log.info("2球收益：" + reward2.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward2, betAmountAll, 4), 1000) + "‰");
+
+        /** 3球数据 */
+        double bonusThree = CalcUtil.mul(betAmountThree, oddsThree); // 奖金
+        Double reward3 = CalcUtil.sub(CalcUtil.add(bonusThree, rebateSPAmount, rebateHGAmountHalf), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHgHalf);
+        betParamVo.setReward3(reward3);
+        log.info("3球收益：" + reward3.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward3, betAmountAll, 4), 1000) + "‰");
+
+        /** 4球数据 */
+        double bonusFour = CalcUtil.mul(betAmountFour, oddsFour); // 奖金
+        Double reward4 = CalcUtil.sub(CalcUtil.add(bonusFour, rebateSPAmount, rebateHGAmountAll), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHg);
+        betParamVo.setReward4(reward4);
+        log.info("4球收益：" + reward4.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward4, betAmountAll, 4), 1000) + "‰");
+
+        /** 5球数据 */
+        double bonusFive = CalcUtil.mul(betAmountFive, oddsFive); // 奖金
+        Double reward5 = CalcUtil.sub(CalcUtil.add(bonusFive, rebateSPAmount, rebateHGAmountAll), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHg);
+        betParamVo.setReward5(reward5);
+        log.info("5球收益：" + reward5.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward5, betAmountAll, 4), 1000) + "‰");
+
+        /** 6球数据 */
+        double bonusSix = CalcUtil.mul(betAmountSix, oddsSix); // 奖金
+        Double reward6 = CalcUtil.sub(CalcUtil.add(bonusSix, rebateSPAmount, rebateHGAmountAll), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHg);
+        betParamVo.setReward6(reward6);
+        log.info("6球收益：" + reward6.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward6, betAmountAll, 4), 1000) + "‰");
+
+        /** 7球+数据 */
+        double bonusSeven = CalcUtil.mul(betAmountSeven, oddsSeven); // 奖金
+        Double reward7 = CalcUtil.sub(CalcUtil.add(bonusSeven, rebateSPAmount, rebateHGAmountAll), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven, betAmountHg);
+        betParamVo.setReward7(reward7);
+        log.info("7球+收益：" + reward7.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(reward7, betAmountAll, 4), 1000) + "‰");
+
+        /** 皇冠中球 */
+        double bonusHg = CalcUtil.mul(betAmountHg, oddsHg); // 奖金
+
+        // 皇冠返水 - 皇冠中球返水 按出奖金额作为基础金额
+        double rebateHGAmount = CalcUtil.mul(bonusHg, rebateHG);
+
+        Double rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSPAmount, rebateHGAmount), betAmountTwo, betAmountThree, betAmountFour, betAmountFive, betAmountSix, betAmountSeven);
+        betParamVo.setRewardHG(rewardHg);
+        log.info("皇冠收益：" + rewardHg.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHg, betAmountAll, 4), 1000) + "‰");
+    }
+
+    /**
      * 小2.5/3
      * 体彩大 34567+,皇冠 小2.5/3, 3球体彩赢，皇冠输一半
      * @param betParamVo
@@ -1914,16 +2042,18 @@ public class BallTempServiceImpl implements IBallTempService {
        Double oddsWin = basketballParamVo.getOddsWin();
        Double visitWin = basketballParamVo.getVisitWin();
        if (oddsWin != 0 && visitWin != 0) {
-           log.info("      体彩 主胜, 皇冠 客胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsWin, visitWin);
+           log.info("       @@篮球@胜负, 体彩 @主胜, 皇冠 @客胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsWin, visitWin);
+           log.info("");
        }
 
        /** 体彩客胜，皇冠主胜 */
        Double oddsLose = basketballParamVo.getOddsLose();
        Double homeWin = basketballParamVo.getHomeWin();
        if (oddsLose != 0 && homeWin != 0) {
-           log.info("      体彩 客胜, 皇冠 主胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsLose, homeWin);
+           log.info("       @@篮球@胜负, 体彩 @客胜, 皇冠 @主胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsLose, homeWin);
+           log.info("");
        }
 
        /**
@@ -1933,60 +2063,67 @@ public class BallTempServiceImpl implements IBallTempService {
        Double oddsCutWin = basketballParamVo.getOddsCutWin();
        Double visitAdd = basketballParamVo.getVisitAdd();
        if (oddsCutWin != 0 && visitAdd != 0) {
-           log.info("       体彩 主减胜, 皇冠 客加胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutWin, visitAdd);
+           log.info("       @@篮球@让分胜负, 体彩 @主减胜, 皇冠 @客加胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsCutWin, visitAdd);
+           log.info("");
        }
 
        /** 体彩 主减客胜，皇冠 主胜 */
        Double oddsCutLose = basketballParamVo.getOddsCutLose();
        if (oddsCutLose != 0 && homeWin != 0) {
-           log.info("       体彩 主减客胜, 皇冠 主胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeWin);
+           log.info("       @@篮球@让分胜负, 体彩 @主减客胜, 皇冠 @主胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeWin);
+           log.info("");
        }
 
        /** 体彩 主减客胜，皇冠 主加胜（加任意分/最高赔率） */
        Double homeAdd = basketballParamVo.getHomeAdd();
        if (oddsCutLose != 0 && homeAdd != 0) {
-           log.info("       体彩 主减客胜, 皇冠 主加胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsCutLose, homeAdd);
+           log.info("       @@篮球@让分胜负, 体彩 @主减客胜, 皇冠 @主加胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeAdd);
+           log.info("");
        }
 
        /** 体彩 主加胜，皇冠 客减胜 */
        Double oddsAddWin = basketballParamVo.getOddsAddWin();
        Double visitCut = basketballParamVo.getVisitCut();
        if (oddsAddWin != 0 && visitCut != 0) {
-           log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsAddWin, visitCut);
+           log.info("       @@篮球@让分胜负, 体彩 @主加胜, 皇冠 @客减胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsAddWin, visitCut);
+           log.info("");
        }
 
        /** 体彩 主加客胜，皇冠 主加胜 */
        Double oddsAddLose = basketballParamVo.getOddsAddLose();
        if (oddsAddLose != 0 && homeAdd != 0) {
-           log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsAddLose, homeAdd);
+           log.info("       @@篮球@让分胜负, 体彩 @主加胜, 皇冠 @客减胜 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsAddLose, homeAdd);
+           log.info("");
        }
-       /** 体彩 大，皇冠 小 */
+       /** 体彩 大，皇冠 小  , hg小分 - 体彩基准加1，体彩基准135 （体彩大135,皇冠小136）*/
        Double oddsBig = basketballParamVo.getOddsBig();
-       Double hgSmall = basketballParamVo.getHgSmall();
-       if (oddsBig != 0 && hgSmall != 0) {
-           log.info("       体彩 大, 皇冠 小 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+       Double hgSmallAdd1 = basketballParamVo.getHgSmallAdd1();
+       if (oddsBig != 0 && hgSmallAdd1 != 0) {
+           log.info("       @@篮球@大小分, 体彩 @大, 皇冠 @小 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1);
+           log.info("");
        }
-       /** 体彩 大，皇冠 小 */
+       /** 体彩 小，皇冠 大  , hg大分 - 体彩基准减1，体彩基准135 （体彩小135,皇冠大134）*/
        Double oddsSmall = basketballParamVo.getOddsSmall();
-       Double hgBig = basketballParamVo.getHgBig();
-       if (oddsSmall != 0 && hgBig != 0) {
-           log.info("       体彩 主加胜, 皇冠 客减胜 ------------------------------------------------------");
-           BK_WINLose_RangFen(betAmountSp, oddsBig, hgSmall);
+       Double hgBigCut1 = basketballParamVo.getHgBigCut1();
+       if (oddsSmall != 0 && hgBigCut1 != 0) {
+           log.info("       @@篮球@大小分, 体彩 @小, 皇冠 @大 ------------------------------------------------------");
+           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1);
+           log.info("");
        }
-
    }
 
     /**
      * 篮球胜负
      * 篮球让分
+     * 篮球大小分
      */
-    private void BK_WINLose_RangFen(Double betAmountSp, Double oddsSp, Double oddsHg) {
+    private void BK_winLose_rangFen(Double betAmountSp, Double oddsSp, Double oddsHg) {
         //计算hg投注额
         Double betAmountHg = calcBet(betAmountSp, oddsSp, oddsHg);
         //hg全输水
@@ -1994,14 +2131,31 @@ public class BallTempServiceImpl implements IBallTempService {
         //计算体彩水
         Double rebateSp = CalcUtil.mul(betAmountSp, rebateSPBK);
         //计算体彩收益
-        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, oddsSp), betAmountHg), rebateSp,rebateHgAll);
+        Double rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, CalcUtil.sub(oddsSp, 1)), betAmountHg), rebateSp,rebateHgAll);
         //计算皇冠出奖
-        Double hgBonus = CalcUtil.mul(betAmountHg, oddsHg);
+        Double hgBonus = CalcUtil.mul(betAmountHg, CalcUtil.sub(oddsHg, 1));
         //计算皇冠出奖返水
         Double hgBonusRebate = CalcUtil.mul(hgBonus,rebateHG);
         Double rewardHg = CalcUtil.add(CalcUtil.sub(hgBonus, betAmountSp), rebateSp, hgBonusRebate);
-        log.info("      体彩 @"+ oddsSp +"  投注 :"+betAmountSp.intValue() +"   收益:"+ rewardSp +"  收益率:"+ CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "%");
-        log.info("      皇冠 @"+ oddsHg +"  投注 :"+betAmountHg.intValue() +"   收益:"+ rewardHg +"  收益率:"+ CalcUtil.mul(CalcUtil.div(rewardHg, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "%");
+
+        // 调配金额
+        betAmountHg = AdaptationAmount.amountDeployment(oddsHg, betAmountHg, rewardSp, rewardHg);
+        if (betAmountHg == null) {
+            return;
+        }
+
+        //hg全输水
+        rebateHgAll = CalcUtil.mul(betAmountHg, rebateHG);
+        //计算体彩收益
+        rewardSp = CalcUtil.add(CalcUtil.sub(CalcUtil.mul(betAmountSp, CalcUtil.sub(oddsSp, 1)), betAmountHg), rebateSp,rebateHgAll);
+        //计算皇冠出奖
+        hgBonus = CalcUtil.mul(betAmountHg, CalcUtil.sub(oddsHg, 1));
+        //计算皇冠出奖返水
+        hgBonusRebate = CalcUtil.mul(hgBonus,rebateHG);
+        rewardHg = CalcUtil.add(CalcUtil.sub(hgBonus, betAmountSp), rebateSp, hgBonusRebate);
+
+        log.info("  体彩投注 @"+ oddsSp +", "+betAmountSp.intValue() +", 收益:"+ rewardSp.intValue() +", 收益率:"+ CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "%");
+        log.info("  皇冠投注 @"+ oddsHg +", "+betAmountHg.intValue() +", 收益:"+ rewardHg.intValue() +", 收益率:"+ CalcUtil.mul(CalcUtil.div(rewardHg, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "%");
     }
 
     /**

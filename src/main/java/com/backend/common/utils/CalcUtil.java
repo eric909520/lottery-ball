@@ -117,6 +117,18 @@ public class CalcUtil {
         return b1.subtract(b2).subtract(b3).subtract(b4).subtract(b5).subtract(b6).subtract(b7).doubleValue();
     }
 
+    public static Double sub(double v1,double v2,double v3,double v4,double v5, double v6, double v7, double v8){
+        BigDecimal b1 = new BigDecimal(Double.toString(v1));
+        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+        BigDecimal b3 = new BigDecimal(Double.toString(v3));
+        BigDecimal b4 = new BigDecimal(Double.toString(v4));
+        BigDecimal b5 = new BigDecimal(Double.toString(v5));
+        BigDecimal b6 = new BigDecimal(Double.toString(v6));
+        BigDecimal b7 = new BigDecimal(Double.toString(v7));
+        BigDecimal b8 = new BigDecimal(Double.toString(v8));
+        return b1.subtract(b2).subtract(b3).subtract(b4).subtract(b5).subtract(b6).subtract(b7).subtract(b8).doubleValue();
+    }
+
     /**
      * 提供精确的乘法运算。
      * @param v1 被乘数

@@ -77,7 +77,7 @@ public class BallOpenApiController extends BaseController {
     }
 
     /**
-     * 投注测试 - 单关胜平负
+     * 投注测试 - 篮球
      */
     @PostMapping(value = "/betBasketball")
     public AjaxResult betBasketball(@RequestBody BetBasketballParamVo basketballParamVo) {
