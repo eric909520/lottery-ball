@@ -2043,7 +2043,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitWin = basketballParamVo.getVisitWin();
        if (oddsWin != 0 && visitWin != 0) {
            log.info("       @@篮球@胜负, 体彩 @主胜, 皇冠 @客胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsWin, visitWin);
+           BK_winLose_rangFen(betAmountSp, oddsWin, visitWin, 1);
            log.info("");
        }
 
@@ -2052,7 +2052,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double homeWin = basketballParamVo.getHomeWin();
        if (oddsLose != 0 && homeWin != 0) {
            log.info("       @@篮球@胜负, 体彩 @客胜, 皇冠 @主胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsLose, homeWin);
+           BK_winLose_rangFen(betAmountSp, oddsLose, homeWin, 1);
            log.info("");
        }
 
@@ -2064,7 +2064,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitAdd = basketballParamVo.getVisitAdd();
        if (oddsCutWin != 0 && visitAdd != 0) {
            log.info("       @@篮球@让分胜负, 体彩 @主减胜, 皇冠 @客加胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsCutWin, visitAdd);
+           BK_winLose_rangFen(betAmountSp, oddsCutWin, visitAdd, 0);
            log.info("");
        }
 
@@ -2072,7 +2072,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double oddsCutLose = basketballParamVo.getOddsCutLose();
        if (oddsCutLose != 0 && homeWin != 0) {
            log.info("       @@篮球@让分胜负, 体彩 @主减客胜, 皇冠 @主胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeWin);
+           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeWin, 1);
            log.info("");
        }
 
@@ -2080,7 +2080,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double homeAdd = basketballParamVo.getHomeAdd();
        if (oddsCutLose != 0 && homeAdd != 0) {
            log.info("       @@篮球@让分胜负, 体彩 @主减客胜, 皇冠 @主加胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeAdd);
+           BK_winLose_rangFen(betAmountSp, oddsCutLose, homeAdd, 0);
            log.info("");
        }
 
@@ -2089,7 +2089,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double visitCut = basketballParamVo.getVisitCut();
        if (oddsAddWin != 0 && visitCut != 0) {
            log.info("       @@篮球@让分胜负, 体彩 @主加胜, 皇冠 @客减胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsAddWin, visitCut);
+           BK_winLose_rangFen(betAmountSp, oddsAddWin, visitCut, 0);
            log.info("");
        }
 
@@ -2097,7 +2097,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double oddsAddLose = basketballParamVo.getOddsAddLose();
        if (oddsAddLose != 0 && homeAdd != 0) {
            log.info("       @@篮球@让分胜负, 体彩 @主加胜, 皇冠 @客减胜 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsAddLose, homeAdd);
+           BK_winLose_rangFen(betAmountSp, oddsAddLose, homeAdd, 0);
            log.info("");
        }
        /** 体彩 大，皇冠 小  , hg小分 - 体彩基准加1，体彩基准135 （体彩大135,皇冠小136）*/
@@ -2105,7 +2105,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double hgSmallAdd1 = basketballParamVo.getHgSmallAdd1();
        if (oddsBig != 0 && hgSmallAdd1 != 0) {
            log.info("       @@篮球@大小分, 体彩 @大, 皇冠 @小 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1);
+           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1, 0);
            log.info("");
        }
        /** 体彩 小，皇冠 大  , hg大分 - 体彩基准减1，体彩基准135 （体彩小135,皇冠大134）*/
@@ -2113,7 +2113,7 @@ public class BallTempServiceImpl implements IBallTempService {
        Double hgBigCut1 = basketballParamVo.getHgBigCut1();
        if (oddsSmall != 0 && hgBigCut1 != 0) {
            log.info("       @@篮球@大小分, 体彩 @小, 皇冠 @大 ------------------------------------------------------");
-           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1);
+           BK_winLose_rangFen(betAmountSp, oddsBig, hgSmallAdd1, 0);
            log.info("");
        }
    }
@@ -2122,10 +2122,11 @@ public class BallTempServiceImpl implements IBallTempService {
      * 篮球胜负
      * 篮球让分
      * 篮球大小分
+     * @param flag  0:非篮球胜负场, 1:篮球胜负场
      */
-    private void BK_winLose_rangFen(Double betAmountSp, Double oddsSp, Double oddsHg) {
+    private void BK_winLose_rangFen(Double betAmountSp, Double oddsSp, Double oddsHg, Integer flag) {
         //计算hg投注额
-        Double betAmountHg = calcBet(betAmountSp, oddsSp, oddsHg);
+        Double betAmountHg = calcBet(betAmountSp, oddsSp, flag==0?CalcUtil.add(oddsHg, 1):oddsHg);
         //hg全输水
         Double rebateHgAll = CalcUtil.mul(betAmountHg, rebateHG);
         //计算体彩水
@@ -2139,7 +2140,7 @@ public class BallTempServiceImpl implements IBallTempService {
         Double rewardHg = CalcUtil.add(CalcUtil.sub(hgBonus, betAmountSp), rebateSp, hgBonusRebate);
 
         // 调配金额
-        betAmountHg = AdaptationAmount.amountDeployment(oddsHg, betAmountHg, rewardSp, rewardHg);
+        betAmountHg = AdaptationAmount.amountDeployment(flag==0?CalcUtil.add(oddsHg, 1):oddsHg, betAmountHg, rewardSp, rewardHg);
         if (betAmountHg == null) {
             return;
         }
