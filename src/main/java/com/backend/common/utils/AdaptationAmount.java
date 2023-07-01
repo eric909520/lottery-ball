@@ -70,7 +70,11 @@ public class AdaptationAmount {
     public static Double amountDeployment(Double oddsHg, Double betAmountHg, Double rewardSp, Double rewardHg) {
         if (rewardSp <0 && rewardHg <0) {
             return null;
-        } else if (rewardSp <0 || rewardHg <0) { // 单边收益负
+        } else if (rewardSp<0 || rewardHg<0) { // 单边收益负
+            Double rewardAll = CalcUtil.add(rewardSp, rewardHg);
+            if (rewardAll < 50) {
+                return null;
+            }
             // 收益差
             Double rewardSub = CalcUtil.add(Math.abs(rewardSp), Math.abs(rewardHg));
             if (rewardSub < 0) {
