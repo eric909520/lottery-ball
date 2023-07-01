@@ -98,7 +98,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/system/open/api/getPreOrder",
                         "/system/open/api/orderConfirm",
                         "/system/open/api/lottery/getNumber/hour/*",
-                        "/system/open/api/ball/*"
+                        "/system/open/api/ball/*",
+                        "/system/open/api/hedge/*"
                 ).anonymous()
                 .antMatchers(
                         HttpMethod.GET,

@@ -1,6 +1,5 @@
 package com.backend.common.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.backend.project.system.domain.vo.BetParamVo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,49 +11,57 @@ public class AdaptationAmount {
 
     public static BetParamVo adaptation(BetParamVo betParamVo){
         BetParamVo betParamTemp = new BetParamVo();
-        /**
-         * 0 1 2 3
-         */
-        if(betParamVo.getOddsZero() != 0 && betParamVo.getOddsZero() != null){
+        if (betParamVo.getOddsZero() != 0) {
             Double betZeroAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsZero());
             betParamTemp.setBetAmountZero(Rounding(betZeroAmount));
-
+        }
+        if (betParamVo.getOddsOne() != 0) {
             Double betOneAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsOne());
             betParamTemp.setBetAmountOne(Rounding(betOneAmount));
-
+        }
+        if (betParamVo.getOddsTwo() != 0) {
             Double betTwoAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsTwo());
             betParamTemp.setBetAmountTwo(Rounding(betTwoAmount));
-
-            Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
-            betParamTemp.setBetAmountHg(Rounding(HGBet));
-
-            if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
-                Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
-                betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
-            }
         }
-        /**
-         * 3 4 5 6 7+
-         */
-        if(betParamVo.getOddsFour()!= 0 && betParamVo.getOddsFour() != null){
-            if(betParamVo.getOddsThree() != null && betParamVo.getOddsThree() != 0){
-                Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
-                betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
-            }
+        if (betParamVo.getOddsThree() != 0) {
+            Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
+            betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
+        }
+        if (betParamVo.getOddsFour() != 0) {
             Double betFourAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFour());
             betParamTemp.setBetAmountFour(Rounding(betFourAmount));
-
+        }
+        if (betParamVo.getOddsFive() != 0) {
             Double betFiveAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFive());
             betParamTemp.setBetAmountFive(Rounding(betFiveAmount));
-
+        }
+        if (betParamVo.getOddsSix() != 0) {
             Double betSixAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSix());
             betParamTemp.setBetAmountSix(Rounding(betSixAmount));
-
+        }
+        if (betParamVo.getOddsSeven() != 0) {
             Double betSevenAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSeven());
             betParamTemp.setBetAmountSeven(Rounding(betSevenAmount));
-
+        }
+        if (betParamVo.getOddsHg()!=null && betParamVo.getOddsHg() != 0) {
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
             betParamTemp.setBetAmountHg(Rounding(HGBet));
+        }
+        if (betParamVo.getZong0_1() != 0) {
+            Double amount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getZong0_1());
+            betParamTemp.setZong0_1Amount(Rounding(amount));
+        }
+        if (betParamVo.getZong2_3() != 0) {
+            Double amount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getZong2_3());
+            betParamTemp.setZong2_3Amount(Rounding(amount));
+        }
+        if (betParamVo.getZong4_6() != 0) {
+            Double amount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getZong4_6());
+            betParamTemp.setZong4_6Amount(Rounding(amount));
+        }
+        if (betParamVo.getZong7() != 0) {
+            Double amount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getZong7());
+            betParamTemp.setZong7Amount(Rounding(amount));
         }
         return betParamTemp;
     }
@@ -107,6 +114,30 @@ public class AdaptationAmount {
             }
         }
         return betAmountHg;
+    }
+
+    /**
+     * 总进球金额调配
+     * @return
+     */
+    public static BetParamVo adaptationZong(BetParamVo betParamVo) {
+        Double reward0 = betParamVo.getReward0();
+        Double reward1 = betParamVo.getReward1();
+        Double reward2 = betParamVo.getReward2();
+        Double reward3 = betParamVo.getReward3();
+        Double reward4 = betParamVo.getReward4();
+        Double reward5 = betParamVo.getReward5();
+        Double reward6 = betParamVo.getReward6();
+        Double reward7 = betParamVo.getReward7();
+        Double rewardZong0_1 = betParamVo.getRewardZong0_1();
+        Double rewardZong2_3 = betParamVo.getRewardZong2_3();
+        Double rewardZong4_6 = betParamVo.getRewardZong4_6();
+        Double rewardZong7 = betParamVo.getRewardZong7();
+        if (reward0<=10 && reward1<=10 && reward2<=10 && reward3<=10 && reward4<=10 && reward5<=10 && reward6<=10
+                && reward7<=10 && rewardZong0_1<=10 && rewardZong2_3<=10 && rewardZong4_6<=10 && rewardZong7<=10) {
+            return null;
+        }
+        return betParamVo;
     }
 
     /**

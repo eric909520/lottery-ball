@@ -19,55 +19,55 @@ public class BetParamVo extends BetHGVo implements Serializable {
 
     private Double oddsZero = 0d;
 
-    private Double reward0;
+    private Double reward0 = 0D;
 
     private Double betAmountOne;
 
     private Double oddsOne;
 
-    private Double reward1;
+    private Double reward1 = 0D;
 
     private Double betAmountTwo;
 
     private Double oddsTwo;
 
-    private Double reward2;
+    private Double reward2 = 0D;
 
     private Double betAmountThree;
 
     private Double oddsThree;
 
-    private Double reward3;
+    private Double reward3 = 0D;
 
     private Double betAmountFour;
 
     private Double oddsFour = 0d;
 
-    private Double reward4;
+    private Double reward4 = 0D;
 
     private Double betAmountFive;
 
     private Double oddsFive;
 
-    private Double reward5;
+    private Double reward5 = 0D;
 
     private Double betAmountSix;
 
     private Double oddsSix;
 
-    private Double reward6;
+    private Double reward6 = 0D;
 
     private Double betAmountSeven;
 
     private Double oddsSeven;
 
-    private Double reward7;
+    private Double reward7 = 0D;
 
     private Double betAmountHg;
 
     private Double oddsHg;
 
-    private Double rewardHG;
+    private Double rewardHG = 0D;
 
     /**
      * 单关参数 - 体彩

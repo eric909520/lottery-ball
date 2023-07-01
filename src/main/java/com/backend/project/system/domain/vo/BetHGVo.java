@@ -91,6 +91,34 @@ public class BetHGVo implements Serializable {
 
     private Double 小35_4Amount;
 
+    // 总进球 0-1
+    private Double zong0_1;
+
+    private Double zong0_1Amount;
+
+    private Double rewardZong0_1 = 0D;
+
+    // 总进球 2-3
+    private Double zong2_3;
+
+    private Double zong2_3Amount;
+
+    private Double rewardZong2_3 = 0D;
+
+    // 总进球 4-6
+    private Double zong4_6;
+
+    private Double zong4_6Amount;
+
+    private Double rewardZong4_6 = 0D;
+
+    // 总进球 7+
+    private Double zong7;
+
+    private Double zong7Amount;
+
+    private Double rewardZong7 = 0D;
+
     /**
      * 单关参数
      */
