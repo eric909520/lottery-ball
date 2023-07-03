@@ -562,18 +562,20 @@ public class HttpUtils {
             Element rootElt = doc.getRootElement();
             Iterator gameIt = rootElt.elementIterator("game");
             while (gameIt.hasNext()) {
-                Element region = (Element) gameIt.next();
-                Element game = region.element("game");
+                Element game = (Element) gameIt.next();
                 String gid = game.elementTextTrim("gid");
-                String team_c = game.elementTextTrim("TEAM_C");
-                String ecid = game.elementTextTrim("ECID");
+                if (!gid.equals("6214197")) {
+                    continue;
+                }
+                String team_h = game.elementTextTrim("team_h");
+                String team_c = game.elementTextTrim("team_c");
                 String ratio_ouho = game.elementTextTrim("ratio_ouho");
-                String ratio_ouhu = game.elementTextTrim("ratio_ouhu");
+                String ior_OUHO = game.elementTextTrim("ior_OUHO");
                 System.out.println(gid);
+                System.out.println(team_h);
                 System.out.println(team_c);
-                System.out.println(ecid);
                 System.out.println(ratio_ouho);
-                System.out.println(ratio_ouhu);
+                System.out.println(ior_OUHO);
             }
         } catch (Exception e) {
             log.info("doPostForm exception ----->>>>", e);
