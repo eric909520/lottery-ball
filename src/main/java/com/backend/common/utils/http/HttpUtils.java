@@ -6,14 +6,20 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -380,6 +386,42 @@ public class HttpUtils {
         return result.toString();
     }
 
+    public static String doPostForm(String url, HashMap<String, String> headerMap, HashMap<String, String> paramMap) throws Exception {
+        String result = "";
+        CloseableHttpClient client = HttpClients.createDefault();
+
+        HttpPost httpPost = new HttpPost(url);
+        Iterator<Map.Entry<String, String>> headerIt = headerMap.entrySet().iterator();
+        while (headerIt.hasNext()) {
+            Map.Entry<String, String> header = headerIt.next();
+            httpPost.setHeader(header.getKey(), header.getValue());
+        }
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        Iterator<Map.Entry<String, String>> it = paramMap.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            builder.addTextBody(entry.getKey(), entry.getValue());
+        }
+
+        HttpEntity multipart = builder.build();
+        httpPost.setEntity(multipart);
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            if (response != null) {
+                HttpEntity resEntity = response.getEntity();
+                if (resEntity != null) {
+                    result = EntityUtils.toString(resEntity, "UTF-8");
+                }
+            }
+        } catch (Exception e) {
+            log.info("", e);
+            throw new RuntimeException("请求异常---" + e);
+        }
+        return result;
+    }
+
     private static class TrustAnyTrustManager implements X509TrustManager {
         @Override
         public void checkClientTrusted(X509Certificate[] chain, String authType) {
@@ -399,6 +441,46 @@ public class HttpUtils {
         @Override
         public boolean verify(String hostname, SSLSession session) {
             return true;
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            String url = "https://www.mos022.com/transform.php";
+            HashMap<String, String> headerMap = new HashMap<>();
+            headerMap.put("Content-type", "application/x-www-form-urlencoded");
+            headerMap.put("Host", "www.mos022.com");
+            headerMap.put("Origin", "https://www.mos033.com");
+            headerMap.put("Referer", "https://www.mos033.com");
+            headerMap.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36");
+            headerMap.put("Accept", "*/*");
+            headerMap.put("Accept-Encoding", "gzip, deflate, br");
+            headerMap.put("Accept-Language", "zh-CN,zh;q=0.9");
+            headerMap.put("Connection", "keep-alive");
+            headerMap.put("Cookie", "CookieChk=WQ; box4pwd_notshow_31216544=MzEyMTY1NDRfTg==; myGameVer_31216544=XzIxMTIyOA==; ft_myGame_31216544=e30=; box4pwd_notshow_31222858=MzEyMjI4NThfTg==; myGameVer_31222858=XzIxMTIyOA==; announcement_31222858_202209=MzEyMjI4NThfTg==; ft_myGame_31222858=e30=; Gen_cookie_31222858=MjE4MzNfMzEyMjI4NTg=; Imp_cookie_31222858=MjI1Nl8zMTIyMjg1OA==; test=aW5pdA; op_myGame_31222858=e30=; bk_myGame_31222858=e30=; announcement_31216544_202209=MzEyMTY1NDRfTg==; protocolstr=aHR0cHM=; odd_f_type_31222858=RQ==; now_passcode=W2RlbF0=; login_31222858=MTY4ODM2MTU3OQ; loginuser=UXVhblNoYW4wMDE=; login_31216544=MTY4ODM2NDM0OQ; cu=Tg==; cuipv6=Tg==; ipv6=Tg==");
+            headerMap.put("sec-ch-ua", "\"Google Chrome\";v=\"107\", \"Chromium\";v=\"107\", \"Not=A?Brand\";v=\"24\"");
+            headerMap.put("sec-ch-ua-mobile", "?0");
+            headerMap.put("sec-ch-ua-platform", "Windows");
+            headerMap.put("Sec-Fetch-Dest", "empty");
+            headerMap.put("Sec-Fetch-Mode", "cors");
+            headerMap.put("Sec-Fetch-Site", "same-origin");
+
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", "get_league_list_All");
+            paramMap.put("uid", "7qkd16y5m31216544l115184b0");
+            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("gtype", "FT");
+            paramMap.put("FS", "N");
+            paramMap.put("showtype", "ft");
+            paramMap.put("date", "0");
+            paramMap.put("ts", "1688364421939");
+            paramMap.put("nocp", "N");
+            String s = doPostForm(url, headerMap, paramMap);
+            System.out.println(s);
+
+        } catch (Exception e) {
+            log.info("doPostForm exception ----->>>>", e);
         }
     }
 }

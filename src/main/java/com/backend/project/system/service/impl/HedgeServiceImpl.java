@@ -39,7 +39,7 @@ public class HedgeServiceImpl implements IHedgeService {
         log.info("  365投注 @" + odds365 + ", " + bet365Amount.intValue() + ", 收益:"+ reward365.intValue() + ", 收益率:"+ CalcUtil.mul(CalcUtil.div(reward365, CalcUtil.add(bet365Amount, betHgAmount), 4), 100) + "%");
 
         // 调配金额
-        bet365Amount = AdaptationAmount.amountDeployment(odds365, bet365Amount, reward365, rewardHg);
+        bet365Amount = AdaptationAmount.amountDeployment(odds365, bet365Amount, rewardHg, reward365);
         if (bet365Amount == null) {
             return;
         }
