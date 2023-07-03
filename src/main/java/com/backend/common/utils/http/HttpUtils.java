@@ -447,7 +447,7 @@ public class HttpUtils {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         try {
             String url = "https://www.mos022.com/transform.php";
 
@@ -485,10 +485,53 @@ public class HttpUtils {
                     System.out.println(leagueId);
                     System.out.println(leagueTSort);
                 }
-
             }
 
 
+        } catch (Exception e) {
+            log.info("doPostForm exception ----->>>>", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            String url = "https://www.mos022.com/transform.php";
+
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", "get_game_list");
+            paramMap.put("uid", "7qkd16y5m31216544l115184b0");
+            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("p3type", "");
+            paramMap.put("date", "0");
+            paramMap.put("gtype", "ft");
+            paramMap.put("showtype", "today");
+            paramMap.put("rtype", "r");
+            paramMap.put("ltype", "3");
+            paramMap.put("lid", "104841");
+            paramMap.put("action", "click_league");
+            paramMap.put("sorttype", "L");
+            paramMap.put("specialClick", "");
+            paramMap.put("isFantasy", "N");
+            paramMap.put("ts", "1688405870811");
+            String data = doPostForm(url, paramMap);
+//            System.out.println(data);
+
+
+            Document doc = null;
+            doc = DocumentHelper.parseText(data); // 将字符串转为XML
+            Element rootElt = doc.getRootElement();
+            Iterator ecIt = rootElt.elementIterator("ec");
+            while (ecIt.hasNext()) {
+                Element region = (Element)ecIt.next();
+                Element game = region.element("game");
+                Element team_h = game.element("TEAM_H");
+                Element team_c = game.element("TEAM_C");
+                Element ecid = game.element("ECID");
+                System.out.println(team_h);
+                System.out.println(team_c);
+                System.out.println(ecid);
+            }
         } catch (Exception e) {
             log.info("doPostForm exception ----->>>>", e);
         }
