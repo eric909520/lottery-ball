@@ -13,6 +13,9 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -459,8 +462,32 @@ public class HttpUtils {
             paramMap.put("date", "0");
             paramMap.put("ts", "1688364421939");
             paramMap.put("nocp", "N");
-            String s = doPostForm(url, paramMap);
-            System.out.println(s);
+            String data = doPostForm(url, paramMap);
+//            System.out.println(data);
+
+
+            Document doc = null;
+            doc = DocumentHelper.parseText(data); // 将字符串转为XML
+            Element rootElt = doc.getRootElement();
+            Element classifier = rootElt.element("classifier");
+            Iterator regionIt = classifier.elementIterator("region");
+            while (regionIt.hasNext()) {
+                Element region = (Element)regionIt.next();
+                String regionName = region.attributeValue("name");
+                System.out.println(regionName);
+                Iterator leagueIt = region.elementIterator("league");
+                while (leagueIt.hasNext()) {
+                    Element league = (Element)leagueIt.next();
+                    String leagueName = league.attributeValue("name");
+                    String leagueId = league.attributeValue("id");
+                    String leagueTSort = league.attributeValue("t_sort");
+                    System.out.println(leagueName);
+                    System.out.println(leagueId);
+                    System.out.println(leagueTSort);
+                }
+
+            }
+
 
         } catch (Exception e) {
             log.info("doPostForm exception ----->>>>", e);
