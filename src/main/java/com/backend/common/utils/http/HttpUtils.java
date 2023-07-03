@@ -466,8 +466,7 @@ public class HttpUtils {
 //            System.out.println(data);
 
 
-            Document doc = null;
-            doc = DocumentHelper.parseText(data); // 将字符串转为XML
+            Document doc = DocumentHelper.parseText(data); // 将字符串转为XML
             Element rootElt = doc.getRootElement();
             Element classifier = rootElt.element("classifier");
             Iterator regionIt = classifier.elementIterator("region");
@@ -493,7 +492,7 @@ public class HttpUtils {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         try {
             String url = "https://www.mos022.com/transform.php";
 
@@ -518,16 +517,15 @@ public class HttpUtils {
 //            System.out.println(data);
 
 
-            Document doc = null;
-            doc = DocumentHelper.parseText(data); // 将字符串转为XML
+            Document doc = DocumentHelper.parseText(data); // 将字符串转为XML
             Element rootElt = doc.getRootElement();
             Iterator ecIt = rootElt.elementIterator("ec");
             while (ecIt.hasNext()) {
-                Element region = (Element)ecIt.next();
-                Element game = region.element("game");
-                Element team_h = game.element("TEAM_H");
-                Element team_c = game.element("TEAM_C");
-                Element ecid = game.element("ECID");
+                Element ec = (Element)ecIt.next();
+                Element game = ec.element("game");
+                String team_h = game.elementTextTrim("TEAM_H");
+                String team_c = game.elementTextTrim("TEAM_C");
+                String ecid = game.elementTextTrim("ECID");
                 System.out.println(team_h);
                 System.out.println(team_c);
                 System.out.println(ecid);
@@ -537,7 +535,52 @@ public class HttpUtils {
         }
     }
 
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
+        try {
+            String url = "https://www.mos022.com/transform.php";
+
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", "get_game_more");
+            paramMap.put("uid", "7qkd16y5m31216544l115184b0");
+            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("gtype", "ft");
+            paramMap.put("showtype", "today");
+            paramMap.put("ltype", "3");
+            paramMap.put("isRB", "N");
+            paramMap.put("lid", "104841");
+            paramMap.put("specialClick", "");
+            paramMap.put("mode", "");
+            paramMap.put("filter", "");
+            paramMap.put("ts", "1688405870811");
+            paramMap.put("ecid", "7184623");
+            String data = doPostForm(url, paramMap);
+//            System.out.println(data);
+
+
+            Document doc = DocumentHelper.parseText(data); // 将字符串转为XML
+            Element rootElt = doc.getRootElement();
+            Iterator gameIt = rootElt.elementIterator("game");
+            while (gameIt.hasNext()) {
+                Element region = (Element) gameIt.next();
+                Element game = region.element("game");
+                String gid = game.elementTextTrim("gid");
+                String team_c = game.elementTextTrim("TEAM_C");
+                String ecid = game.elementTextTrim("ECID");
+                String ratio_ouho = game.elementTextTrim("ratio_ouho");
+                String ratio_ouhu = game.elementTextTrim("ratio_ouhu");
+                System.out.println(gid);
+                System.out.println(team_c);
+                System.out.println(ecid);
+                System.out.println(ratio_ouho);
+                System.out.println(ratio_ouhu);
+            }
+        } catch (Exception e) {
+            log.info("doPostForm exception ----->>>>", e);
+        }
+    }
+
+    public static void main6(String[] args) {
 //            HashMap<String, String> headerMap = new HashMap<>();
 //            headerMap.put("Content-type", "application/x-www-form-urlencoded");
 //            headerMap.put("Host", "www.mos022.com");
