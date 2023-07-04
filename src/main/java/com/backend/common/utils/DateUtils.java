@@ -26,6 +26,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
+    public static String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
+
     public static SimpleDateFormat YYYYMMDD_HHMMSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static SimpleDateFormat YYYY_MM_DD_HH_MM_SS_SSS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -293,13 +295,96 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return parseDateToStr(YYYY_MM_DD, date);
     }
 
+    /**
+     * 根据参数时间加指定小时的时间
+     * @param baseDate
+     * @param addHours
+     * @return
+     */
+    public static String addHours(String baseDate, int addHours) {
+        Date date = parseDate(baseDate);
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, addHours);
+        date = calendar.getTime();
+        return parseDateToStr(YYYY_MM_DD_HH_MM, date);
+    }
+
+    /**
+     * 根据参数时间加指定小时的时间
+     * @param baseDate
+     * @param addHours
+     * @return
+     */
+    public static Long addHours1(String baseDate, int addHours) {
+        Date date = parseDate(baseDate);
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.HOUR, addHours);
+        date = calendar.getTime();
+        return date.getTime();
+    }
+
+    public static String getCurrentYear() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        return String.valueOf(year);
+    }
+
+    /**
+     * 改造hg比赛时间
+     * 08-06 11:00a
+     * 07-04 03:15p
+     * 改造格式， + 12H
+     * @return
+     */
+    public static String transformDateHg(String dateTime) {
+        String year = getCurrentYear();
+        int flag = dateTime.indexOf("p");
+        if (flag < 0) { // 上午时间
+            String date = year + "-" + dateTime.replace("a", "");
+            date = addHours(date, 12);
+            return date;
+        } else { // 下午时间，03:15p = 15:15
+            String date = year + "-" + dateTime.replace("p", "");
+            date = addHours(date, 24);
+            return date;
+        }
+    }
+
+    /**
+     * 获取hg比赛时间戳
+     * 08-06 11:00a
+     * 07-04 03:15p
+     * 改造格式， + 12H
+     * @return
+     */
+    public static Long getLeagueDate(String dateTime) {
+        String year = getCurrentYear();
+        int flag = dateTime.indexOf("p");
+        if (flag < 0) { // 上午时间
+            dateTime = year + "-" + dateTime.replace("a", "");
+            Long date = addHours1(dateTime, 12);
+            return date;
+        } else { // 下午时间，03:15p = 15:15
+            dateTime = year + "-" + dateTime.replace("p", "");
+            Long date = addHours1(dateTime, 24);
+            return date;
+        }
+    }
+
     public static void main(String[] args) {
-        try {
+        /*try {
             String onePointTime = getOnePointTime(-1);
             System.out.println(onePointTime);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
+//        String s = transformDateHg("07-04 11:00a");
+//        String s = transformDateHg("07-04 1:00p");
+//        Long s = getLeagueDate("07-04 11:00a");
+        Long s = getLeagueDate("07-04 1:00p");
+        System.out.println(s);
     }
 
 }

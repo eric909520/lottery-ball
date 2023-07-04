@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.HgApiMapper">
+
+    <resultMap type="HgApi" id="HgApiResult">
+        <result property="id" column="id"/>
+        <result property="apiLink" column="api_link"/>
+        <result property="p" column="p"/>
+        <result property="uId" column="u_id"/>
+        <result property="ts" column="ts"/>
+    </resultMap>
+
+    <sql id="selectHgApiVo">
+        select id, api_link, p, u_id, ts from hg_api
+    </sql>
+
+    <select id="selectByP" parameterType="string" resultMap="HgApiResult">
+        <include refid="selectHgApiVo"/>
+        <where>
+            <if test="p != null  and p != ''">
+                and p = #{p}
+            </if>
+        </where>
+    </select>
+
+</mapper>
