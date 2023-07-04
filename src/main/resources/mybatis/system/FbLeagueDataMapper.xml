@@ -68,7 +68,7 @@
             </if>
             <if test="ecTime != null  and ecTime != ''">#{ecTime},
             </if>
-            <if test="ecTimeStamp != null  and ecTimeStamp != ''">#{ecTimeStamp},
+            <if test="ecTimestamp != null  and ecTimestamp != ''">#{ecTimestamp},
             </if>
             <if test="teamH != null  and teamH != ''">#{teamH},
             </if>

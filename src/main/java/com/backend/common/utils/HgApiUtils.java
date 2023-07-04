@@ -28,7 +28,7 @@ public class HgApiUtils {
         try {
             String url = hgApi.getApiLink();
             HashMap<String, String> paramMap = new HashMap<>();
-            paramMap.put("p", hgApi.getApiLink());
+            paramMap.put("p", hgApi.getP());
             paramMap.put("uid", hgApi.getUId());
 //            paramMap.put("ver", "2023-06-26-unbanner-1166");
             paramMap.put("langx", "zh-cn");

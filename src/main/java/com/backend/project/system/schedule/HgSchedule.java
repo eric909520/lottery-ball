@@ -14,7 +14,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -38,12 +37,13 @@ public class HgSchedule {
      * task - polling today football data
      * 每天中午12点拿今日足球比赛数据
      */
-    @Scheduled(cron="0 0/1 * * * ?")
+//    @Scheduled(cron="0 0/1 * * * ?")
+//    @Scheduled(fixedDelay = 600000L)
     private void pollingFootballDataToday() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
-                HgApi hgApi = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
-                String league_list_all = HgApiUtils.get_league_list_All(hgApi);
+                HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
+                String league_list_all = HgApiUtils.get_league_list_All(hgApi1);
                 Document doc = DocumentHelper.parseText(league_list_all);
                 Element rootElt = doc.getRootElement();
                 Element classifier = rootElt.element("classifier");
@@ -59,8 +59,9 @@ public class HgSchedule {
                         String leagueSortName = league.attributeValue("sort_name"); // 联赛排序标记
                         String leagueId = league.attributeValue("id"); // 联赛id
                         // 设置参数，获取联赛下属比赛列表
-                        hgApi.setLid(leagueId);
-                        String game_list = HgApiUtils.get_game_list(hgApi);
+                        HgApi hgApi2 = hgApiMapper.selectByP(HgApiEnum.get_game_list.getApi());
+                        hgApi2.setLid(leagueId);
+                        String game_list = HgApiUtils.get_game_list(hgApi2);
                         Document docGameList = DocumentHelper.parseText(game_list);
                         Element rootEltGameList = docGameList.getRootElement();
                         Iterator ecIt = rootEltGameList.elementIterator("ec");
