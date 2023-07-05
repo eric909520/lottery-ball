@@ -49,10 +49,15 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 smi.setAwaTeamAbbName(sl.getAwayTeamAbbName());
                                 smi.setMatchDate(sl.getMatchDate());
                                 smi.setMatchNum(sl.getMatchNum());
+                                smi.setMatchTime(sl.getMatchTime());
                                 Had had = sl.getHad();
                                 smi.setLose(had.getA());
                                 smi.setDraw(had.getD());
                                 smi.setWin(had.getH());
+                                Hhad hhad = sl.getHhad();
+                                smi.setHandicapLose(hhad.getA());
+                                smi.setHandicapDraw(hhad.getD());
+                                smi.setHandicapWin(hhad.getH());
                                 Ttg ttg = sl.getTtg();
                                 smi.setS0(ttg.getS0());
                                 smi.setS1(ttg.getS1());
@@ -72,8 +77,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         }
 
         if(spMatchInfos != null && spMatchInfos.size() >0){
-            spMatchInfoMapper.deleteMatchInfo();
-            spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
+            try {
+                spMatchInfoMapper.deleteMatchInfo();
+                spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

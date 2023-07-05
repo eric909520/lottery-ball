@@ -71,7 +71,8 @@
              s4,
              s5,
              s6,
-             s7
+             s7,
+            create_time
              )
             values
         <foreach item="list" index="index" collection="list" separator=",">
@@ -117,7 +118,8 @@
         s4,
         s5,
         s6,
-        s7)
+        s7,
+        create_time)
         values
             (
             #{matchNum},
