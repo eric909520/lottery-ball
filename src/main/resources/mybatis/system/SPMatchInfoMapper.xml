@@ -51,56 +51,99 @@
 <!--        where id = #{id}-->
 <!--    </select>-->
 
-    <insert id="insertSPMatchInfo" parameterType="SPMatchInfo" useGeneratedKeys="true"
-            keyProperty="id">
-        insert into sp_match_info
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="matchNum != null  and matchNum != ''">match_num,</if>
-            <if test="matchDate != null  and matchDate != ''">match_date,</if>
-            <if test="matchTime != null and matchTime !=''">match_time,</if>
-            <if test="homeTeamAbbName != null  and homeTeamAbbName != ''">home_team_abb_name,</if>
-            <if test="awaTeamAbbName != null  and awaTeamAbbName != ''">awa_team_abb_name,</if>
-            <if test="win != null  and win != ''">win,</if>
-            <if test="draw != null  and draw != ''">draw,</if>
-            <if test="lose != null  and lose != ''">lose,</if>
-            <if test="handicapWin != null  and handicapWin != ''">handicap_win,</if>
-            <if test="handicapDraw != null  and handicapDraw != ''">handicap_draw,</if>
-            <if test="handicapLose != null  and handicapLose != ''">handicap_lose,</if>
-            <if test="s0 != null  and s0 != ''">s0,</if>
-            <if test="s1 != null  and s1 != ''">s1,</if>
-            <if test="s2 != null  and s2 != ''">s2,</if>
-            <if test="s3 != null  and s3 != ''">s3,</if>
-            <if test="s4 != null  and s4 != ''">s4,</if>
-            <if test="s5 != null  and s5 != ''">s5,</if>
-            <if test="s6 != null  and s6 != ''">s6,</if>
-            <if test="s7 != null  and s7 != ''">s7</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="matchNum != null  and matchNum != ''">#{matchNum},</if>
-            <if test="matchDate != null  and matchDate != ''">#{matchDate},</if>
-            <if test="matchTime != null and matchTime !=''">#{matchTime},</if>
-            <if test="homeTeamAbbName != null  and homeTeamAbbName != ''">#{homeTeamAbbName},</if>
-            <if test="awaTeamAbbName != null  and awaTeamAbbName != ''">#{awaTeamAbbName},</if>
-            <if test="win != null  and win != ''">#{win},</if>
-            <if test="draw != null  and draw != ''">#{draw},</if>
-            <if test="lose != null  and lose != ''">#{lose},</if>
-            <if test="handicapWin != null  and handicapWin != ''">#{handicapWin},</if>
-            <if test="handicapDraw != null  and handicapDraw != ''">#{handicapDraw},</if>
-            <if test="handicapLose != null  and handicapLose != ''">#{handicapLose},</if>
-            <if test="s0 != null  and s0 != ''">#{s0},</if>
-            <if test="s1 != null  and s1 != ''">#{s1},</if>
-            <if test="s2 != null  and s2 != ''">#{s2},</if>
-            <if test="s3 != null  and s3 != ''">#{s3},</if>
-            <if test="s4 != null  and s4 != ''">#{s4},</if>
-            <if test="s5 != null  and s5 != ''">#{s5},</if>
-            <if test="s6 != null  and s6 != ''">#{s6},</if>
-            <if test="s7 != null  and s7 != ''">#{s7},</if>
-            <if test="createTime != null  and createTime != ''">#{createTime}</if>
-        </trim>
+    <insert id="insertSPMatchInfos">
+        insert into sp_match_info(
+             match_num,
+             match_date,
+             match_time,
+             home_team_abb_name,
+             awa_team_abb_name,
+             win,
+             draw,
+             lose,
+             handicap_win,
+             handicap_draw,
+             handicap_lose,
+             s0,
+             s1,
+             s2,
+             s3,
+             s4,
+             s5,
+             s6,
+             s7
+             )
+            values
+        <foreach item="list" index="index" collection="list" separator=",">
+            (#{list.matchNum},
+            #{list.matchDate},
+            #{list.matchTime},
+            #{list.homeTeamAbbName},
+            #{list.awaTeamAbbName},
+            #{list.win},
+            #{list.draw},
+            #{list.lose},
+            #{list.handicapWin},
+            #{list.handicapDraw},
+            #{list.handicapLose},
+            #{list.s0},
+            #{list.s1},
+            #{list.s2},
+            #{list.s3},
+            #{list.s4},
+            #{list.s5},
+            #{list.s6},
+            #{list.s7},
+            #{list.createTime})
+        </foreach>
+    </insert>
+    <insert id="insertSPMatchInfo">
+        insert into sp_match_info(
+        match_num,
+        match_date,
+        match_time,
+        home_team_abb_name,
+        awa_team_abb_name,
+        win,
+        draw,
+        lose,
+        handicap_win,
+        handicap_draw,
+        handicap_lose,
+        s0,
+        s1,
+        s2,
+        s3,
+        s4,
+        s5,
+        s6,
+        s7)
+        values
+            (
+            #{matchNum},
+            #{matchDate},
+            #{matchTime},
+            #{homeTeamAbbName},
+            #{awaTeamAbbName},
+            #{win},
+            #{draw},
+            #{lose},
+            #{handicapWin},
+            #{handicapDraw},
+            #{handicapLose},
+            #{s0},
+            #{s1},
+            #{s2},
+            #{s3},
+            #{s4},
+            #{s5},
+            #{s6},
+            #{s7},
+            #{createTime})
     </insert>
 
     <delete id="deleteMatchInfo">
-        delete from sp_match_info where id > 1
+        delete from sp_match_info where id > 0
     </delete>
 
 </mapper>
