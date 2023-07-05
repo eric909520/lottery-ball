@@ -22,7 +22,9 @@ public class SPDataSchedule {
     @Scheduled(cron = "0 0/1 * * * ? ")
     private void getSPMatchData() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
-//            sportsBettingDataService.getSportsBettingFBData();
+            //足球数据
+            sportsBettingDataService.getSportsBettingFBData();
+            //篮球数据
             sportsBettingDataService.getSportsBettingBKData();
         });
     }
