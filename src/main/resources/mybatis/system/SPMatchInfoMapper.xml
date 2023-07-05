@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.SPMatchInfoMapper">
+
+    <resultMap type="SPMatchInfo" id="SPMatchInfoResult">
+        <result property="id" column="id"/>
+        <result property="matchNum" column="match_num"/>
+        <result property="matchDate" column="match_date"/>
+        <result property="matchTime" column="match_time"/>
+        <result property="homeTeamAbbName" column="home_team_abb_name"/>
+        <result property="awaTeamAbbName" column="awa_team_abb_name"/>
+        <result property="win" column="win"/>
+        <result property="draw" column="draw"/>
+        <result property="lose" column="lose"/>
+        <result property="handicapWin" column="handicap_win"/>
+        <result property="handicapDraw" column="handicap_draw"/>
+        <result property="handicapLose" column="handicap_lose"/>
+        <result property="s0" column="s0"/>
+        <result property="s1" column="s1"/>
+        <result property="s2" column="s2"/>
+        <result property="s3" column="s3"/>
+        <result property="s4" column="s4"/>
+        <result property="s5" column="s5"/>
+        <result property="s6" column="s6"/>
+        <result property="s7" column="s7"/>
+    </resultMap>
+
+<!--    <sql id="selectSPMatchInfo" >-->
+<!--        select id, c_key, c_value, type, remark from sp_match_info-->
+<!--    </sql>-->
+
+<!--    <select id="selectAppConfigList"  resultMap="SPMatchInfoResult">-->
+<!--        <include refid="selectAppConfigVo"/>-->
+<!--        <where>-->
+<!--            <if test="cKey != null  and cKey != ''">-->
+<!--                and c_key = #{cKey}-->
+<!--            </if>-->
+<!--            <if test="cValue != null  and cValue != ''">-->
+<!--                and c_value = #{cValue}-->
+<!--            </if>-->
+<!--            <if test="type != null ">-->
+<!--                and type = #{type}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+<!--    <select id="selectAppConfigById" parameterType="Long" resultMap="AppConfigResult">-->
+<!--        <include refid="selectAppConfigVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+
+    <insert id="insertSPMatchInfo" parameterType="SPMatchInfo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into sp_match_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="matchNum != null  and matchNum != ''">match_num,</if>
+            <if test="matchDate != null  and matchDate != ''">match_date,</if>
+            <if test="matchTime != null and matchTime !=''">match_time,</if>
+            <if test="homeTeamAbbName != null  and homeTeamAbbName != ''">home_team_abb_name,</if>
+            <if test="awaTeamAbbName != null  and awaTeamAbbName != ''">awa_team_abb_name,</if>
+            <if test="win != null  and win != ''">win,</if>
+            <if test="draw != null  and draw != ''">draw,</if>
+            <if test="lose != null  and lose != ''">lose,</if>
+            <if test="handicapWin != null  and handicapWin != ''">handicap_win,</if>
+            <if test="handicapDraw != null  and handicapDraw != ''">handicap_draw,</if>
+            <if test="handicapLose != null  and handicapLose != ''">handicap_lose,</if>
+            <if test="s0 != null  and s0 != ''">s0,</if>
+            <if test="s1 != null  and s1 != ''">s1,</if>
+            <if test="s2 != null  and s2 != ''">s2,</if>
+            <if test="s3 != null  and s3 != ''">s3,</if>
+            <if test="s4 != null  and s4 != ''">s4,</if>
+            <if test="s5 != null  and s5 != ''">s5,</if>
+            <if test="s6 != null  and s6 != ''">s6,</if>
+            <if test="s7 != null  and s7 != ''">s7</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="matchNum != null  and matchNum != ''">#{matchNum},</if>
+            <if test="matchDate != null  and matchDate != ''">#{matchDate},</if>
+            <if test="matchTime != null and matchTime !=''">#{matchTime},</if>
+            <if test="homeTeamAbbName != null  and homeTeamAbbName != ''">#{homeTeamAbbName},</if>
+            <if test="awaTeamAbbName != null  and awaTeamAbbName != ''">#{awaTeamAbbName},</if>
+            <if test="win != null  and win != ''">#{win},</if>
+            <if test="draw != null  and draw != ''">#{draw},</if>
+            <if test="lose != null  and lose != ''">#{lose},</if>
+            <if test="handicapWin != null  and handicapWin != ''">#{handicapWin},</if>
+            <if test="handicapDraw != null  and handicapDraw != ''">#{handicapDraw},</if>
+            <if test="handicapLose != null  and handicapLose != ''">#{handicapLose},</if>
+            <if test="s0 != null  and s0 != ''">#{s0},</if>
+            <if test="s1 != null  and s1 != ''">#{s1},</if>
+            <if test="s2 != null  and s2 != ''">#{s2},</if>
+            <if test="s3 != null  and s3 != ''">#{s3},</if>
+            <if test="s4 != null  and s4 != ''">#{s4},</if>
+            <if test="s5 != null  and s5 != ''">#{s5},</if>
+            <if test="s6 != null  and s6 != ''">#{s6},</if>
+            <if test="s7 != null  and s7 != ''">#{s7},</if>
+            <if test="createTime != null  and createTime != ''">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteMatchInfo">
+        delete from sp_match_info where id > 1
+    </delete>
+
+</mapper>
