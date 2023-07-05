@@ -148,4 +148,43 @@
         delete from sp_match_info where id > 0
     </delete>
 
+
+    <delete id="deleteBKMatchInfo">
+        delete from sp_bk_match_info where id > 0
+    </delete>
+    <insert id="insertSPBKMatchInfos">
+        insert into sp_bk_match_info(
+        match_num,
+        match_date,
+        match_time,
+        home_team_abb_name,
+        away_team_abb_name,
+        win,
+        lose,
+        handicap,
+        handicap_win,
+        handicap_lose,
+        score,
+        high,
+        low,
+        create_time
+        )
+        values
+        <foreach item="list" index="index" collection="list" separator=",">
+            (#{list.matchNum},
+            #{list.matchDate},
+            #{list.matchTime},
+            #{list.homeTeamAbbName},
+            #{list.awayTeamAbbName},
+            #{list.win},
+            #{list.lose},
+            #{list.handicap},
+            #{list.handicapWin},
+            #{list.handicapLose},
+            #{list.score},
+            #{list.high},
+            #{list.low},
+            #{list.createTime})
+        </foreach>
+    </insert>
 </mapper>

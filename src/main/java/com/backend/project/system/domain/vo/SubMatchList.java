@@ -26,7 +26,7 @@ public class SubMatchList {
 
     private List<PoolList> poolList;
 
-    /**足球进球数据*/
+    /**足球总进球赔率数据*/
     private Ttg ttg;
 
     private Date businessDate;
@@ -62,5 +62,15 @@ public class SubMatchList {
     private String lineNum;
 
     private int isHot;
+
+    /**
+     * 篮球数据
+     */
+    /**让分胜负数据*/
+    private Hdc hdc;
+    /**大小分数据*/
+    private Hilo hilo;
+    /**胜负*/
+    private Mnl mnl;
 
 }

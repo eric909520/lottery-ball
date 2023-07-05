@@ -2,6 +2,7 @@ package com.backend.project.system.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.backend.common.utils.http.HttpUtils;
+import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
 import com.backend.project.system.domain.vo.*;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
@@ -90,6 +91,58 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
     @Override
     public void getSportsBettingBKData() {
+        String s = HttpUtils.commonGet("https://webapi.sporttery.cn/gateway/jc/basketball/getMatchCalculatorV1.qry");
+        JSONObject obj = JSONObject.parseObject(s);
+        Root root = JSON.toJavaObject(obj, Root.class);
+        //批量插入集合
+        List<SPBKMatchInfo> spBKMatchInfos = new ArrayList<>();
+        if (root != null) {
+            Value value = root.getValue();
 
+            if (value != null) {
+                List<MatchInfoList> matchInfoList = value.getMatchInfoList();
+
+                if (matchInfoList != null && matchInfoList.size() > 0) {
+                    for (MatchInfoList m : matchInfoList) {
+                        List<SubMatchList> subMatchList = m.getSubMatchList();
+
+                        if (subMatchList != null && subMatchList.size() > 0) {
+                            for (SubMatchList sl : subMatchList){
+
+                                SPBKMatchInfo smi = new SPBKMatchInfo();
+                                smi.setCreateTime(System.currentTimeMillis());
+                                smi.setHomeTeamAbbName(sl.getHomeTeamAbbName());
+                                smi.setAwayTeamAbbName(sl.getAwayTeamAbbName());
+                                smi.setMatchDate(sl.getMatchDate());
+                                smi.setMatchNum(sl.getMatchNum());
+                                smi.setMatchTime(sl.getMatchTime());
+                                Mnl mnl = sl.getMnl();
+                                smi.setLose(mnl.getA());
+                                smi.setWin(mnl.getH());
+                                Hdc hdc = sl.getHdc();
+                                smi.setHandicap(hdc.getGoalLine());
+                                smi.setHandicapWin(hdc.getA());
+                                smi.setHandicapLose(hdc.getH());
+                                Hilo hilo = sl.getHilo();
+                                smi.setHigh(hilo.getH());
+                                smi.setLow(hilo.getL());
+                                smi.setScore(hilo.getGoalLine());
+
+                                spBKMatchInfos.add(smi);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(spBKMatchInfos != null && spBKMatchInfos.size() >0){
+            try {
+                spMatchInfoMapper.deleteBKMatchInfo();
+                spMatchInfoMapper.insertSPBKMatchInfos(spBKMatchInfos);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
