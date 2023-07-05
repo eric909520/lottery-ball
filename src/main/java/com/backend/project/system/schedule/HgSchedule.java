@@ -92,6 +92,29 @@ public class HgSchedule {
                             fbLeagueData.setTeamC(team_c);
                             fbLeagueData.setTeamCId(team_c_id);
                             fbLeagueDataMapper.insertData(fbLeagueData);
+
+                            // 赔率明细
+                            HgApi hgApi3 = hgApiMapper.selectByP(HgApiEnum.get_game_more.getApi());
+                            hgApi3.setLid(leagueId);
+                            hgApi3.setEcid(ecid);
+                            String game_more = HgApiUtils.get_game_more(hgApi3);
+                            Document docGameMore = DocumentHelper.parseText(game_more);
+                            Element rootEltGameMore = docGameMore.getRootElement();
+                            Iterator gameIt = rootEltGameMore.elementIterator("game");
+                            while (gameIt.hasNext()) {
+                                Element gameGameMore = (Element) gameIt.next();
+                                String gid = gameGameMore.elementTextTrim("gid");
+                                if (!gid.equals("6214197")) {
+                                    continue;
+                                }
+                                String teamHGameMore = gameGameMore.elementTextTrim("team_h");
+                                String teamCGameMore = gameGameMore.elementTextTrim("team_c");
+                                String ratio_ouho = gameGameMore.elementTextTrim("ratio_ouho");
+                                String ior_OUHO = gameGameMore.elementTextTrim("ior_OUHO");
+                                System.out.println(gid);
+                                System.out.println(teamHGameMore);
+                                System.out.println(teamCGameMore);
+                            }
                         }
                     }
                 }
