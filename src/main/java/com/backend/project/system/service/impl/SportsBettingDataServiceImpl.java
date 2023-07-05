@@ -62,6 +62,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 smi.setS5(ttg.getS5());
                                 smi.setS6(ttg.getS6());
                                 smi.setS7(ttg.getS7());
+//                                spMatchInfoMapper.insertSPMatchInfo(smi);
                                 spMatchInfos.add(smi);
                             }
                         }
@@ -72,7 +73,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
         if(spMatchInfos != null && spMatchInfos.size() >0){
             spMatchInfoMapper.deleteMatchInfo();
-            spMatchInfoMapper.insertSPMatchInfo(spMatchInfos);
+            spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
         }
     }
 

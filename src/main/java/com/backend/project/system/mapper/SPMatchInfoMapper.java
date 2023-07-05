@@ -1,6 +1,8 @@
 package com.backend.project.system.mapper;
 
 import com.backend.project.system.domain.SPMatchInfo;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,10 +12,11 @@ import java.util.List;
 public interface SPMatchInfoMapper {
     /**
      * 保存体彩足球比赛信息
-     * @param spMatchInfo
+     * @param list
      * @return
      */
-    int insertSPMatchInfo(List<SPMatchInfo> spMatchInfo);
+    int insertSPMatchInfos(List<SPMatchInfo> list);
+    int insertSPMatchInfo(SPMatchInfo spMatchInfo);
 
     int deleteMatchInfo();
 
