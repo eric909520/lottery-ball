@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.DictLeagueMapper">
+
+    <resultMap type="DictLeague" id="DictLeagueResult">
+        <result property="id" column="id"/>
+        <result property="sp" column="sp"/>
+        <result property="hg" column="hg"/>
+    </resultMap>
+
+    <sql id="selectDictLeagueVo">
+        select id, sp, hg from dict_league
+    </sql>
+
+    <select id="selectList" resultMap="DictLeagueResult">
+        <include refid="selectDictLeagueVo"/>
+    </select>
+
+    <select id="selectBySp" parameterType="String" resultMap="DictLeagueResult">
+        <include refid="selectDictLeagueVo"/>
+        where sp = #{sp};
+    </select>
+
+    <select id="selectByHg" parameterType="String" resultMap="DictLeagueResult">
+        <include refid="selectDictLeagueVo"/>
+        where hg = #{hg};
+    </select>
+
+    <insert id="insertDict" parameterType="DictLeague" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into dict_league
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sp != null  and sp != ''">sp,
+            </if>
+            <if test="hg != null  and hg != ''">hg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sp != null  and sp != ''">#{sp},
+            </if>
+            <if test="hg != null  and hg != ''">#{hg},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -14,6 +14,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public class HgSchedule {
      * 每天中午12点拿今日足球比赛数据
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(fixedDelay = 600000L)
     private void pollingFootballDataToday() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
@@ -68,6 +69,7 @@ public class HgSchedule {
                         while (ecIt.hasNext()) {
                             Element ec = (Element)ecIt.next();
                             Element game = ec.element("game");
+                            String gid = game.elementTextTrim("GID");
                             String dateTime = game.elementTextTrim("DATETIME");
                             String team_h = game.elementTextTrim("TEAM_H");
                             String team_h_id = game.elementTextTrim("TEAM_H_ID");
@@ -103,15 +105,15 @@ public class HgSchedule {
                             Iterator gameIt = rootEltGameMore.elementIterator("game");
                             while (gameIt.hasNext()) {
                                 Element gameGameMore = (Element) gameIt.next();
-                                String gid = gameGameMore.elementTextTrim("gid");
-                                if (!gid.equals("6214197")) {
+                                String gidGameMore = gameGameMore.elementTextTrim("gid");
+                                if (!gidGameMore.equals(gid)) {
                                     continue;
                                 }
                                 String teamHGameMore = gameGameMore.elementTextTrim("team_h");
                                 String teamCGameMore = gameGameMore.elementTextTrim("team_c");
                                 String ratio_ouho = gameGameMore.elementTextTrim("ratio_ouho");
                                 String ior_OUHO = gameGameMore.elementTextTrim("ior_OUHO");
-                                System.out.println(gid);
+                                System.out.println(gidGameMore);
                                 System.out.println(teamHGameMore);
                                 System.out.println(teamCGameMore);
                             }
