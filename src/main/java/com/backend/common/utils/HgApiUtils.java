@@ -4,12 +4,8 @@ import com.backend.common.utils.http.HttpUtils;
 import com.backend.project.system.domain.HgApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * @author
@@ -101,26 +97,6 @@ public class HgApiUtils {
             paramMap.put("ts", hgApi.getTs());
             paramMap.put("ecid", hgApi.getEcid());
             String data = HttpUtils.doPostForm(url, paramMap);
-
-            Document doc = DocumentHelper.parseText(data);
-            Element rootElt = doc.getRootElement();
-            Iterator gameIt = rootElt.elementIterator("game");
-            while (gameIt.hasNext()) {
-                Element game = (Element) gameIt.next();
-                String gid = game.elementTextTrim("gid");
-                if (!gid.equals("6214197")) {
-                    continue;
-                }
-                String team_h = game.elementTextTrim("team_h");
-                String team_c = game.elementTextTrim("team_c");
-                String ratio_ouho = game.elementTextTrim("ratio_ouho");
-                String ior_OUHO = game.elementTextTrim("ior_OUHO");
-                System.out.println(gid);
-                System.out.println(team_h);
-                System.out.println(team_c);
-                System.out.println(ratio_ouho);
-                System.out.println(ior_OUHO);
-            }
             return data;
         } catch (Exception e) {
             log.info("doPostForm exception ----->>>>", e);
