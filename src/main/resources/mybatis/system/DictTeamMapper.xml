@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.DictTeamMapper">
+
+    <resultMap type="DictTeam" id="DictTeamResult">
+        <result property="id" column="id"/>
+        <result property="sp" column="sp"/>
+        <result property="hg" column="hg"/>
+    </resultMap>
+
+    <sql id="selectDictTeamVo">
+        select id, sp, hg from dict_team
+    </sql>
+
+    <select id="selectList" resultMap="DictTeamResult">
+        <include refid="selectDictTeamVo"/>
+    </select>
+
+    <select id="selectBySp" parameterType="String" resultMap="DictTeamResult">
+        <include refid="selectDictTeamVo"/>
+        where sp = #{sp};
+    </select>
+
+    <select id="selectByHg" parameterType="String" resultMap="DictTeamResult">
+        <include refid="selectDictTeamVo"/>
+        where hg = #{hg};
+    </select>
+
+    <insert id="insertDict" parameterType="DictTeam" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into dict_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sp != null  and sp != ''">sp,
+            </if>
+            <if test="hg != null  and hg != ''">hg,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sp != null  and sp != ''">#{sp},
+            </if>
+            <if test="hg != null  and hg != ''">#{hg},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>
