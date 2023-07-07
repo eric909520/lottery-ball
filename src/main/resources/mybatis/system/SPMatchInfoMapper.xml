@@ -53,15 +53,15 @@
 
 
     <select id="getTodayLeague" parameterType="string" resultType="string">
-        select league_abb_name from sp_match_info
+        select league_abb_name from sp_match_info where exact_date = #{date}
     </select>
 
     <select id="getTodayHomeTeam" parameterType="string" resultType="string">
-        select home_team_abb_name from sp_match_info
+        select home_team_abb_name from sp_match_info where exact_date = #{date}
     </select>
 
     <select id="getTodayAwayTeam" parameterType="string" resultType="string">
-        select awa_team_abb_name from sp_match_info
+        select awa_team_abb_name from sp_match_info where exact_date = #{date}
     </select>
 
     <insert id="insertSPMatchInfos">

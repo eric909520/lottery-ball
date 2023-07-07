@@ -8,11 +8,13 @@ import com.backend.project.system.domain.HgApi;
 import com.backend.project.system.enums.HgApiEnum;
 import com.backend.project.system.mapper.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -43,15 +45,15 @@ public class HgSchedule {
      * 每天中午12点拿今日足球比赛数据
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(fixedDelay = 600000L)
     private void pollingFootballDataToday() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
                 // 获取体彩今日足球联赛列表
                 String currenDate = DateUtils.getDate();
                 List<String> todayLeague = spMatchInfoMapper.getTodayLeague(currenDate);
-                List<String> todayHomeTeam = spMatchInfoMapper.getTodayLeague(currenDate);
-                List<String> todayAwayTeam = spMatchInfoMapper.getTodayLeague(currenDate);
+                List<String> todayHomeTeam = spMatchInfoMapper.getTodayHomeTeam(currenDate);
+                List<String> todayAwayTeam = spMatchInfoMapper.getTodayAwayTeam(currenDate);
                 HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
                 String league_list_all = HgApiUtils.get_league_list_All(hgApi1);
                 Document doc = DocumentHelper.parseText(league_list_all);
@@ -66,7 +68,8 @@ public class HgSchedule {
                     while (leagueIt.hasNext()) {
                         Element league = (Element)leagueIt.next();
                         String leagueName = league.attributeValue("name"); // 联赛名称
-                        if (!todayLeague.contains(leagueName)) {
+                        String spLeagueName = dictLeagueMapper.selectByHg(leagueName);
+                        if (StringUtils.isBlank(spLeagueName) || !todayLeague.contains(spLeagueName)) {
                             continue;
                         }
                         String leagueSortName = league.attributeValue("sort_name"); // 联赛排序标记
@@ -88,7 +91,10 @@ public class HgSchedule {
                             String team_c = game.elementTextTrim("TEAM_C");
                             String team_c_id = game.elementTextTrim("TEAM_C_ID");
                             String ecid = game.elementTextTrim("ECID");
-                            if (!todayHomeTeam.contains(team_h) && !todayHomeTeam.contains(team_c) && !todayAwayTeam.contains(team_h) && !todayAwayTeam.contains(team_c)) {
+                            String spTeamH = dictTeamMapper.selectByHg(team_h);
+                            String spTeamC = dictTeamMapper.selectByHg(team_c);
+                            if ((StringUtils.isBlank(spTeamH) || StringUtils.isBlank(spTeamC)) || (!todayHomeTeam.contains(spTeamH)
+                                    && !todayHomeTeam.contains(spTeamH) && !todayAwayTeam.contains(spTeamC) && !todayAwayTeam.contains(spTeamC))) {
                                 continue;
                             }
                             // 处理比赛时间，+12H
