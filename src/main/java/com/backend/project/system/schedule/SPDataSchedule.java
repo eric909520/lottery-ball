@@ -19,12 +19,16 @@ public class SPDataSchedule {
     @Resource
     private ISportsBettingDataService sportsBettingDataService;
 
-    @Scheduled(cron = "0 0/1 * * * ? ")
-    private void getSPMatchData() {
+    @Scheduled(cron = "0 0/2 * * * ? ")
+    private void getSPMatchDataFB() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
-            //足球数据
             sportsBettingDataService.getSportsBettingFBData();
-            //篮球数据
+        });
+    }
+
+    @Scheduled(cron = "0 0/2 * * * ? ")
+    private void getSPMatchDataBB() {
+        threadPoolConfig.threadPoolExecutor().submit(() -> {
             sportsBettingDataService.getSportsBettingBKData();
         });
     }
