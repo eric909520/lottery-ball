@@ -13,7 +13,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -43,7 +42,7 @@ public class HgSchedule {
      * 每天中午12点拿今日足球比赛数据
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-    @Scheduled(fixedDelay = 600000L)
+//    @Scheduled(fixedDelay = 600000L)
     private void pollingFootballDataToday() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {

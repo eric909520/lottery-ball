@@ -19,7 +19,8 @@ public class SPDataSchedule {
     @Resource
     private ISportsBettingDataService sportsBettingDataService;
 
-    @Scheduled(cron = "0 0/2 * * * ? ")
+//    @Scheduled(cron = "0 0/2 * * * ? ")
+    @Scheduled(fixedDelay = 600000L)
     private void getSPMatchDataFB() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             sportsBettingDataService.getSportsBettingFBData();

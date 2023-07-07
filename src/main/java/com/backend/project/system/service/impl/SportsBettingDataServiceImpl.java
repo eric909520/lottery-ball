@@ -36,38 +36,31 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             Value value = root.getValue();
 
             if (value != null) {
-                Integer integer = null;
                 List<MatchInfoList> matchInfoList = value.getMatchInfoList();
 
                 if (matchInfoList != null && matchInfoList.size() > 0) {
-                    for (MatchInfoList m : matchInfoList) {
+                    for (int i = 0; i < matchInfoList.size(); i++) {
+                        MatchInfoList m = matchInfoList.get(i);
                         List<SubMatchList> subMatchList = m.getSubMatchList();
+                        // 转换精确时间
+                        String exactDate = "";
+                        if (i == 0) {
+                            exactDate = DateUtils.getDate();
+                        } else if(i > 0) {
+                            exactDate = DateUtils.addDaysYYYYMMDD(DateUtils.getDate(), i);
+                        }
 
                         if (subMatchList != null && subMatchList.size() > 0) {
-                            for (int i = 0; i < subMatchList.size(); i++) {
-                                SubMatchList sl = subMatchList.get(i);
+                            for (int j = 0; j < subMatchList.size(); j++) {
+                                SubMatchList sl = subMatchList.get(j);
                                 SPMatchInfo smi = new SPMatchInfo();
                                 smi.setCreateTime(System.currentTimeMillis());
+                                smi.setExactDate(exactDate);
                                 smi.setHomeTeamAbbName(sl.getHomeTeamAbbName());
                                 smi.setAwaTeamAbbName(sl.getAwayTeamAbbName());
                                 smi.setMatchDate(sl.getMatchDate());
                                 smi.setLeagueAbbName(sl.getLeagueAbbName());
-                                int matchNum = sl.getMatchNum();
-                                String exactDate = "";
-                                // 转换精确时间
-                                String substring = String.valueOf(matchNum).substring(0, 1);
-                                if (i == 0) {
-                                    integer = Integer.valueOf(substring);
-                                }
-                                Integer num = Integer.valueOf(substring);
-                                if (num == integer) {
-                                    exactDate = DateUtils.getDate();
-                                } else if(num > integer) {
-                                    int substarct = num - integer;
-                                    exactDate = DateUtils.addDaysYYYYMMDD(DateUtils.getDate(), substarct);
-                                }
-                                smi.setExactDate(exactDate);
-                                smi.setMatchNum(matchNum);
+                                smi.setMatchNum(sl.getMatchNum());
                                 smi.setMatchTime(sl.getMatchTime());
                                 Had had = sl.getHad();
                                 smi.setLose(had.getA());
