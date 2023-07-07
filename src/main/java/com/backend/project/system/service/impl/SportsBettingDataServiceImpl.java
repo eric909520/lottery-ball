@@ -70,6 +70,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 smi.setHandicapLose(hhad.getA());
                                 smi.setHandicapDraw(hhad.getD());
                                 smi.setHandicapWin(hhad.getH());
+                                smi.setHandicap(hhad.getGoalLine());
                                 Ttg ttg = sl.getTtg();
                                 smi.setS0(ttg.getS0());
                                 smi.setS1(ttg.getS1());

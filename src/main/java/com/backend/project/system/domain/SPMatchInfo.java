@@ -30,6 +30,8 @@ public class SPMatchInfo implements Serializable {
     private String draw;
     //主负
     private String lose;
+    //主让球/受让球数
+    private String handicap;
     //主让球胜
     private String handicapWin;
     //主让球平
