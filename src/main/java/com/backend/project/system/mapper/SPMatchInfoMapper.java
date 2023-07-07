@@ -34,5 +34,25 @@ public interface SPMatchInfoMapper {
      */
     void insertSPBKMatchInfos(List<SPBKMatchInfo> list);
 
-//    List<String> getTodayLeague(String )
+    /**
+     * 根据日期查询联赛列表
+     * @param date
+     * @return
+     */
+    List<String> getTodayLeague(String date);
+
+    /**
+     * 根据日期查询主队球队列表
+     * @param date
+     * @return
+     */
+    List<String> getTodayHomeTeam(String date);
+
+    /**
+     * 根据日期查询客队球队列表
+     * @param date
+     * @return
+     */
+    List<String> getTodayAwayTeam(String date);
+
 }

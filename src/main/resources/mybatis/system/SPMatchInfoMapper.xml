@@ -51,6 +51,19 @@
 <!--        where id = #{id}-->
 <!--    </select>-->
 
+
+    <select id="getTodayLeague" parameterType="string" resultType="string">
+        select league_abb_name from sp_match_info
+    </select>
+
+    <select id="getTodayHomeTeam" parameterType="string" resultType="string">
+        select home_team_abb_name from sp_match_info
+    </select>
+
+    <select id="getTodayAwayTeam" parameterType="string" resultType="string">
+        select awa_team_abb_name from sp_match_info
+    </select>
+
     <insert id="insertSPMatchInfos">
         insert into sp_match_info(
              match_num,

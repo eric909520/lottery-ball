@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  */
@@ -47,7 +48,10 @@ public class HgSchedule {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
                 // 获取体彩今日足球联赛列表
-//                spMatchInfoMapper.deleteMatchInfo()
+                String currenDate = DateUtils.getDate();
+                List<String> todayLeague = spMatchInfoMapper.getTodayLeague(currenDate);
+                List<String> todayHomeTeam = spMatchInfoMapper.getTodayLeague(currenDate);
+                List<String> todayAwayTeam = spMatchInfoMapper.getTodayLeague(currenDate);
                 HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
                 String league_list_all = HgApiUtils.get_league_list_All(hgApi1);
                 Document doc = DocumentHelper.parseText(league_list_all);
@@ -62,7 +66,9 @@ public class HgSchedule {
                     while (leagueIt.hasNext()) {
                         Element league = (Element)leagueIt.next();
                         String leagueName = league.attributeValue("name"); // 联赛名称
-                        String spLeagueName = dictLeagueMapper.selectByHg(leagueName); // 体彩对应联赛名称
+                        if (!todayLeague.contains(leagueName)) {
+                            continue;
+                        }
                         String leagueSortName = league.attributeValue("sort_name"); // 联赛排序标记
                         String leagueId = league.attributeValue("id"); // 联赛id
                         // 设置参数，获取联赛下属比赛列表
@@ -82,6 +88,9 @@ public class HgSchedule {
                             String team_c = game.elementTextTrim("TEAM_C");
                             String team_c_id = game.elementTextTrim("TEAM_C_ID");
                             String ecid = game.elementTextTrim("ECID");
+                            if (!todayHomeTeam.contains(team_h) && !todayHomeTeam.contains(team_c) && !todayAwayTeam.contains(team_h) && !todayAwayTeam.contains(team_c)) {
+                                continue;
+                            }
                             // 处理比赛时间，+12H
                             String ecTime = DateUtils.transformDateHg(dateTime);
                             Long ecTimestamp = DateUtils.getLeagueDate(dateTime);
