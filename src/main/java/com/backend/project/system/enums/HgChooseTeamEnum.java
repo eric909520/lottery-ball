@@ -4,8 +4,11 @@ package com.backend.project.system.enums;
  * 真/假枚举类
  * 各类非真即假，非是即否情况使用
  */
-public enum TotalChooseTeamEnum {
+public enum HgChooseTeamEnum {
 
+    HOME("H","主队"),
+    CUSTOMER("C","客队"),
+    NORMAL("N","和局"),
     INSIDE0_1("0~1","总进球0-1"),
     INSIDE2_3("2~3","总进球2-3"),
     INSIDE4_6("4~6","总进球4-6"),
@@ -16,7 +19,7 @@ public enum TotalChooseTeamEnum {
 
     private String desc;
 
-    TotalChooseTeamEnum(String type, String desc){
+    HgChooseTeamEnum(String type, String desc){
         this.type = type;
         this.desc = desc;
     }

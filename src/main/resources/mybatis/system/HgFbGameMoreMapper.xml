@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.HgFbGameMoreMapper">
+
+    <resultMap type="HgFbGameMore" id="HgFbGameMoreResult">
+        <result property="id" column="id"/>
+        <result property="lid" column="lid"/>
+        <result property="ecid" column="ecid"/>
+        <result property="hAdd05" column="h_add_05"/>
+        <result property="hCut05" column="h_cut_05"/>
+        <result property="cAdd05" column="c_add_05"/>
+        <result property="cCut05" column="c_cut_05"/>
+        <result property="myselfH" column="myself_h"/>
+        <result property="myselfC" column="myself_c"/>
+        <result property="myselfN" column="myself_n"/>
+        <result property="total01" column="total_01"/>
+        <result property="total23" column="total_23"/>
+        <result property="total46" column="total_46"/>
+        <result property="total7" column="total_7"/>
+        <result property="big15" column="big_15"/>
+        <result property="big25" column="big_25"/>
+        <result property="big35" column="big_35"/>
+        <result property="big15_2" column="big_15_2"/>
+        <result property="big2_25" column="big_2_25"/>
+        <result property="big25_3" column="big_25_3"/>
+        <result property="big3_35" column="big_3_35"/>
+        <result property="small25" column="small_25"/>
+        <result property="small35" column="small_35"/>
+        <result property="small2_25" column="small_2_25"/>
+        <result property="small25_3" column="small_25_3"/>
+        <result property="small3_35" column="small_3_35"/>
+        <result property="small35_4" column="small_35_4"/>
+    </resultMap>
+
+    <sql id="selectHgApiVo">
+        select id, lid, ecid, h_add_05, h_cut_05, c_add_05, c_cut_05, myself_h, myself_c, myself_n, total_01, total_23
+             , total_46, total_7, big_15, big_25, big_35, big_15_2, big_2_25, big_25_3, big_3_35, small_25
+             , small_35, small_2_25, small_25_3, small_3_35, small_35_4
+        from hg_fb_game_more
+    </sql>
+
+    <insert id="insertData" parameterType="HgFbGameMore" useGeneratedKeys="true" keyProperty="id">
+        insert into hg_fb_game_more
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lid != null  and lid != ''">lid,
+            </if>
+            <if test="ecid != null  and ecid != ''">ecid,
+            </if>
+            <if test="hAdd05 != null  and hAdd05 != ''">h_add_05,
+            </if>
+            <if test="hCut05 != null  and hCut05 != ''">h_cut_05,
+            </if>
+            <if test="cAdd05 != null  and cAdd05 != ''">c_add_05,
+            </if>
+            <if test="cCut05 != null  and cCut05 != ''">c_cut_05,
+            </if>
+            <if test="myselfH != null  and myselfH != ''">myself_h,
+            </if>
+            <if test="myselfC != null  and myselfC != ''">myself_c,
+            </if>
+            <if test="myselfN != null  and myselfN != ''">myself_n,
+            </if>
+            <if test="total01 != null  and total01 != ''">total_01,
+            </if>
+            <if test="total23 != null  and total23 != ''">total_23,
+            </if>
+            <if test="total46 != null  and total46 != ''">total_46,
+            </if>
+            <if test="total7 != null  and total7 != ''">total_7,
+            </if>
+            <if test="big15 != null  and big15 != ''">big_15,
+            </if>
+            <if test="big25 != null  and big25 != ''">big_25,
+            </if>
+            <if test="big35 != null  and big35 != ''">big_35,
+            </if>
+            <if test="big15_2 != null  and big15_2 != ''">big_15_2,
+            </if>
+            <if test="big2_25 != null  and big2_25 != ''">big_2_25,
+            </if>
+            <if test="big25_3 != null  and big25_3 != ''">big_25_3,
+            </if>
+            <if test="big3_35 != null  and big3_35 != ''">big_3_35,
+            </if>
+            <if test="small25 != null  and small25 != ''">small_25,
+            </if>
+            <if test="small35 != null  and small35 != ''">small_35,
+            </if>
+            <if test="small2_25 != null  and small2_25 != ''">small_2_25,
+            </if>
+            <if test="small25_3 != null  and small25_3 != ''">small_25_3,
+            </if>
+            <if test="small3_35 != null  and small3_35 != ''">small_3_35,
+            </if>
+            <if test="small35_4 != null  and small35_4 != ''">small_35_4,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lid != null  and lid != ''">#{lid},
+            </if>
+            <if test="ecid != null  and ecid != ''">#{ecid},
+            </if>
+            <if test="hAdd05 != null  and hAdd05 != ''">#{hAdd05},
+            </if>
+            <if test="hCut05 != null  and hCut05 != ''">#{hCut05},
+            </if>
+            <if test="cAdd05 != null  and cAdd05 != ''">#{cAdd05},
+            </if>
+            <if test="cCut05 != null  and cCut05 != ''">#{cCut05},
+            </if>
+            <if test="myselfH != null  and myselfH != ''">#{myselfH},
+            </if>
+            <if test="myselfC != null  and myselfC != ''">#{myselfC},
+            </if>
+            <if test="myselfN != null  and myselfN != ''">#{myselfN},
+            </if>
+            <if test="total01 != null  and total01 != ''">#{total01},
+            </if>
+            <if test="total23 != null  and total23 != ''">#{total23},
+            </if>
+            <if test="total46 != null  and total46 != ''">#{total46},
+            </if>
+            <if test="total7 != null  and total7 != ''">#{total7},
+            </if>
+            <if test="big15 != null  and big15 != ''">#{big15},
+            </if>
+            <if test="big25 != null  and big25 != ''">#{big25},
+            </if>
+            <if test="big35 != null  and big35 != ''">#{big35},
+            </if>
+            <if test="big15_2 != null  and big15_2 != ''">#{big15_2},
+            </if>
+            <if test="big2_25 != null  and big2_25 != ''">#{big2_25},
+            </if>
+            <if test="big25_3 != null  and big25_3 != ''">#{big25_3},
+            </if>
+            <if test="big3_35 != null  and big3_35 != ''">#{big3_35},
+            </if>
+            <if test="small25 != null  and small25 != ''">#{small25},
+            </if>
+            <if test="small35 != null  and small35 != ''">#{small35},
+            </if>
+            <if test="small2_25 != null  and small2_25 != ''">#{small2_25},
+            </if>
+            <if test="small25_3 != null  and small25_3 != ''">#{small25_3},
+            </if>
+            <if test="small3_35 != null  and small3_35 != ''">#{small3_35},
+            </if>
+            <if test="small35_4 != null  and small35_4 != ''">#{small35_4},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

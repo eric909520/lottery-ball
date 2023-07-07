@@ -26,4 +26,10 @@ public class HgApi extends BaseEntity {
 
     private String ecid;
 
+    private String gid;
+
+    private String wType;
+
+    private String choseTeam;
+
 }

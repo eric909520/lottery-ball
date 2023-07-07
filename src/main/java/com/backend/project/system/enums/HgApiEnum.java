@@ -8,6 +8,9 @@ public enum HgApiEnum {
     get_league_list_All("get_league_list_All", "今日足球赛事"),
     get_game_list("get_game_list", "赛事下属球赛列表"),
     get_game_more("get_game_more", "球赛详细"),
+
+    ft_order_view("FT_order_view", "准确赔率"),
+
     ;
 
     HgApiEnum(String api, String desc) {

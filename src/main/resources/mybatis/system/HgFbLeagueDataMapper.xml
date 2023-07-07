@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.backend.project.system.mapper.FbLeagueDataMapper">
+<mapper namespace="com.backend.project.system.mapper.HgFbLeagueDataMapper">
 
-    <resultMap type="FbLeagueData" id="FbLeagueDataResult">
+    <resultMap type="HgFbLeagueData" id="HgFbLeagueDataResult">
         <result property="id" column="id"/>
         <result property="regionName" column="region_name"/>
         <result property="regionSortName" column="region_sort_name"/>
@@ -22,11 +22,11 @@
 
     <sql id="selectHgApiVo">
         select id, region_name, region_sort_name, league_name, league_sort_name, league_id, ecid, ec_time, ec_timestamp, team_h, team_h_id, team_c, team_c_id
-        from fb_league_data
+        from hg_fb_league_data
     </sql>
 
-    <insert id="insertData" parameterType="FbLeagueData" useGeneratedKeys="true" keyProperty="id">
-        insert into fb_league_data
+    <insert id="insertData" parameterType="HgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
+        insert into hg_fb_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="regionName != null  and regionName != ''">region_name,
             </if>

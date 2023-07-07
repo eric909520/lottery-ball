@@ -3,7 +3,6 @@ package com.backend.common.utils;
 import com.backend.common.utils.http.HttpUtils;
 import com.backend.project.system.domain.HgApi;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.client.config.RequestConfig;
 
 import java.util.HashMap;
 
@@ -12,8 +11,6 @@ import java.util.HashMap;
  */
 @Slf4j
 public class HgApiUtils {
-
-    private static RequestConfig requestConfig;
 
     /**
      * 今日足球赛事
@@ -37,7 +34,7 @@ public class HgApiUtils {
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("doPostForm exception ----->>>>", e);
+            log.info("get_league_list_All exception ----->>>>", e);
         }
         return null;
     }
@@ -70,7 +67,7 @@ public class HgApiUtils {
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("doPostForm exception ----->>>>", e);
+            log.info("get_game_list exception ----->>>>", e);
         }
         return null;
     }
@@ -99,7 +96,31 @@ public class HgApiUtils {
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("doPostForm exception ----->>>>", e);
+            log.info("get_game_more exception ----->>>>", e);
+        }
+        return null;
+    }
+
+    /**
+     * 准确赔率
+     */
+    public static String ft_order_view(HgApi hgApi) {
+        try {
+            String url = hgApi.getApiLink();
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", hgApi.getP());
+            paramMap.put("uid", hgApi.getUId());
+//            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("odd_f_type", "H");
+            paramMap.put("gid", hgApi.getGid());
+            paramMap.put("gtype", "FT");
+            paramMap.put("wtype", hgApi.getWType());
+            paramMap.put("chose_team", hgApi.getChoseTeam());
+            String data = HttpUtils.doPostForm(url, paramMap);
+            return data;
+        } catch (Exception e) {
+            log.info("ft_order_view exception ----->>>>", e);
         }
         return null;
     }

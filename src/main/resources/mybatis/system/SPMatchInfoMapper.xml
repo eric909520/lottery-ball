@@ -14,6 +14,7 @@
         <result property="win" column="win"/>
         <result property="draw" column="draw"/>
         <result property="lose" column="lose"/>
+        <result property="handicap" column="handicap"/>
         <result property="handicapWin" column="handicap_win"/>
         <result property="handicapDraw" column="handicap_draw"/>
         <result property="handicapLose" column="handicap_lose"/>
@@ -27,30 +28,14 @@
         <result property="s7" column="s7"/>
     </resultMap>
 
-<!--    <sql id="selectSPMatchInfo" >-->
-<!--        select id, c_key, c_value, type, remark from sp_match_info-->
-<!--    </sql>-->
+    <sql id="selectSPMatchInfo">
+        select handicap from sp_match_info
+    </sql>
 
-<!--    <select id="selectAppConfigList"  resultMap="SPMatchInfoResult">-->
-<!--        <include refid="selectAppConfigVo"/>-->
-<!--        <where>-->
-<!--            <if test="cKey != null  and cKey != ''">-->
-<!--                and c_key = #{cKey}-->
-<!--            </if>-->
-<!--            <if test="cValue != null  and cValue != ''">-->
-<!--                and c_value = #{cValue}-->
-<!--            </if>-->
-<!--            <if test="type != null ">-->
-<!--                and type = #{type}-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-
-<!--    <select id="selectAppConfigById" parameterType="Long" resultMap="AppConfigResult">-->
-<!--        <include refid="selectAppConfigVo"/>-->
-<!--        where id = #{id}-->
-<!--    </select>-->
-
+    <select id="selectCondition" parameterType="string" resultMap="SPMatchInfoResult">
+        select handicap from sp_match_info
+        where league_abb_name = #{leagueName} and home_team_abb_name = #{homeTeam} and awa_team_abb_name = #{awayTeam}
+    </select>
 
     <select id="getTodayLeague" parameterType="string" resultType="string">
         select league_abb_name from sp_match_info where exact_date = #{date}
