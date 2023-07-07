@@ -8,9 +8,9 @@ public interface DictLeagueMapper {
 
     public List<DictLeague> selectList();
 
-    public DictLeague selectBySp(String sp);
+    public String selectBySp(String sp);
 
-    public DictLeague selectByHg(String hg);
+    public String selectByHg(String hg);
 
     public int insertDict(DictLeague dictLeague);
 

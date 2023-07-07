@@ -1,6 +1,7 @@
 package com.backend.project.system.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.backend.common.utils.DateUtils;
 import com.backend.common.utils.http.HttpUtils;
 import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
@@ -35,6 +36,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             Value value = root.getValue();
 
             if (value != null) {
+                Integer integer = null;
                 List<MatchInfoList> matchInfoList = value.getMatchInfoList();
 
                 if (matchInfoList != null && matchInfoList.size() > 0) {
@@ -42,14 +44,30 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                         List<SubMatchList> subMatchList = m.getSubMatchList();
 
                         if (subMatchList != null && subMatchList.size() > 0) {
-                            for (SubMatchList sl : subMatchList){
-
+                            for (int i = 0; i < subMatchList.size(); i++) {
+                                SubMatchList sl = subMatchList.get(i);
                                 SPMatchInfo smi = new SPMatchInfo();
                                 smi.setCreateTime(System.currentTimeMillis());
                                 smi.setHomeTeamAbbName(sl.getHomeTeamAbbName());
                                 smi.setAwaTeamAbbName(sl.getAwayTeamAbbName());
                                 smi.setMatchDate(sl.getMatchDate());
-                                smi.setMatchNum(sl.getMatchNum());
+                                smi.setLeagueAbbName(sl.getLeagueAbbName());
+                                int matchNum = sl.getMatchNum();
+                                String exactDate = "";
+                                // 转换精确时间
+                                String substring = String.valueOf(matchNum).substring(0, 1);
+                                if (i == 0) {
+                                    integer = Integer.valueOf(substring);
+                                }
+                                Integer num = Integer.valueOf(substring);
+                                if (num == integer) {
+                                    exactDate = DateUtils.getDate();
+                                } else if(num > integer) {
+                                    int substarct = num - integer;
+                                    exactDate = DateUtils.addDaysYYYYMMDD(DateUtils.getDate(), substarct);
+                                }
+                                smi.setExactDate(exactDate);
+                                smi.setMatchNum(matchNum);
                                 smi.setMatchTime(sl.getMatchTime());
                                 Had had = sl.getHad();
                                 smi.setLose(had.getA());

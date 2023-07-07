@@ -19,12 +19,12 @@
     </select>
 
     <select id="selectBySp" parameterType="String" resultMap="DictTeamResult">
-        <include refid="selectDictTeamVo"/>
+        select hg from dict_team
         where sp = #{sp};
     </select>
 
     <select id="selectByHg" parameterType="String" resultMap="DictTeamResult">
-        <include refid="selectDictTeamVo"/>
+        select sp from dict_team
         where hg = #{hg};
     </select>
 

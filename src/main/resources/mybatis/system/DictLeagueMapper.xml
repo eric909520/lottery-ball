@@ -18,13 +18,13 @@
         <include refid="selectDictLeagueVo"/>
     </select>
 
-    <select id="selectBySp" parameterType="String" resultMap="DictLeagueResult">
-        <include refid="selectDictLeagueVo"/>
+    <select id="selectBySp" parameterType="String" resultType="string">
+        select hg from dict_league
         where sp = #{sp};
     </select>
 
-    <select id="selectByHg" parameterType="String" resultMap="DictLeagueResult">
-        <include refid="selectDictLeagueVo"/>
+    <select id="selectByHg" parameterType="String" resultType="string">
+        select sp from dict_league
         where hg = #{hg};
     </select>
 

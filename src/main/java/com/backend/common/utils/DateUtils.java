@@ -55,6 +55,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return dateTimeNow(YYYY_MM_DD);
     }
 
+    public static void main(String[] args) {
+        System.out.println(getDate());
+    }
+
     /**
      * 获取当前日期, 默认格式为YYYY_MM_DD_HH_MM_SS
      *
@@ -373,7 +377,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         /*try {
             String onePointTime = getOnePointTime(-1);
             System.out.println(onePointTime);
