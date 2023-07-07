@@ -2,8 +2,6 @@ package com.backend.project.system.mapper;
 
 import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,4 +33,6 @@ public interface SPMatchInfoMapper {
      * @param list
      */
     void insertSPBKMatchInfos(List<SPBKMatchInfo> list);
+
+//    List<String> getTodayLeague(String )
 }

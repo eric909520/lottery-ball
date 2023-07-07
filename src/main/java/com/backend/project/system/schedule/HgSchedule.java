@@ -6,8 +6,7 @@ import com.backend.framework.config.ThreadPoolConfig;
 import com.backend.project.system.domain.FbLeagueData;
 import com.backend.project.system.domain.HgApi;
 import com.backend.project.system.enums.HgApiEnum;
-import com.backend.project.system.mapper.FbLeagueDataMapper;
-import com.backend.project.system.mapper.HgApiMapper;
+import com.backend.project.system.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -30,9 +29,14 @@ public class HgSchedule {
     private ThreadPoolConfig threadPoolConfig;
     @Resource
     private HgApiMapper hgApiMapper;
-
     @Resource
     private FbLeagueDataMapper fbLeagueDataMapper;
+    @Resource
+    private DictLeagueMapper dictLeagueMapper;
+    @Resource
+    private DictTeamMapper dictTeamMapper;
+    @Resource
+    private SPMatchInfoMapper spMatchInfoMapper;
 
     /**
      * task - polling today football data
@@ -43,6 +47,8 @@ public class HgSchedule {
     private void pollingFootballDataToday() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
+                // 获取体彩今日足球联赛列表
+//                spMatchInfoMapper.deleteMatchInfo()
                 HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
                 String league_list_all = HgApiUtils.get_league_list_All(hgApi1);
                 Document doc = DocumentHelper.parseText(league_list_all);
@@ -57,6 +63,7 @@ public class HgSchedule {
                     while (leagueIt.hasNext()) {
                         Element league = (Element)leagueIt.next();
                         String leagueName = league.attributeValue("name"); // 联赛名称
+                        String spLeagueName = dictLeagueMapper.selectByHg(leagueName); // 体彩对应联赛名称
                         String leagueSortName = league.attributeValue("sort_name"); // 联赛排序标记
                         String leagueId = league.attributeValue("id"); // 联赛id
                         // 设置参数，获取联赛下属比赛列表

@@ -14,6 +14,8 @@ public class SPMatchInfo implements Serializable {
     private Integer id;
     // 比赛编号 例 周一001就是1001
     private int matchNum;
+    // 联赛名称
+    private String leagueAbbName;
     //比赛开始日期
     private String matchDate;
     //比赛开始时间
@@ -52,6 +54,10 @@ public class SPMatchInfo implements Serializable {
     private String s7;
     //创建时间
     private Long createTime;
+
+    // 精确时间
+    private String exactDate;
+
 
 
 

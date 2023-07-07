@@ -6,6 +6,7 @@ import com.backend.project.system.domain.DictTeam;
 import com.backend.project.system.mapper.DictLeagueMapper;
 import com.backend.project.system.mapper.DictTeamMapper;
 import com.backend.project.system.service.IDictService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,8 +38,8 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AjaxResult insertDictLeague(DictLeague dictLeague) {
-        DictLeague db = dictLeagueMapper.selectBySp(dictLeague.getSp());
-        if (db != null) {
+        String db = dictLeagueMapper.selectBySp(dictLeague.getSp());
+        if (StringUtils.isNotBlank(db)) {
             return AjaxResult.error("字典已经存在");
         }
         int result = dictLeagueMapper.insertDict(dictLeague);
@@ -50,8 +51,8 @@ public class DictServiceImpl implements IDictService {
 
     @Override
     public AjaxResult insertDictTeam(DictTeam dictTeam) {
-        DictTeam db = dictTeamMapper.selectBySp(dictTeam.getSp());
-        if (db != null) {
+        String db = dictTeamMapper.selectBySp(dictTeam.getSp());
+        if (StringUtils.isNotBlank(db)) {
             return AjaxResult.error("字典已经存在");
         }
         int result = dictTeamMapper.insertDict(dictTeam);

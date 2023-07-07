@@ -54,6 +54,7 @@
     <insert id="insertSPMatchInfos">
         insert into sp_match_info(
              match_num,
+             league_abb_name,
              match_date,
              match_time,
              home_team_abb_name,
@@ -72,11 +73,13 @@
              s5,
              s6,
              s7,
-            create_time
+            create_time,
+            exact_date
              )
             values
         <foreach item="list" index="index" collection="list" separator=",">
             (#{list.matchNum},
+            #{list.leagueAbbName},
             #{list.matchDate},
             #{list.matchTime},
             #{list.homeTeamAbbName},
@@ -95,12 +98,14 @@
             #{list.s5},
             #{list.s6},
             #{list.s7},
-            #{list.createTime})
+            #{list.createTime},
+            #{list.exactDate})
         </foreach>
     </insert>
     <insert id="insertSPMatchInfo">
         insert into sp_match_info(
         match_num,
+        league_abb_name,
         match_date,
         match_time,
         home_team_abb_name,
@@ -119,10 +124,12 @@
         s5,
         s6,
         s7,
-        create_time)
+        create_time,
+        exact_date)
         values
             (
             #{matchNum},
+            #{list.leagueAbbName},
             #{matchDate},
             #{matchTime},
             #{homeTeamAbbName},
@@ -141,7 +148,8 @@
             #{s5},
             #{s6},
             #{s7},
-            #{createTime})
+            #{createTime},
+            #{list.exactDate})
     </insert>
 
     <delete id="deleteMatchInfo">

@@ -8,9 +8,9 @@ public interface DictTeamMapper {
 
     public List<DictTeam> selectList();
 
-    public DictTeam selectBySp(String sp);
+    public String selectBySp(String sp);
 
-    public DictTeam selectByHg(String hg);
+    public String selectByHg(String hg);
 
     public int insertDict(DictTeam dictTeam);
 
