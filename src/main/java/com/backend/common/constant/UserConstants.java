@@ -47,6 +47,11 @@ public class UserConstants {
     public static final String YES = "Y";
 
     /**
+     * 是否为系统默认（是）
+     */
+    public static final String NO = "N";
+
+    /**
      * 校验返回结果码
      */
     public final static String UNIQUE = "0";

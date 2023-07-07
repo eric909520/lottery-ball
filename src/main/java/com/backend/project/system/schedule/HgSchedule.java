@@ -84,7 +84,6 @@ public class HgSchedule {
                         while (ecIt.hasNext()) {
                             Element ec = (Element)ecIt.next();
                             Element game = ec.element("game");
-                            String gid = game.elementTextTrim("GID");
                             String dateTime = game.elementTextTrim("DATETIME");
                             String team_h = game.elementTextTrim("TEAM_H");
                             String team_h_id = game.elementTextTrim("TEAM_H_ID");
@@ -127,16 +126,10 @@ public class HgSchedule {
                             while (gameIt.hasNext()) {
                                 Element gameGameMore = (Element) gameIt.next();
                                 String gidGameMore = gameGameMore.elementTextTrim("gid");
-                                if (!gidGameMore.equals(gid)) {
-                                    continue;
-                                }
-                                String teamHGameMore = gameGameMore.elementTextTrim("team_h");
-                                String teamCGameMore = gameGameMore.elementTextTrim("team_c");
+
                                 String ratio_ouho = gameGameMore.elementTextTrim("ratio_ouho");
                                 String ior_OUHO = gameGameMore.elementTextTrim("ior_OUHO");
-                                System.out.println(gidGameMore);
-                                System.out.println(teamHGameMore);
-                                System.out.println(teamCGameMore);
+
                             }
                         }
                     }
