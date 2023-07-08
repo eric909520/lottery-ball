@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.BetSPMatchInfoMapper">
+
+    <resultMap type="BetSPMatchInfo" id="BetSPMatchInfoResult">
+        <result property="id" column="id"/>
+        <result property="matchNum" column="match_num"/>
+        <result property="matchDate" column="match_date"/>
+        <result property="matchTime" column="match_time"/>
+        <result property="homeTeamAbbName" column="home_team_abb_name"/>
+        <result property="awaTeamAbbName" column="awa_team_abb_name"/>
+        <result property="win" column="win"/>
+        <result property="draw" column="draw"/>
+        <result property="lose" column="lose"/>
+        <result property="handicap" column="handicap"/>
+        <result property="handicapWin" column="handicap_win"/>
+        <result property="handicapDraw" column="handicap_draw"/>
+        <result property="handicapLose" column="handicap_lose"/>
+        <result property="s0" column="s0"/>
+        <result property="s1" column="s1"/>
+        <result property="s2" column="s2"/>
+        <result property="s3" column="s3"/>
+        <result property="s4" column="s4"/>
+        <result property="s5" column="s5"/>
+        <result property="s6" column="s6"/>
+        <result property="s7" column="s7"/>
+        <result property="isBetting" column="is_betting"/>
+        <result property="notifyTime" column="notify_time"/>
+    </resultMap>
+
+    <select id="findBettingRecord" resultMap="BetSPMatchInfoResult">
+        select
+            match_num,
+            league_abb_name,
+            match_date,
+            match_time,
+            home_team_abb_name,
+            awa_team_abb_name,
+            win,
+            draw,
+            lose,
+            handicap,
+            handicap_win,
+            handicap_draw,
+            handicap_lose,
+            s0,
+            s1,
+            s2,
+            s3,
+            s4,
+            s5,
+            s6,
+            s7,
+            notify_time
+        from bet_sp_match_info
+        where is_betting = 1
+    </select>
+    <insert id="insertBetSPMatchInfo">
+        insert into bet_sp_match_info(
+        match_num,
+        league_abb_name,
+        match_date,
+        match_time,
+        home_team_abb_name,
+        awa_team_abb_name,
+        win,
+        draw,
+        lose,
+        handicap_win,
+        handicap_draw,
+        handicap_lose,
+        s0,
+        s1,
+        s2,
+        s3,
+        s4,
+        s5,
+        s6,
+        s7,
+        create_time,
+        exact_date,
+        notify_time)
+        values
+            (
+            #{matchNum},
+            #{list.leagueAbbName},
+            #{matchDate},
+            #{matchTime},
+            #{homeTeamAbbName},
+            #{awaTeamAbbName},
+            #{win},
+            #{draw},
+            #{lose},
+            #{handicapWin},
+            #{handicapDraw},
+            #{handicapLose},
+            #{s0},
+            #{s1},
+            #{s2},
+            #{s3},
+            #{s4},
+            #{s5},
+            #{s6},
+            #{s7},
+            #{createTime},
+            #{exactDate},
+             1)
+    </insert>
+    <update id="updateNotifyTime">
+        update bet_sp_match_info set notify_time = #{timeStamp} where id = #{id}
+    </update>
+
+</mapper>

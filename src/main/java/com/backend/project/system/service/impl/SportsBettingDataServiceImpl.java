@@ -3,9 +3,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.backend.common.utils.DateUtils;
 import com.backend.common.utils.http.HttpUtils;
+import com.backend.project.system.domain.BetSPMatchInfo;
 import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
 import com.backend.project.system.domain.vo.*;
+import com.backend.project.system.mapper.BetSPMatchInfoMapper;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
 import com.backend.project.system.service.ISportsBettingDataService;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
     @Resource
     private SPMatchInfoMapper spMatchInfoMapper;
+    @Resource
+    private BetSPMatchInfoMapper betSPMatchInfoMapper;
 
 
     @Override
@@ -80,7 +84,6 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 smi.setS5(ttg.getS5());
                                 smi.setS6(ttg.getS6());
                                 smi.setS7(ttg.getS7());
-//                                spMatchInfoMapper.insertSPMatchInfo(smi);
                                 spMatchInfos.add(smi);
                             }
                         }
@@ -89,8 +92,41 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             }
         }
 
-        if(spMatchInfos != null && spMatchInfos.size() >0){
+        if(spMatchInfos != null && spMatchInfos.size() > 0){
             try {
+                //查询有没有投注中状态的记录
+                List<BetSPMatchInfo> bettingRecordList = betSPMatchInfoMapper.findBettingRecord();
+                if(bettingRecordList != null && bettingRecordList.size() > 0){
+
+                    for(BetSPMatchInfo bsmi : bettingRecordList){
+
+                        for(SPMatchInfo smi: spMatchInfos){
+                            //如果比赛编号和比赛日期相等 则比较赔率有没有变化
+                            if(bsmi.getMatchNum() == smi.getMatchNum() && bsmi.getMatchDate().equals(smi.getMatchDate())){
+
+                                if(!smi.getWin().equals(bsmi.getWin()) || !smi.getDraw().equals(bsmi.getDraw()) || !smi.getLose().equals(bsmi.getLose()) ){
+                                    if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
+                                        //通知 胜平负赔率变化
+
+                                        //通知后更新通知时间
+                                        betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
+                                    }
+                                }
+
+                                if(!smi.getHandicapWin().equals(bsmi.getHandicapWin()) || !smi.getHandicapDraw().equals(bsmi.getHandicapDraw()) || !smi.getHandicapLose().equals(bsmi.getHandicapLose()) ){
+                                    if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
+                                        //通知 主让/主受让 胜平负赔率变化
+
+                                        //通知后更新通知时间
+                                        betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+
                 spMatchInfoMapper.deleteMatchInfo();
                 spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
             }catch (Exception e){
