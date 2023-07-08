@@ -68,6 +68,7 @@
         win,
         draw,
         lose,
+        handicap,
         handicap_win,
         handicap_draw,
         handicap_lose,
@@ -85,7 +86,7 @@
         values
             (
             #{matchNum},
-            #{list.leagueAbbName},
+            #{leagueAbbName},
             #{matchDate},
             #{matchTime},
             #{homeTeamAbbName},
@@ -93,6 +94,7 @@
             #{win},
             #{draw},
             #{lose},
+            #{handicap},
             #{handicapWin},
             #{handicapDraw},
             #{handicapLose},

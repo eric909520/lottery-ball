@@ -28,6 +28,8 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
     @Resource
     private BetSPMatchInfoMapper betSPMatchInfoMapper;
 
+    private String url = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
+
 
     @Override
     public void getSportsBettingFBData() {
@@ -107,7 +109,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 if(!smi.getWin().equals(bsmi.getWin()) || !smi.getDraw().equals(bsmi.getDraw()) || !smi.getLose().equals(bsmi.getLose()) ){
                                     if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=比赛编号:"+bsmi.getMatchNum()+",开赛时间:"+bsmi.getMatchDate()+" 的胜平负赔率已变化");
                                         //通知后更新通知时间
                                         betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
                                     }
@@ -116,7 +118,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                 if(!smi.getHandicapWin().equals(bsmi.getHandicapWin()) || !smi.getHandicapDraw().equals(bsmi.getHandicapDraw()) || !smi.getHandicapLose().equals(bsmi.getHandicapLose()) ){
                                     if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
                                         //通知 主让/主受让 胜平负赔率变化
-
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=比赛编号:"+bsmi.getMatchNum()+",开赛时间:"+bsmi.getMatchDate()+" 的主让/主受让 胜平负赔率已变化");
                                         //通知后更新通知时间
                                         betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
                                     }
@@ -192,5 +194,16 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 将投注中的记录复制到投注表(bet_sp_match_info) 并把投注状态设置成投注中
+     * @param matchNum
+     * @param matchDate
+     */
+    @Override
+    public void insertBetSPMatchInfo(Integer matchNum, String matchDate) {
+        SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(matchNum,matchDate);
+        betSPMatchInfoMapper.insertBetSPMatchInfo(spMatchInfo);
     }
 }

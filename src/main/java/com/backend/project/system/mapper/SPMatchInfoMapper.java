@@ -62,4 +62,11 @@ public interface SPMatchInfoMapper {
      */
     List<String> getTodayAwayTeam(String date);
 
+    /**
+     * 通过比赛编号和开始时间查询比赛
+     * @param matchNum
+     * @param matchDate
+     * @return
+     */
+    SPMatchInfo findSPMatchInfo(Integer matchNum, String matchDate);
 }
