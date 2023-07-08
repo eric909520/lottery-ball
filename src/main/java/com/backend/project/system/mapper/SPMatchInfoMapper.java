@@ -63,6 +63,27 @@ public interface SPMatchInfoMapper {
     List<String> getTodayAwayTeam(String date);
 
     /**
+     * 根据日期查询联赛列表
+     * @param date
+     * @return
+     */
+    List<String> getEarlyLeague(String date);
+
+    /**
+     * 根据日期查询主队球队列表
+     * @param date
+     * @return
+     */
+    List<String> getEarlyHomeTeam(String date);
+
+    /**
+     * 根据日期查询客队球队列表
+     * @param date
+     * @return
+     */
+    List<String> getEarlyAwayTeam(String date);
+
+    /**
      * 通过比赛编号和开始时间查询比赛
      * @param matchNum
      * @param matchDate
