@@ -25,6 +25,10 @@
         from hg_fb_league_data
     </sql>
 
+    <select id="selectExist" parameterType="string" resultType="integer">
+        select 1 from hg_fb_league_data where league_id = #{leagueId} and ecid = #{ecid}
+    </select>
+
     <insert id="insertData" parameterType="HgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
         insert into hg_fb_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">

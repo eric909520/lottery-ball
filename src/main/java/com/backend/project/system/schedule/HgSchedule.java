@@ -58,9 +58,9 @@ public class HgSchedule {
      * 每天中午12点拿今日足球比赛数据
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-    @Scheduled(fixedDelay = 600000L)
+    @Scheduled(fixedDelay = 20000L)
     private void pollingFootballDataToday() {
-        threadPoolConfig.threadPoolExecutor().submit(() -> {
+//        threadPoolConfig.threadPoolExecutor().submit(() -> {
             try {
                 String currenDate = DateUtils.getDate();
                 List<String> todayLeague = spMatchInfoMapper.getTodayLeague(currenDate);
@@ -125,9 +125,17 @@ public class HgSchedule {
                             // 写入联赛球队数据
                             HgFbLeagueData hgFbLeagueData = new HgFbLeagueData(regionName, regionSortName, leagueName
                                     , leagueSortName, leagueId, ecid, ecTime, ecTimestamp, team_h, team_h_id, team_c, team_c_id);
-                            hgFbLeagueDataMapper.insertData(hgFbLeagueData);
+                            Integer exist = hgFbLeagueDataMapper.selectExist(leagueId, ecid);
+                            if (null == exist) {
+                                hgFbLeagueDataMapper.insertData(hgFbLeagueData);
+                            }
+
 
                             /** 赔率明细 */
+                            // 存储赔率数据
+                            HgFbGameMore hgFbGameMore = new HgFbGameMore();
+                            hgFbGameMore.setLid(leagueId);
+                            hgFbGameMore.setEcid(ecid);
                             hgApi3.setLid(leagueId);
                             hgApi3.setEcid(ecid);
                             String game_more = HgApiUtils.get_game_more(hgApi3);
@@ -135,15 +143,16 @@ public class HgSchedule {
                             Element rootEltGameMore = docGameMore.getRootElement();
                             Iterator gameIt = rootEltGameMore.elementIterator("game");
                             while (gameIt.hasNext()) {
-                                // 存储赔率数据
-                                HgFbGameMore hgFbGameMore = new HgFbGameMore();
                                 Element gameGameMore = (Element) gameIt.next();
                                 String gidGameMore = gameGameMore.elementTextTrim("gid"); // 获取准确赔率参数
                                 hgApi4.setGid(gidGameMore); // 接口参数
+                                hgApi4.setLid(leagueId);
+                                hgApi4.setEcid(ecid);
                                 String strong = gameGameMore.elementTextTrim("strong"); // 强队标识，H：主队强（主减客加），C：客队强（主加客减）
+                                String mode = gameGameMore.attributeValue("mode");
                                 /** 让球 */
                                 String sw_r = gameGameMore.elementTextTrim("sw_R"); // 让球赔率开关 （sw_ 赔率开关，Y:开，N:关）
-                                if (UserConstants.YES.equals(sw_r)) {
+                                if (UserConstants.YES.equals(sw_r) && "FT".equals(mode)) {
                                     sw_rang(hgApi4, handicap, hgFbGameMore, gameGameMore, strong);
                                 }
                                 /** 大小球 */
@@ -154,16 +163,20 @@ public class HgSchedule {
 
                                 /** master参数组 */
                                 String master = gameGameMore.attributeValue("master");
-                                if (UserConstants.YES.equals(master)) {
+                                if (UserConstants.YES.equals(master) && "FT".equals(mode)) {
                                     /** 独赢 */
                                     sw_monopoly(hgApi4, hgFbGameMore);
 
                                     /** 总进球数 */
                                     sw_total(hgApi4, hgFbGameMore);
                                 }
-
+                            }
+                            Integer exist1 = hgFbGameMoreMapper.selectExist(leagueId, ecid);
+                            if (null == exist1) {
                                 // 写入赔率数据
                                 hgFbGameMoreMapper.insertData(hgFbGameMore);
+                            } else {
+                                hgFbGameMoreMapper.updateData(hgFbGameMore);
                             }
                         }
                     }
@@ -171,7 +184,7 @@ public class HgSchedule {
             } catch (Exception e) {
                 log.info("pollingFootballDataToday exception ----->>>>", e);
             }
-        });
+//        });
     }
 
     /**
@@ -185,34 +198,42 @@ public class HgSchedule {
         // 0-1
         hgApi4.setChoseTeam(HgChooseTeamEnum.INSIDE0_1.getType());
         String order_view_0_1 = HgApiUtils.ft_order_view(hgApi4);
-        Document orderView0_1 = DocumentHelper.parseText(order_view_0_1);
-        Element rootOrderView0_1 = orderView0_1.getRootElement();
-        String ioratio0_1 = rootOrderView0_1.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setTotal01(ioratio0_1);
+        if (order_view_0_1 != null) {
+            Document orderView0_1 = DocumentHelper.parseText(order_view_0_1);
+            Element rootOrderView0_1 = orderView0_1.getRootElement();
+            String ioratio0_1 = rootOrderView0_1.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setTotal01(ioratio0_1);
+        }
 
         // 2-3
         hgApi4.setChoseTeam(HgChooseTeamEnum.INSIDE2_3.getType());
         String order_view_2_3 = HgApiUtils.ft_order_view(hgApi4);
-        Document orderView2_3 = DocumentHelper.parseText(order_view_2_3);
-        Element rootOrderView2_3 = orderView2_3.getRootElement();
-        String ioratio2_3 = rootOrderView2_3.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setTotal23(ioratio2_3);
+        if (order_view_2_3 != null) {
+            Document orderView2_3 = DocumentHelper.parseText(order_view_2_3);
+            Element rootOrderView2_3 = orderView2_3.getRootElement();
+            String ioratio2_3 = rootOrderView2_3.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setTotal23(ioratio2_3);
+        }
 
         // 4-6
         hgApi4.setChoseTeam(HgChooseTeamEnum.INSIDE4_6.getType());
         String order_view_4_6 = HgApiUtils.ft_order_view(hgApi4);
-        Document orderView4_6 = DocumentHelper.parseText(order_view_4_6);
-        Element rootOrderView4_6 = orderView4_6.getRootElement();
-        String ioratio4_6 = rootOrderView4_6.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setTotal46(ioratio4_6);
+        if (order_view_4_6 != null) {
+            Document orderView4_6 = DocumentHelper.parseText(order_view_4_6);
+            Element rootOrderView4_6 = orderView4_6.getRootElement();
+            String ioratio4_6 = rootOrderView4_6.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setTotal46(ioratio4_6);
+        }
 
         // 7+
         hgApi4.setChoseTeam(HgChooseTeamEnum.OVER7.getType());
         String order_view_7 = HgApiUtils.ft_order_view(hgApi4);
-        Document orderView7 = DocumentHelper.parseText(order_view_7);
-        Element rootOrderView7 = orderView7.getRootElement();
-        String ioratio7 = rootOrderView7.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setTotal7(ioratio7);
+        if (order_view_4_6 != null) {
+            Document orderView7 = DocumentHelper.parseText(order_view_7);
+            Element rootOrderView7 = orderView7.getRootElement();
+            String ioratio7 = rootOrderView7.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setTotal7(ioratio7);
+        }
     }
 
     /**
@@ -226,26 +247,32 @@ public class HgSchedule {
         // 独赢 - 主队
         hgApi4.setChoseTeam(HgChooseTeamEnum.HOME.getType());
         String order_view_h = HgApiUtils.ft_order_view(hgApi4);
-        Document orderViewH = DocumentHelper.parseText(order_view_h);
-        Element rootOrderViewH = orderViewH.getRootElement();
-        String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setMyselfH(ioratioH);
+        if (order_view_h != null) {
+            Document orderViewH = DocumentHelper.parseText(order_view_h);
+            Element rootOrderViewH = orderViewH.getRootElement();
+            String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setMyselfH(ioratioH);
+        }
 
         // 独赢 - 客队
         hgApi4.setChoseTeam(HgChooseTeamEnum.CUSTOMER.getType());
         String order_view_c = HgApiUtils.ft_order_view(hgApi4);
-        Document orderViewC = DocumentHelper.parseText(order_view_c);
-        Element rootOrderViewC = orderViewC.getRootElement();
-        String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setMyselfC(ioratioC);
+        if (order_view_h != null) {
+            Document orderViewC = DocumentHelper.parseText(order_view_c);
+            Element rootOrderViewC = orderViewC.getRootElement();
+            String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setMyselfC(ioratioC);
+        }
 
         // 独赢 - 和局
         hgApi4.setChoseTeam(HgChooseTeamEnum.NORMAL.getType());
         String order_view_n = HgApiUtils.ft_order_view(hgApi4);
-        Document orderViewN = DocumentHelper.parseText(order_view_n);
-        Element rootOrderViewN = orderViewN.getRootElement();
-        String ioratioN = rootOrderViewN.elementTextTrim("ioratio"); // 水位
-        hgFbGameMore.setMyselfN(ioratioN);
+        if (order_view_h != null) {
+            Document orderViewN = DocumentHelper.parseText(order_view_n);
+            Element rootOrderViewN = orderViewN.getRootElement();
+            String ioratioN = rootOrderViewN.elementTextTrim("ioratio"); // 水位
+            hgFbGameMore.setMyselfN(ioratioN);
+        }
     }
 
     /**
@@ -259,25 +286,29 @@ public class HgSchedule {
         // 小球赔率 - 小xxx
         hgApi4.setChoseTeam(HgChooseTeamEnum.HOME.getType());
         String order_view_h = HgApiUtils.ft_order_view(hgApi4);
-        Document orderViewH = DocumentHelper.parseText(order_view_h);
-        Element rootOrderViewH = orderViewH.getRootElement();
-        String spreadH = rootOrderViewH.elementTextTrim("spread"); // 小球个数
-        if (Arrays.asList(xiao_qiu).contains(spreadH)) {
-            String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位 - 小球
-            // 小球水位设置
-            transformSmall(hgFbGameMore, spreadH, ioratioH);
+        if (order_view_h != null) {
+            Document orderViewH = DocumentHelper.parseText(order_view_h);
+            Element rootOrderViewH = orderViewH.getRootElement();
+            String spreadH = rootOrderViewH.elementTextTrim("spread"); // 小球个数
+            if (Arrays.asList(xiao_qiu).contains(spreadH)) {
+                String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位 - 小球
+                // 小球水位设置
+                transformSmall(hgFbGameMore, spreadH, ioratioH);
+            }
         }
+
         // 大球赔率 - 大xxx
         hgApi4.setChoseTeam(HgChooseTeamEnum.CUSTOMER.getType());
         String order_view_c = HgApiUtils.ft_order_view(hgApi4);
-        Document orderViewC = DocumentHelper.parseText(order_view_c);
-        Element rootOrderViewC = orderViewC.getRootElement();
-        String spreadC = rootOrderViewC.elementTextTrim("spread"); // 大球个数
-        if (Arrays.asList(da_qiu).contains(spreadC)) {
-            String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位 - 大球
-//                                        private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
-            // 大球水位设置
-            transformBig(hgFbGameMore, spreadC, ioratioC);
+        if (order_view_c != null) {
+            Document orderViewC = DocumentHelper.parseText(order_view_c);
+            Element rootOrderViewC = orderViewC.getRootElement();
+            String spreadC = rootOrderViewC.elementTextTrim("spread"); // 大球个数
+            if (Arrays.asList(da_qiu).contains(spreadC)) {
+                String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位 - 大球
+                // 大球水位设置
+                transformBig(hgFbGameMore, spreadC, ioratioC);
+            }
         }
     }
 
@@ -295,38 +326,42 @@ public class HgSchedule {
         Double handicapSub = CalcUtil.sub(handicapDouble, 0.5);
         String ratio = gameGameMore.elementTextTrim("ratio"); // 让球数
         // 判断是否符合系统所需让球个数 （1-0.5）（2-1.5）
-        if (handicapSub.equals(Double.valueOf(ratio))) {
+        if (ratio.indexOf("/")<0 && handicapSub.equals(Double.valueOf(ratio))) {
             hgApi4.setWType(HgWTypEnum.RANG.getType());
             // 主队赔率
             hgApi4.setChoseTeam(HgChooseTeamEnum.HOME.getType());
             /** 准确赔率 */
             String order_view_h = HgApiUtils.ft_order_view(hgApi4);
-            Document orderViewH = DocumentHelper.parseText(order_view_h);
-            Element rootOrderViewH = orderViewH.getRootElement();
-            String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
-//                                        String spreadH = rootOrderViewH.elementTextTrim("spread"); // 让球个数
-//                                    String gold_gmin_h = rootOrderView.elementTextTrim("gold_gmin"); // 投注最小金额
-//                                    String gold_gmax_h = rootOrderView.elementTextTrim("gold_gmax"); // 投注最大金额
-            if (HgChooseTeamEnum.HOME.getType().equals(strong)) {
-                // 主减spread
-                hgFbGameMore.setHCut05(ioratioH);
-            } else {
-                // 主加spread
-                hgFbGameMore.setHAdd05(ioratioH);
-
+            if (order_view_h != null) {
+                Document orderViewH = DocumentHelper.parseText(order_view_h);
+                Element rootOrderViewH = orderViewH.getRootElement();
+                String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
+//                String spreadH = rootOrderViewH.elementTextTrim("spread"); // 让球个数
+//                String gold_gmin_h = rootOrderView.elementTextTrim("gold_gmin"); // 投注最小金额
+//                String gold_gmax_h = rootOrderView.elementTextTrim("gold_gmax"); // 投注最大金额
+                if (HgChooseTeamEnum.HOME.getType().equals(strong)) {
+                    // 主减spread
+                    hgFbGameMore.setHCut05(ioratioH);
+                } else {
+                    // 主加spread
+                    hgFbGameMore.setHAdd05(ioratioH);
+                }
             }
+
             // 客队赔率
             hgApi4.setChoseTeam(HgChooseTeamEnum.CUSTOMER.getType());
             String order_view_c = HgApiUtils.ft_order_view(hgApi4);
-            Document orderViewC = DocumentHelper.parseText(order_view_c);
-            Element rootOrderViewC = orderViewC.getRootElement();
-            String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
-            if (HgChooseTeamEnum.HOME.getType().equals(strong)) {
-                // 客加spread
-                hgFbGameMore.setCAdd05(ioratioC);
-            } else {
-                // 客减spread
-                hgFbGameMore.setCCut05(ioratioC);
+            if (order_view_c != null) {
+                Document orderViewC = DocumentHelper.parseText(order_view_c);
+                Element rootOrderViewC = orderViewC.getRootElement();
+                String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
+                if (HgChooseTeamEnum.HOME.getType().equals(strong)) {
+                    // 客加spread
+                    hgFbGameMore.setCAdd05(ioratioC);
+                } else {
+                    // 客减spread
+                    hgFbGameMore.setCCut05(ioratioC);
+                }
             }
         }
     }

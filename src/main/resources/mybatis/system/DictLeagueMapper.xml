@@ -25,7 +25,7 @@
 
     <select id="selectByHg" parameterType="String" resultType="string">
         select sp from dict_league
-        where hg = #{hg};
+        where hg = #{hg} and enable = 1;
     </select>
 
     <insert id="insertDict" parameterType="DictLeague" useGeneratedKeys="true"
