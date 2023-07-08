@@ -13,11 +13,11 @@ import java.util.HashMap;
 public class HgApiUtils {
 
     /**
-     * 今日足球赛事
+     * 今日足球-联赛列表
      * @param hgApi
      * @return
      */
-    public static String get_league_list_All(HgApi hgApi) {
+    public static String today_get_league_list_All(HgApi hgApi) {
         try {
             String url = hgApi.getApiLink();
             HashMap<String, String> paramMap = new HashMap<>();
@@ -40,11 +40,11 @@ public class HgApiUtils {
     }
 
     /**
-     * 赛事下属球赛列表
+     * 今日足球-联赛下属比赛列表
      * @param hgApi
      * @return
      */
-    public static String get_game_list(HgApi hgApi) {
+    public static String today_get_game_list(HgApi hgApi) {
         try {
             String url = hgApi.getApiLink();
             HashMap<String, String> paramMap = new HashMap<>();
@@ -67,15 +67,15 @@ public class HgApiUtils {
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("get_game_list exception ----->>>>", e);
+            log.info("today_get_game_list exception ----->>>>", e);
         }
         return null;
     }
 
     /**
-     * 球赛详细
+     * 今日足球-赔率详细
      */
-    public static String get_game_more(HgApi hgApi) {
+    public static String today_get_game_more(HgApi hgApi) {
         try {
             String url = hgApi.getApiLink();
             HashMap<String, String> paramMap = new HashMap<>();
@@ -90,21 +90,21 @@ public class HgApiUtils {
             paramMap.put("lid", hgApi.getLid());
             paramMap.put("specialClick", "");
             paramMap.put("mode", "");
-            paramMap.put("filter", "");
+            paramMap.put("filter", "Main");
             paramMap.put("ts", hgApi.getTs());
             paramMap.put("ecid", hgApi.getEcid());
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("get_game_more exception ----->>>>", e);
+            log.info("today_get_game_more exception ----->>>>", e);
         }
         return null;
     }
 
     /**
-     * 准确赔率
+     * 今日足球-准确赔率
      */
-    public static String ft_order_view(HgApi hgApi) {
+    public static String today_ft_order_view(HgApi hgApi) {
         try {
             String url = hgApi.getApiLink();
             HashMap<String, String> paramMap = new HashMap<>();
@@ -120,7 +120,96 @@ public class HgApiUtils {
             String data = HttpUtils.doPostForm(url, paramMap);
             return data;
         } catch (Exception e) {
-            log.info("ft_order_view exception ----->>>>", e);
+            log.info("today_ft_order_view exception ----->>>>", e);
+        }
+        return null;
+    }
+
+    /**
+     * 早盘足球-联赛列表
+     * @param hgApi
+     * @return
+     */
+    public static String early_get_league_list_All(HgApi hgApi) {
+        try {
+            String url = hgApi.getApiLink();
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", hgApi.getP());
+            paramMap.put("uid", hgApi.getUId());
+//            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("gtype", "FT");
+            paramMap.put("FS", "N");
+            paramMap.put("showtype", "fu");
+            paramMap.put("date", "all");
+            paramMap.put("ts", hgApi.getTs());
+            paramMap.put("nocp", "N");
+            String data = HttpUtils.doPostForm(url, paramMap);
+            return data;
+        } catch (Exception e) {
+            log.info("early_get_league_list_All exception ----->>>>", e);
+        }
+        return null;
+    }
+
+    /**
+     * 早盘足球-联赛下属比赛列表
+     * @param hgApi
+     * @return
+     */
+    public static String early_get_game_list(HgApi hgApi) {
+        try {
+            String url = hgApi.getApiLink();
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", hgApi.getP());
+            paramMap.put("uid", hgApi.getUId());
+//            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("p3type", "");
+            paramMap.put("date", "all");
+            paramMap.put("gtype", "ft");
+            paramMap.put("showtype", "early");
+            paramMap.put("rtype", "r");
+            paramMap.put("ltype", "3");
+            paramMap.put("lid", hgApi.getLid());
+            paramMap.put("action", "click_league");
+            paramMap.put("sorttype", "L");
+            paramMap.put("specialClick", "");
+            paramMap.put("isFantasy", "N");
+            paramMap.put("ts", hgApi.getTs());
+            String data = HttpUtils.doPostForm(url, paramMap);
+            return data;
+        } catch (Exception e) {
+            log.info("early_today_get_game_list exception ----->>>>", e);
+        }
+        return null;
+    }
+
+    /**
+     * 早盘足球-赔率详细
+     */
+    public static String early_get_game_more(HgApi hgApi) {
+        try {
+            String url = hgApi.getApiLink();
+            HashMap<String, String> paramMap = new HashMap<>();
+            paramMap.put("p", hgApi.getP());
+            paramMap.put("uid", hgApi.getUId());
+//            paramMap.put("ver", "2023-06-26-unbanner-1166");
+            paramMap.put("langx", "zh-cn");
+            paramMap.put("gtype", "ft");
+            paramMap.put("showtype", "early");
+            paramMap.put("ltype", "3");
+            paramMap.put("isRB", "N");
+            paramMap.put("lid", hgApi.getLid());
+            paramMap.put("specialClick", "");
+            paramMap.put("mode", "");
+            paramMap.put("filter", "Main");
+            paramMap.put("ts", hgApi.getTs());
+            paramMap.put("ecid", hgApi.getEcid());
+            String data = HttpUtils.doPostForm(url, paramMap);
+            return data;
+        } catch (Exception e) {
+            log.info("early_today_get_game_more exception ----->>>>", e);
         }
         return null;
     }

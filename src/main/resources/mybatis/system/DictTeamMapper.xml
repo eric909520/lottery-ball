@@ -20,12 +20,12 @@
 
     <select id="selectBySp" parameterType="String" resultType="string">
         select hg from dict_team
-        where sp = #{sp};
+        where sp = #{sp} and enable = 1;
     </select>
 
     <select id="selectByHg" parameterType="String" resultType="string">
         select sp from dict_team
-        where hg = #{hg};
+        where hg = #{hg} and enable = 1;
     </select>
 
     <insert id="insertDict" parameterType="DictTeam" useGeneratedKeys="true"

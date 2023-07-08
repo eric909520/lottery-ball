@@ -36,6 +36,8 @@ public class HgFbLeagueData extends BaseEntity {
 
     private String teamCId;
 
+    private String handicapFlag;
+
     public HgFbLeagueData() {}
 
     public HgFbLeagueData(String regionName, String regionSortName, String leagueName, String leagueSortName
@@ -53,7 +55,6 @@ public class HgFbLeagueData extends BaseEntity {
         this.teamHId = teamHId;
         this.teamC = teamC;
         this.teamCId = teamCId;
-
     }
 
 }

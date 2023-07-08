@@ -48,6 +48,18 @@
     <select id="getTodayAwayTeam" parameterType="string" resultType="string">
         select awa_team_abb_name from sp_match_info where exact_date = #{date}
     </select>
+
+    <select id="getEarlyLeague" parameterType="string" resultType="string">
+        select league_abb_name from sp_match_info where exact_date > #{date}
+    </select>
+
+    <select id="getEarlyHomeTeam" parameterType="string" resultType="string">
+        select home_team_abb_name from sp_match_info where exact_date > #{date}
+    </select>
+
+    <select id="getEarlyAwayTeam" parameterType="string" resultType="string">
+        select awa_team_abb_name from sp_match_info where exact_date > #{date}
+    </select>
     <select id="findSPMatchInfo" resultType="com.backend.project.system.domain.SPMatchInfo">
         SELECT * from sp_match_info WHERE match_num = #{matchNum} and match_date = #{matchDate}
     </select>
