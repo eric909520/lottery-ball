@@ -42,8 +42,6 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         String s = HttpUtils.commonGet("https://webapi.sporttery.cn/gateway/jc/football/getMatchCalculatorV1.qry");
         JSONObject obj = JSONObject.parseObject(s);
         Root root = JSON.toJavaObject(obj, Root.class);
-        Integer matchNum = 0;
-        String matchDate = "";
         //批量插入集合
         List<SPMatchInfo> spMatchInfos = new ArrayList<>();
         if (root != null) {
@@ -68,10 +66,6 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                             for (int j = 0; j < subMatchList.size(); j++) {
                                 SubMatchList sl = subMatchList.get(j);
                                 SPMatchInfo smi = new SPMatchInfo();
-                                if(j == 0){
-                                    matchDate = sl.getMatchDate();
-                                    matchNum = sl.getMatchNum();
-                                }
                                 smi.setCreateTime(System.currentTimeMillis());
                                 smi.setExactDate(exactDate);
                                 smi.setHomeTeamAbbName(sl.getHomeTeamAbbName());
