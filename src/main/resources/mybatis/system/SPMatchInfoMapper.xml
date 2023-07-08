@@ -198,4 +198,29 @@
             #{list.createTime})
         </foreach>
     </insert>
+
+
+    <update id="updateMatchInfo" parameterType="list">
+        <foreach item="list" index="index" collection="list">
+            update sp_match_info
+            set
+            win=	#{list.win},
+            draw=	#{list.draw},
+            lose=	#{list.lose},
+            handicap_win=	#{list.handicapWin},
+            handicap_draw=	#{list.handicapDraw},
+            handicap_lose=	#{list.handicapLose},
+            s0=	#{list.s0},
+            s1=	#{list.s1},
+            s2=	#{list.s2},
+            s3=	#{list.s3},
+            s4=	#{list.s4},
+            s5=	#{list.s5},
+            s6=	#{list.s6},
+            s7=	#{list.s7}
+            where match_num = #{list.matchNum} and match_date = #{list.matchDate}
+
+        </foreach>
+
+    </update>
 </mapper>

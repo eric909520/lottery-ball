@@ -69,4 +69,6 @@ public interface SPMatchInfoMapper {
      * @return
      */
     SPMatchInfo findSPMatchInfo(Integer matchNum, String matchDate);
+
+    int updateMatchInfo(List<SPMatchInfo> list);
 }

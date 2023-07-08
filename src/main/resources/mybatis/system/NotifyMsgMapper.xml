@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.NotifyMsgMapper">
+
+    <resultMap type="AppConfig" id="AppConfigResult">
+        <result property="id" column="id"/>
+        <result property="cKey" column="c_key"/>
+        <result property="cValue" column="c_value"/>
+        <result property="type" column="type"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <insert id="insertNotifyMsg">
+        insert into notify_msg (msg_type,notify_time,bet_id) values (#{msgType},#{notifyTime},#{betId});
+    </insert>
+    <select id="findMsgByContion" resultType="com.backend.project.system.domain.NotifyMsg">
+        SELECT * from notify_msg WHERE msg_type =#{type} and bet_id =#{betId}
+    </select>
+
+
+</mapper>

@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.backend.common.utils.DateUtils;
 import com.backend.common.utils.http.HttpUtils;
 import com.backend.project.system.domain.BetSPMatchInfo;
+import com.backend.project.system.domain.NotifyMsg;
 import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
 import com.backend.project.system.domain.vo.*;
+import com.backend.project.system.enums.MsgEnum;
 import com.backend.project.system.mapper.BetSPMatchInfoMapper;
+import com.backend.project.system.mapper.NotifyMsgMapper;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
 import com.backend.project.system.service.ISportsBettingDataService;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,10 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
     @Resource
     private BetSPMatchInfoMapper betSPMatchInfoMapper;
 
-    private String url = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
+    @Resource
+    private NotifyMsgMapper notifyMsgMapper;
+
+    private static String url = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
 
 
     @Override
@@ -36,6 +42,8 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         String s = HttpUtils.commonGet("https://webapi.sporttery.cn/gateway/jc/football/getMatchCalculatorV1.qry");
         JSONObject obj = JSONObject.parseObject(s);
         Root root = JSON.toJavaObject(obj, Root.class);
+        Integer matchNum = 0;
+        String matchDate = "";
         //批量插入集合
         List<SPMatchInfo> spMatchInfos = new ArrayList<>();
         if (root != null) {
@@ -60,6 +68,10 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                             for (int j = 0; j < subMatchList.size(); j++) {
                                 SubMatchList sl = subMatchList.get(j);
                                 SPMatchInfo smi = new SPMatchInfo();
+                                if(j == 0){
+                                    matchDate = sl.getMatchDate();
+                                    matchNum = sl.getMatchNum();
+                                }
                                 smi.setCreateTime(System.currentTimeMillis());
                                 smi.setExactDate(exactDate);
                                 smi.setHomeTeamAbbName(sl.getHomeTeamAbbName());
@@ -106,35 +118,85 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                             //如果比赛编号和比赛日期相等 则比较赔率有没有变化
                             if(bsmi.getMatchNum() == smi.getMatchNum() && bsmi.getMatchDate().equals(smi.getMatchDate())){
 
-                                if(!smi.getWin().equals(bsmi.getWin()) || !smi.getDraw().equals(bsmi.getDraw()) || !smi.getLose().equals(bsmi.getLose()) ){
-                                    if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
+                                if(!smi.getWin().equals(bsmi.getWin())){
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByContion(MsgEnum.win.getValue(), bsmi.getId());
+                                    if(System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=比赛编号:"+bsmi.getMatchNum()+",开赛时间:"+bsmi.getMatchDate()+" 的胜平负赔率已变化");
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主胜        比赛编号:" + smi.getMatchNum() +", 原始赔率 @"+bsmi.getWin() + ", 最新赔率 @" + smi.getWin());
+                                        NotifyMsg msg = new NotifyMsg();
+                                        msg.setMsgType(MsgEnum.win.getValue());
+                                        msg.setNotifyTime(System.currentTimeMillis());
                                         //通知后更新通知时间
-                                        betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
+                                        notifyMsgMapper.insertNotifyMsg(msg);
                                     }
                                 }
-
-                                if(!smi.getHandicapWin().equals(bsmi.getHandicapWin()) || !smi.getHandicapDraw().equals(bsmi.getHandicapDraw()) || !smi.getHandicapLose().equals(bsmi.getHandicapLose()) ){
-                                    if(System.currentTimeMillis() - bsmi.getNotifyTime() > 600000) {
-                                        //通知 主让/主受让 胜平负赔率变化
-                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=比赛编号:"+bsmi.getMatchNum()+",开赛时间:"+bsmi.getMatchDate()+" 的主让/主受让 胜平负赔率已变化");
+                                if(!smi.getDraw().equals(bsmi.getDraw())){
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByContion(MsgEnum.draw.getValue(), bsmi.getId());
+                                    if(System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
+                                        //通知 胜平负赔率变化
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主平        比赛编号:" + smi.getMatchNum() +", 原始赔率 @"+bsmi.getDraw() + ", 最新赔率 @" + smi.getDraw());
+                                        NotifyMsg msg = new NotifyMsg();
+                                        msg.setMsgType(MsgEnum.draw.getValue());
+                                        msg.setNotifyTime(System.currentTimeMillis());
                                         //通知后更新通知时间
-                                        betSPMatchInfoMapper.updateNotifyTime(bsmi.getId(),System.currentTimeMillis());
+                                        notifyMsgMapper.insertNotifyMsg(msg);
                                     }
-
+                                }
+                                if(!smi.getLose().equals(bsmi.getLose())){
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByContion(MsgEnum.lose.getValue(), bsmi.getId());
+                                    if(System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
+                                        //通知 胜平负赔率变化
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主负        比赛编号:" + smi.getMatchNum() +", 原始赔率 @"+bsmi.getLose() + ", 最新赔率 @" + smi.getLose());
+                                        NotifyMsg msg = new NotifyMsg();
+                                        msg.setMsgType(MsgEnum.lose.getValue());
+                                        msg.setNotifyTime(System.currentTimeMillis());
+                                        //通知后更新通知时间
+                                        notifyMsgMapper.insertNotifyMsg(msg);
+                                    }
+                                }
+                                if(!smi.getHandicapWin().equals(bsmi.getHandicapWin())){
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByContion(MsgEnum.handicapWin.getValue(), bsmi.getId());
+                                    if(System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
+                                        //通知 胜平负赔率变化
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主让胜/受让胜        比赛编号:" + smi.getMatchNum() +", 原始赔率 @"+bsmi.getHandicapWin() + ", 最新赔率 @" + smi.getHandicapWin());
+                                        NotifyMsg msg = new NotifyMsg();
+                                        msg.setMsgType(MsgEnum.handicapWin.getValue());
+                                        msg.setNotifyTime(System.currentTimeMillis());
+                                        //通知后更新通知时间
+                                        notifyMsgMapper.insertNotifyMsg(msg);
+                                    }
+                                }
+                                if(!smi.getHandicapLose().equals(bsmi.getHandicapLose())){
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByContion(MsgEnum.handicapWin.getValue(), bsmi.getId());
+                                    if(System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
+                                        //通知 胜平负赔率变化
+                                        HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主让负/受让负        比赛编号:" + smi.getMatchNum() +", 原始赔率 @"+bsmi.getHandicapLose() + ", 最新赔率 @" + smi.getHandicapLose());
+                                        NotifyMsg msg = new NotifyMsg();
+                                        msg.setMsgType(MsgEnum.handicapLose.getValue());
+                                        msg.setNotifyTime(System.currentTimeMillis());
+                                        //通知后更新通知时间
+                                        notifyMsgMapper.insertNotifyMsg(msg);
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
-                spMatchInfoMapper.deleteMatchInfo();
-                spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
+                SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(matchNum,matchDate);
+                if(spMatchInfo != null){
+                    spMatchInfoMapper.updateMatchInfo(spMatchInfos);
+                }else {
+                    spMatchInfoMapper.insertSPMatchInfos(spMatchInfos);
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        HttpUtils.sendSSLPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ @@主胜        比赛编号:" + "213123" +", 原始赔率 @"+"1.23" + ", 最新赔率 @" + "1.26");
     }
 
 
