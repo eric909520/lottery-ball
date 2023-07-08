@@ -195,4 +195,15 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             }
         }
     }
+
+    /**
+     * 将投注中的记录复制到投注表(bet_sp_match_info) 并把投注状态设置成投注中
+     * @param matchNum
+     * @param matchDate
+     */
+    @Override
+    public void insertBetSPMatchInfo(Integer matchNum, String matchDate) {
+        SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(matchNum,matchDate);
+        betSPMatchInfoMapper.insertBetSPMatchInfo(spMatchInfo);
+    }
 }

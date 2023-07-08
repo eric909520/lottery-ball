@@ -17,9 +17,7 @@ public interface BetSPMatchInfoMapper {
      * @return
      */
     List<BetSPMatchInfo> findBettingRecord();
-    /**
-     * 将投注中的记录复制到投注表 并把投注状态设置成投注中
-     */
+
     void insertBetSPMatchInfo(SPMatchInfo spMatchInfo);
 
     /**
