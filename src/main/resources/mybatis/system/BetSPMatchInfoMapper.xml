@@ -32,6 +32,7 @@
 
     <select id="findBettingRecord" resultMap="BetSPMatchInfoResult">
         select
+            id,
             match_num,
             league_abb_name,
             match_date,

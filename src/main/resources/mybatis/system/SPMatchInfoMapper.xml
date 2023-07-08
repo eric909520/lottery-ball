@@ -128,6 +128,7 @@
         win,
         draw,
         lose,
+        handicap,
         handicap_win,
         handicap_draw,
         handicap_lose,
@@ -144,7 +145,7 @@
         values
             (
             #{matchNum},
-            #{list.leagueAbbName},
+            #{leagueAbbName},
             #{matchDate},
             #{matchTime},
             #{homeTeamAbbName},
@@ -152,6 +153,7 @@
             #{win},
             #{draw},
             #{lose},
+            #{handicap},
             #{handicapWin},
             #{handicapDraw},
             #{handicapLose},
@@ -164,7 +166,7 @@
             #{s6},
             #{s7},
             #{createTime},
-            #{list.exactDate})
+            #{exactDate})
     </insert>
 
     <delete id="deleteMatchInfo">
@@ -194,7 +196,8 @@
         )
         values
         <foreach item="list" index="index" collection="list" separator=",">
-            (#{list.matchNum},
+            (
+            #{list.matchNum},
             #{list.matchDate},
             #{list.matchTime},
             #{list.homeTeamAbbName},
@@ -211,28 +214,23 @@
         </foreach>
     </insert>
 
-
-    <update id="updateMatchInfo" parameterType="list">
-        <foreach item="list" index="index" collection="list">
+    <update id="updateMatchInfo">
             update sp_match_info
             set
-            win=	#{list.win},
-            draw=	#{list.draw},
-            lose=	#{list.lose},
-            handicap_win=	#{list.handicapWin},
-            handicap_draw=	#{list.handicapDraw},
-            handicap_lose=	#{list.handicapLose},
-            s0=	#{list.s0},
-            s1=	#{list.s1},
-            s2=	#{list.s2},
-            s3=	#{list.s3},
-            s4=	#{list.s4},
-            s5=	#{list.s5},
-            s6=	#{list.s6},
-            s7=	#{list.s7}
-            where match_num = #{list.matchNum} and match_date = #{list.matchDate}
-
-        </foreach>
-
+            win=#{win},
+            draw=#{draw},
+            lose=#{lose},
+            handicap_win=#{handicapWin},
+            handicap_draw=#{handicapDraw},
+            handicap_lose=#{handicapLose},
+            s0=	#{s0},
+            s1=	#{s1},
+            s2=	#{s2},
+            s3=	#{s3},
+            s4=	#{s4},
+            s5=	#{s5},
+            s6=	#{s6},
+            s7=	#{s7}
+            where match_num = #{matchNum} and match_date = #{matchDate}
     </update>
 </mapper>

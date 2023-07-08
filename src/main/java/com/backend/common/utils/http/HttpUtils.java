@@ -58,7 +58,7 @@ public class HttpUtils {
             while ((line = in.readLine()) != null) {
                 result.append(line);
             }
-            log.info("recv - {}", result);
+//            log.info("recv - {}", result);
         } catch (ConnectException e) {
             log.error("调用HttpUtils.sendGet ConnectException, url=" + url, e);
             Sentry.captureException(e);

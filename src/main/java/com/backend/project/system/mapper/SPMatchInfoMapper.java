@@ -91,5 +91,5 @@ public interface SPMatchInfoMapper {
      */
     SPMatchInfo findSPMatchInfo(Integer matchNum, String matchDate);
 
-    int updateMatchInfo(List<SPMatchInfo> list);
+    int updateMatchInfo(SPMatchInfo spMatchInfo);
 }
