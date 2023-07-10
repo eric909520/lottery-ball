@@ -19,7 +19,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
     private final static double rebateSP = 0.12;
 
     //体彩篮球返水
-    private final static double rebateSPBK = 0.15;
+    private final static double rebateSPBK = 0.07;
 
     // 皇冠固定返水比例
     private final static double rebateHG = 0.026;
@@ -602,12 +602,12 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      */
     public void SPWin_HGVisitAdd05(BetParamVo betParamVo) {
         Double oddsWin = betParamVo.getOddsWin();
-        Double betAmountSp = betParamVo.getBetBaseAmount();
+        Double betAmountHg = betParamVo.getBetAmountHg();
         Double oddsHg = betParamVo.getVisitAdd05();
         // 计算投注金额基数
-        Double baseAmount = CalcUtil.mul(oddsWin, betAmountSp);
+        Double baseAmount = CalcUtil.mul(oddsWin, betAmountHg);
         // 计算皇冠投注金额
-        Double betAmountHg = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
+        Double betAmountSp = CalcUtil.div(baseAmount, CalcUtil.add(oddsHg, 1));
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -639,9 +639,15 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
 
+        bonusHg = CalcUtil.mul(oddsHg, betAmountHg);
+        // 皇冠奖金返水
+        rebateHgBonus = CalcUtil.mul(bonusHg, rebateHG);
+        rewardHg = CalcUtil.sub(CalcUtil.add(bonusHg, rebateSpAmount, rebateHgBonus), betAmountSp);
+
         log.info("体彩投注：主 胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
-        log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
+        log.info("体彩收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
+        log.info("皇冠收益：" + rewardHg.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHg, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
     }
 
     /**

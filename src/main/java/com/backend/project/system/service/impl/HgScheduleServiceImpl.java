@@ -50,7 +50,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
     private static String[] xiao_qiu = new String[]{"2.5", "3.5", "2 / 2.5", "2.5 / 3", "3 / 3.5", "3.5 / 4"};
 
-    private static Double baseAmount = 100000d;
+    private static Double baseAmount = 10000d;
 
     /**
      * polling today football data
@@ -332,12 +332,12 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             // 体彩让球数据
             String handicap = spInfo.getHandicap();
             if (StringUtils.isNotBlank(handicap)) {
-                if (handicap.indexOf("+") > 0) { // 主加，主队受球
+                if (handicap.indexOf("+") > -1) { // 主加，主队受球
                     betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球胜
-                    betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球客胜
-                } else if (handicap.indexOf("-") > 0) { //主减，主队让球
+                    betParamVo.setOddsShouLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队受球客胜
+                } else if (handicap.indexOf("-") > -1) { //主减，主队让球
                     betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球胜
-                    betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球客胜
+                    betParamVo.setOddsRangLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队让球客胜
                 }
             }
             // 皇冠让球数据
