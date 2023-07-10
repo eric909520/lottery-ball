@@ -662,9 +662,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：客 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：客 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -763,9 +763,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：客 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 受球胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：客 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 受球胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：客 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -816,9 +816,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：主 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：主 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：主 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -869,9 +869,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：主 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 让球负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：主 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 让球负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：主 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
