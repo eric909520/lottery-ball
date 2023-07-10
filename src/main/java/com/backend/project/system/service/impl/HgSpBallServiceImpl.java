@@ -3,12 +3,17 @@ package com.backend.project.system.service.impl;
 import com.backend.common.utils.AdaptationAmount;
 import com.backend.common.utils.CalcUtil;
 import com.backend.common.utils.http.HttpUtils;
+import com.backend.project.system.domain.NotifyMsg;
 import com.backend.project.system.domain.vo.BetBasketballParamVo;
 import com.backend.project.system.domain.vo.BetParamVo;
+import com.backend.project.system.enums.MsgEnum;
+import com.backend.project.system.mapper.NotifyMsgMapper;
 import com.backend.project.system.service.IHgSPBallService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author
@@ -16,6 +21,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class HgSpBallServiceImpl implements IHgSPBallService {
+
+    @Resource
+    private NotifyMsgMapper notifyMsgMapper;
 
     @Value("${tgApi.url}")
     private String tgUrl;
@@ -268,7 +276,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
             log.info("");
         }
 
-
         Double homeCut05 = betParamVo.getHomeCut05();
         Double oddsRangLose = betParamVo.getOddsRangLose();
         /** 体彩主队让球负(体彩主队-)，皇冠（主队减05胜） */
@@ -291,7 +298,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         Double visitCut05 = betParamVo.getVisitCut05();
         if (oddsShouWin != 0 && visitCut05 != 0) {
             log.info("       @@足球, 体彩 @主队受球胜, 皇冠 @客队减05 -----------------------------");
-            SPShouWin_HGHomeCut05(betParamVo);
+            SPShouWin_HGVisitCut05(betParamVo);
             log.info("");
         }
 
@@ -310,7 +317,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         Double betAmountHgVisit = calcBetAmount(betParamVo.getTie(),betAmountHgTie,betParamVo.getVisit());
         //计算体彩投注额
         Double betAmountSp = calcBetAmount(betParamVo.getTie(), betAmountHgTie, oddsWin);
-
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -337,9 +343,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         Double rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgTie), rebateHG);
         Double rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgTie);
 
-
-        // TODO 调配金额
-//        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgVisit >0 ){
         //如果皇冠和收益大于体彩收益20+
         if(rewardHgTie - rewardSp > 20){
             Double differ = rewardHgTie - rewardSp;
@@ -390,10 +393,13 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
             log.info("调整后 皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgVisit, betAmountHgVisit, 4), 100) + "％");
         }
 
-//        }else {
-//            log.info("体彩主队胜，皇冠（和局、客队胜）收益为负 不可打");
-//        }
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：① 和局 @" + oddsHgTie + ", 金额 " + betAmountHgTie.intValue()
+                + ",  ② 客胜 @" + oddsHgVisit + ", 金额 " + betAmountHgVisit.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgVisit), 4), 100) + "％";
 
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPHomeWin_HGVisitWinAndTie);
     }
 
     /**
@@ -446,10 +452,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         Double rebateHgBonusVisit = CalcUtil.mul(CalcUtil.add(bonusHgVisit, betAmountHgHome), rebateHG);
         Double rewardHgVisit = CalcUtil.sub(CalcUtil.add(bonusHgVisit, rebateSpAmount, rebateHgBonusVisit), betAmountSp, betAmountHgHome);
 
-
-
-        // TODO 调配金额
-//        if(rewardSp > 0 && rewardHgHome > 0 && rewardHgVisit >0 ){
         //如果皇冠和收益大于体彩收益20+
         if(rewardHgHome - rewardSp > 20){
             Double differ = rewardHgHome - rewardSp;
@@ -500,9 +502,13 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
             log.info(" 皇冠投注：客胜 @" + oddsHgVisit + ", 投" + betAmountHgVisit.intValue() + ", 收益：" + rewardHgVisit + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgVisit, betAmountHgVisit, 4), 100) + "％");
         }
 
-//        }else {
-//            log.info("体彩平，皇冠（主队胜、客队胜） 收益为负 不可打");
-//        }
+        String msg = betParamVo.getMsg() + ",  体彩投注：平 @" + oddsTie + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：① 主胜 @" + oddsHgHome + ", 金额 " + betAmountHgHome.intValue()
+                + ",  ② 客胜 @" + oddsHgVisit + ", 金额 " + betAmountHgVisit.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgHome, betAmountHgVisit), 4), 100) + "％";
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPTie_HGHomeWinAndVisitWin);
 
     }
     /** 体彩主队负，皇冠（和局、主队胜） */
@@ -542,19 +548,16 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         Double rebateHgBonusHome = CalcUtil.mul(CalcUtil.add(bonusHgHome, betAmountHgTie), rebateHG);
         Double rewardHgHome = CalcUtil.sub(CalcUtil.add(bonusHgHome, rebateSpAmount, rebateHgBonusHome), betAmountSp, betAmountHgTie);
 
-
-        // TODO 调配金额
         revision(betParamVo, oddsLose, betAmountSp, oddsHgTie, oddsHgHome, betAmountHgTie, betAmountHgHome, rebateSpAmount, bonusSp, rewardSp, rewardHgTie, rewardHgHome);
 
     }
 
-    private static void revision(BetParamVo betParamVo, Double oddsLose, Double betAmountSp, Double oddsHgTie, Double oddsHgHome, Double betAmountHgTie, Double betAmountHgHome, Double rebateSpAmount, Double bonusSp, Double rewardSp, Double rewardHgTie, Double rewardHgHome) {
+    private void revision(BetParamVo betParamVo, Double oddsLose, Double betAmountSp, Double oddsHgTie, Double oddsHgHome, Double betAmountHgTie, Double betAmountHgHome, Double rebateSpAmount, Double bonusSp, Double rewardSp, Double rewardHgTie, Double rewardHgHome) {
         Double rebateHgAmount;
         Double bonusHgHome;
         Double rebateHgBonusTie;
         Double rebateHgBonusHome;
         Double bonusHgTie;
-//        if(rewardSp > 0 && rewardHgTie > 0 && rewardHgHome >0 ){
         //如果皇冠和收益大于体彩收益20+
         if(rewardHgTie - rewardSp > 20){
             Double differ = rewardHgTie - rewardSp;
@@ -607,13 +610,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
             log.info(" 皇冠投注：主胜 @" + oddsHgHome + ", 投" + betAmountHgHome.intValue() + ", 收益：" + rewardHgHome.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardHgHome, betAmountHgHome, 4), 100) + "％");
         }
 
-//        }else {
-//            log.info("体彩主负，皇冠（平、主队胜） 收益为负 不可打");
-//        }
+        String msg = betParamVo.getMsg() + ",  体彩投注：客胜 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：① 和局 @" + oddsHgTie + ", 金额 " + betAmountHgTie.intValue()
+                + ",  ② 主胜 @" + oddsHgHome + ", 金额 " + betAmountHgHome.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgHome), 4), 100) + "％";
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPVisitWin_HGHomeWinAndTie);
     }
-
-
-
 
     /**
      * 体彩主队胜，皇冠客队加
@@ -665,7 +669,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         String msg = betParamVo.getMsg() + ",  体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
                 + ",  皇冠投注：客 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
                 + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
-        HttpUtils.sendPost(tgUrl, msg);
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPHomeWin_HGVisitAdd05);
     }
 
     /**
@@ -720,7 +726,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * 体彩主队受球胜(体彩主队+)，皇冠（客队减05胜
      * @param betParamVo
      */
-    public void SPShouWin_HGHomeCut05(BetParamVo betParamVo) {
+    public void SPShouWin_HGVisitCut05(BetParamVo betParamVo) {
         Double oddsWin = betParamVo.getOddsShouWin();
         Double betAmountHg = betParamVo.getBetAmountHg();
         Double oddsHg = betParamVo.getVisitCut05();
@@ -766,7 +772,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         String msg = betParamVo.getMsg() + ",  体彩投注：主 受球胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
                 + ",  皇冠投注：客 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
                 + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
-        HttpUtils.sendPost(tgUrl, msg);
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPShouWin_HGVisitCut05);
     }
 
     /**
@@ -819,7 +827,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         String msg = betParamVo.getMsg() + ",  体彩投注：主 负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
                 + ",  皇冠投注：主 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
                 + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
-        HttpUtils.sendPost(tgUrl, msg);
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPVisitWin_HGHomeAdd05);
     }
 
     /**
@@ -872,7 +882,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         String msg = betParamVo.getMsg() + ",  体彩投注：主 让球负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
                 + ",  皇冠投注：主 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
                 + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
-        HttpUtils.sendPost(tgUrl, msg);
+
+        // 消息通知
+        nofifyMsg(betParamVo.getSpId(), msg, MsgEnum.hedge_SPRangLose_HGHomeCut5);
     }
 
     /**
@@ -2660,5 +2672,22 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         return visitBet;
     }
 
+    /**
+     * 消息通知
+     * @param spId
+     * @param msg
+     */
+    private void nofifyMsg(Long spId, String msg, MsgEnum msgEnum) {
+        NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(msgEnum.getValue(), spId);
+        long currentTime = System.currentTimeMillis();
+        if (msgByCondition == null || currentTime - msgByCondition.getNotifyTime() > 600000) {
+            HttpUtils.sendPost(tgUrl, msg);
+            NotifyMsg notifyMsg = new NotifyMsg();
+            notifyMsg.setMsgType(msgEnum.getValue());
+            notifyMsg.setNotifyTime(currentTime);
+            notifyMsg.setBetId(spId);
+            notifyMsgMapper.insertNotifyMsg(notifyMsg);
+        }
+    }
 
 }

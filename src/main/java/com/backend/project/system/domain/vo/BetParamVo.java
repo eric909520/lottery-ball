@@ -112,4 +112,7 @@ public class BetParamVo extends BetHGVo implements Serializable {
      */
     private String msg;
 
+    // 体彩id
+    private Long spId;
+
 }

@@ -27,7 +27,7 @@ public class HgSpHedgeSchedule {
      * hg - sp 数据计算
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-    @Scheduled(fixedDelay = 2000000L)
+    @Scheduled(fixedDelay = 120000L)
     private void hedge_Hg_SP_data() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_SP_data();
@@ -36,7 +36,7 @@ public class HgSpHedgeSchedule {
 
     public static void main(String[] args) {
         String tgUrl = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
-        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚽⚽球赛监测⚽⚽ 比赛编号:\n 123123 ");
+        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚽⚽球赛监测⚽⚽ 比赛编号: 123123 ");
     }
 
 }

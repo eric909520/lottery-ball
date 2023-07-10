@@ -118,7 +118,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.win.getValue(), bsmi.getId());
                                     if (msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚠️⚠️体彩水位变动⚠️⚠,  ️比赛编号:" + smi.getMatchNum() + ",  @@ 主胜,  原始赔率 @" + bsmi.getWin() + ",  最新赔率 @" + smi.getWin());
+                                        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠,  ️比赛编号:" + smi.getMatchNum() + ",  @@ 主胜,  原始赔率 @" + bsmi.getWin() + ",  最新赔率 @" + smi.getWin());
                                         NotifyMsg msg = new NotifyMsg();
                                         msg.setMsgType(MsgEnum.win.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
@@ -131,7 +131,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.draw.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 平,  原始赔率 @"+bsmi.getDraw() + ",  最新赔率 @" + smi.getDraw());
+                                        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 平,  原始赔率 @"+bsmi.getDraw() + ",  最新赔率 @" + smi.getDraw());
                                         NotifyMsg msg = new NotifyMsg();
                                         msg.setMsgType(MsgEnum.draw.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
@@ -144,7 +144,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.lose.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 客胜,  原始赔率 @"+bsmi.getLose() + ",  最新赔率 @" + smi.getLose());
+                                        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 客胜,  原始赔率 @"+bsmi.getLose() + ",  最新赔率 @" + smi.getLose());
                                         NotifyMsg msg = new NotifyMsg();
                                         msg.setMsgType(MsgEnum.lose.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
@@ -157,7 +157,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.handicapWin.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠,  比赛编号:" + smi.getMatchNum() + ",  @@主让胜 / 主受让胜,  原始赔率 @"+bsmi.getHandicapWin() + ",  最新赔率 @" + smi.getHandicapWin());
+                                        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠,  比赛编号:" + smi.getMatchNum() + ",  @@主让胜 / 主受让胜,  原始赔率 @"+bsmi.getHandicapWin() + ",  最新赔率 @" + smi.getHandicapWin());
                                         NotifyMsg msg = new NotifyMsg();
                                         msg.setMsgType(MsgEnum.handicapWin.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
@@ -170,7 +170,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.handicapWin.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
-                                        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@主让客胜 / 主受让客胜,  原始赔率 @"+bsmi.getHandicapLose() + ",  最新赔率 @" + smi.getHandicapLose());
+                                        HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@主让客胜 / 主受让客胜,  原始赔率 @"+bsmi.getHandicapLose() + ",  最新赔率 @" + smi.getHandicapLose());
                                         NotifyMsg msg = new NotifyMsg();
                                         msg.setMsgType(MsgEnum.handicapLose.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
