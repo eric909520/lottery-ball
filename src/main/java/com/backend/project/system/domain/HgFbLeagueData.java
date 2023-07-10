@@ -12,6 +12,8 @@ public class HgFbLeagueData extends BaseEntity {
 
     private Long id;
 
+    private Long spId;
+
     private String regionName;
 
     private String regionSortName;
@@ -40,7 +42,7 @@ public class HgFbLeagueData extends BaseEntity {
 
     public HgFbLeagueData() {}
 
-    public HgFbLeagueData(String regionName, String regionSortName, String leagueName, String leagueSortName
+    public HgFbLeagueData(Long spId, String regionName, String regionSortName, String leagueName, String leagueSortName
             , String leagueId, String ecid, String ecTime, Long ecTimestamp, String teamH, String teamHId, String teamC
             , String teamCId) {
         this.regionName = regionName;

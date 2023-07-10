@@ -91,6 +91,12 @@ public interface SPMatchInfoMapper {
      */
     SPMatchInfo findSPMatchInfo(Integer matchNum, String matchDate);
 
+    /**
+     * 查询未过期比赛
+     * @return
+     */
+    List<SPMatchInfo> findSPObsoleteNot();
+
     int updateMatchInfo(SPMatchInfo spMatchInfo);
 
     void cleanObsoleteData(int num, int bigNum);

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class SPMatchInfo implements Serializable {
 
-    private Integer id;
+    private Long id;
     // 比赛编号 例 周一001就是1001
     private int matchNum;
     // 联赛名称

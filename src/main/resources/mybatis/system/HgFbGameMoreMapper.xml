@@ -34,7 +34,7 @@
         <result property="small35_4" column="small_35_4"/>
     </resultMap>
 
-    <sql id="selectHgApiVo">
+    <sql id="selectHgFbGameMoreVo">
         select id, lid, ecid, h_add_05, h_cut_05, c_add_05, c_cut_05, myself_h, myself_c, myself_n, total_01, total_23
              , total_46, total_7, big_15, big_25, big_35, big_15_2, big_2_25, big_25_3, big_3_35, small_25
              , small_35, small_2_25, small_25_3, small_3_35, small_35_4
@@ -43,6 +43,11 @@
 
     <select id="selectExist" parameterType="string" resultType="integer">
         select 1 from hg_fb_game_more where lid = #{leagueId} and ecid = #{ecid}
+    </select>
+
+    <select id="selectCondition" parameterType="string" resultMap="HgFbGameMoreResult">
+        <include refid="selectHgFbGameMoreVo"/>
+        where lid = #{leagueId} and ecid = #{ecid}
     </select>
 
     <insert id="insertData" parameterType="HgFbGameMore" useGeneratedKeys="true" keyProperty="id">

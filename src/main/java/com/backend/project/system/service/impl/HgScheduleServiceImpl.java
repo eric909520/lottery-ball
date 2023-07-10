@@ -8,10 +8,12 @@ import com.backend.project.system.domain.HgApi;
 import com.backend.project.system.domain.HgFbGameMore;
 import com.backend.project.system.domain.HgFbLeagueData;
 import com.backend.project.system.domain.SPMatchInfo;
+import com.backend.project.system.domain.vo.BetParamVo;
 import com.backend.project.system.enums.HgApiEnum;
 import com.backend.project.system.enums.HgChooseTeamEnum;
 import com.backend.project.system.enums.HgWTypeEnum;
 import com.backend.project.system.mapper.*;
+import com.backend.project.system.service.IHgSPBallService;
 import com.backend.project.system.service.IHgScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +44,13 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     private SPMatchInfoMapper spMatchInfoMapper;
     @Resource
     private HgFbGameMoreMapper hgFbGameMoreMapper;
+    @Resource
+    private IHgSPBallService hgSPBallService;
 
     private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
     private static String[] xiao_qiu = new String[]{"2.5", "3.5", "2 / 2.5", "2.5 / 3", "3 / 3.5", "3.5 / 4"};
+
+    private static Double baseAmount = 100000d;
 
     /**
      * polling today football data
@@ -113,7 +119,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                         Long ecTimestamp = DateUtils.getLeagueDate(dateTime);
 
                         // 写入联赛球队数据
-                        HgFbLeagueData hgFbLeagueData = new HgFbLeagueData(regionName, regionSortName, leagueName
+                        HgFbLeagueData hgFbLeagueData = new HgFbLeagueData(spMatchInfo.getId(), regionName, regionSortName, leagueName
                                 , leagueSortName, leagueId, ecid, ecTime, ecTimestamp, team_h, team_h_id, team_c, team_c_id);
                         Integer exist = hgFbLeagueDataMapper.selectExist(leagueId, ecid);
                         if (null == exist) {
@@ -243,7 +249,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                         Long ecTimestamp = DateUtils.getLeagueDate(dateTime);
 
                         // 写入联赛球队数据
-                        HgFbLeagueData hgFbLeagueData = new HgFbLeagueData(regionName, regionSortName, leagueName
+                        HgFbLeagueData hgFbLeagueData = new HgFbLeagueData(spMatchInfo.getId(), regionName, regionSortName, leagueName
                                 , leagueSortName, leagueId, ecid, ecTime, ecTimestamp, team_h, team_h_id, team_c, team_c_id);
                         Integer exist = hgFbLeagueDataMapper.selectExist(leagueId, ecid);
                         if (null == exist) {
@@ -302,6 +308,52 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             }
         } catch (Exception e) {
             log.info("pollingFootballDataEarly exception ----->>>>", e);
+        }
+    }
+
+    /**
+     * hg - sp 数据对冲计算
+     */
+    @Override
+    public void hedge_Hg_SP_data() {
+        List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
+        for (SPMatchInfo spInfo : spInfos) {
+            BetParamVo betParamVo = new BetParamVo();
+            betParamVo.setBetBaseAmount(baseAmount);
+            Long spId = spInfo.getId();
+            HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+            HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+            betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
+            betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
+            betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
+            betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
+            betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
+            betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
+            // 体彩让球数据
+            String handicap = spInfo.getHandicap();
+            if (StringUtils.isNotBlank(handicap)) {
+                if (handicap.indexOf("+") > 0) { // 主加，主队受球
+                    betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球胜
+                    betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球客胜
+                } else if (handicap.indexOf("-") > 0) { //主减，主队让球
+                    betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球胜
+                    betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球客胜
+                }
+            }
+            // 皇冠让球数据
+            if (StringUtils.isNotBlank(fbGameMore.getHAdd05())) {
+                betParamVo.setHomeAdd05(Double.valueOf(fbGameMore.getHAdd05()));
+            }
+            if (StringUtils.isNotBlank(fbGameMore.getHCut05())) {
+                betParamVo.setHomeCut05(Double.valueOf(fbGameMore.getHCut05()));
+            }
+            if (StringUtils.isNotBlank(fbGameMore.getCAdd05())) {
+                betParamVo.setVisitAdd05(Double.valueOf(fbGameMore.getCAdd05()));
+            }
+            if (StringUtils.isNotBlank(fbGameMore.getCCut05())) {
+                betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
+            }
+            hgSPBallService.betCheckSingle(betParamVo);
         }
     }
 
