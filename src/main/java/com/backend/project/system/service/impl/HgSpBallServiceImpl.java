@@ -302,14 +302,15 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      */
     public void SPWin_HGTieAndLose(BetParamVo betParamVo) {
         Double oddsWin = betParamVo.getOddsWin();
-        Double betAmountSp = betParamVo.getBetBaseAmount();
         Double oddsHgTie = betParamVo.getTie();
         Double oddsHgVisit = betParamVo.getVisit();
-        // 计算投注金额基数
-        Double baseAmount = CalcUtil.mul(oddsWin, betAmountSp);
-        // 计算皇冠投注金额
-        Double betAmountHgTie = CalcUtil.div(baseAmount, oddsHgTie);
-        Double betAmountHgVisit = CalcUtil.div(baseAmount, oddsHgVisit);
+        //基础投注额为hg平
+        Double betAmountHgTie = betParamVo.getBetBaseAmount();
+        //计算hg客胜投注额
+        Double betAmountHgVisit = calcBetAmount(betParamVo.getTie(),betAmountHgTie,betParamVo.getVisit());
+        //计算体彩投注额
+        Double betAmountSp = calcBetAmount(betParamVo.getTie(), betAmountHgTie, oddsWin);
+
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -343,24 +344,24 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if(rewardHgTie - rewardSp > 20){
             Double differ = rewardHgTie - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgTie = betAmountHgTie - revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsWin());
+            betAmountSp = betAmountSp + revision;
         }
         if(rewardSp - rewardHgTie > 20){
             Double differ = rewardSp - rewardHgTie;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgTie = betAmountHgTie + revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsWin());
+            betAmountSp = betAmountSp - revision;
         }
         //如果皇冠客队胜收益大于体彩收益20+
-        if(rewardHgVisit - rewardSp > 20){
-            Double differ = rewardHgVisit - rewardSp;
+        if(rewardHgVisit - rewardHgTie > 20){
+            Double differ = rewardHgVisit - rewardHgTie;
             //需要调整的金额
             Double revision = CalcUtil.div(differ, betParamVo.getVisit());
             betAmountHgVisit= betAmountHgVisit - revision;
         }
-        if(rewardSp - rewardHgVisit > 20){
-            Double differ = rewardHgVisit - rewardSp;
+        if(rewardHgTie - rewardHgVisit > 20){
+            Double differ = rewardHgTie - rewardHgVisit;
             //需要调整的金额
             Double revision = CalcUtil.div(differ, betParamVo.getVisit());
             betAmountHgVisit= betAmountHgVisit + revision;
@@ -368,7 +369,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgVisit), rebateHG);
         // 体彩收益
-        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgVisit);
+        rewardSp = CalcUtil.sub(CalcUtil.add(CalcUtil.mul(CalcUtil.sub(oddsWin, 1), betAmountSp), rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgVisit);
 
         /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
@@ -395,17 +396,30 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
 
     }
 
+    /**
+     *
+     * @param x 皇冠基础投注倍数
+     * @param baseAmount 基础投注金额
+     * @param y 需要算出投注额的倍数
+     * @return
+     */
+    private  Double calcBetAmount(double x,double baseAmount,double y){
+        //应出奖金额
+        Double award = CalcUtil.mul(baseAmount, x);
+        Double betAmount = CalcUtil.div(award, y, 2);
+        return  betAmount;
+    }
     /** 体彩平，皇冠（主队胜、客队胜） */
     public void SPTie_HGWinAndLose(BetParamVo betParamVo) {
         Double oddsTie = betParamVo.getOddsTie();
-        Double betAmountSp = betParamVo.getBetBaseAmount();
         Double oddsHgHome = betParamVo.getHome();
         Double oddsHgVisit = betParamVo.getVisit();
-        // 计算投注金额基数
-        Double baseAmount = CalcUtil.mul(oddsTie, betAmountSp);
-        // 计算皇冠投注金额
-        Double betAmountHgHome = CalcUtil.div(baseAmount, oddsHgHome);
-        Double betAmountHgVisit = CalcUtil.div(baseAmount, oddsHgVisit);
+        //hg主胜投注额为基础投注额
+        Double betAmountHgHome =betParamVo.getBetBaseAmount();
+        //hg计算hg客胜投注额
+        Double betAmountHgVisit = calcBetAmount(oddsHgHome, betAmountHgHome, oddsHgVisit);
+        //计算体彩投注额
+        Double betAmountSp =  calcBetAmount(oddsHgHome, betAmountHgHome, betParamVo.getOddsTie());
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -440,32 +454,32 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if(rewardHgHome - rewardSp > 20){
             Double differ = rewardHgHome - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgHome = betAmountHgHome - revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsTie());
+            betAmountSp = betAmountSp + revision;
         }
         if(rewardSp - rewardHgHome > 20){
-            Double differ = rewardHgHome - rewardSp;
+            Double differ = rewardSp - rewardHgHome;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgHome = betAmountHgHome + revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsTie());
+            betAmountSp = betAmountSp - revision;
         }
         //如果皇冠客队胜收益大于体彩收益20+
-        if(rewardHgVisit - rewardSp > 20){
+        if(rewardHgVisit - rewardHgHome > 20){
             Double differ = rewardHgVisit - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getHome());
-            betAmountHgVisit= betAmountHgVisit - revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getVisit());
+            betAmountHgVisit = betAmountHgVisit - revision;
         }
-        if(rewardSp - rewardHgVisit > 20){
+        if(rewardHgHome - rewardHgVisit > 20){
             Double differ = rewardHgVisit - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getHome());
+            Double revision = CalcUtil.div(differ, betParamVo.getVisit());
             betAmountHgVisit= betAmountHgVisit + revision;
         }
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgHome, betAmountHgVisit), rebateHG);
         // 体彩收益
-        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgHome, betAmountHgVisit);
+        rewardSp = CalcUtil.sub(CalcUtil.add(CalcUtil.mul(CalcUtil.sub(oddsTie, 1), betAmountSp), rebateSpAmount, rebateHgAmount), betAmountHgHome, betAmountHgVisit);
 
         /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
@@ -494,14 +508,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
     /** 体彩主队负，皇冠（和局、主队胜） */
     public void SPLose_HGWinAndTie(BetParamVo betParamVo) {
         Double oddsLose = betParamVo.getOddsLose();
-        Double betAmountSp = betParamVo.getBetBaseAmount();
         Double oddsHgTie = betParamVo.getTie();
         Double oddsHgHome = betParamVo.getHome();
-        // 计算投注金额基数
-        Double baseAmount = CalcUtil.mul(oddsLose, betAmountSp);
-        // 计算皇冠投注金额
-        Double betAmountHgTie = CalcUtil.div(baseAmount, oddsHgTie);
-        Double betAmountHgHome = CalcUtil.div(baseAmount, oddsHgHome);
+        //hg平为基础投注额
+        Double betAmountHgTie = betParamVo.getBetBaseAmount();
+        //计算hg主胜投注额
+        Double betAmountHgHome = calcBetAmount(oddsHgTie,betAmountHgTie,oddsHgHome);
+        //计算体彩投注额
+        Double betAmountSp = calcBetAmount(oddsHgTie,betAmountHgTie,oddsLose);
 
         // 体彩返水
         Double rebateSpAmount = CalcUtil.mul(betAmountSp, rebateSP);
@@ -545,24 +559,24 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if(rewardHgTie - rewardSp > 20){
             Double differ = rewardHgTie - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgTie = betAmountHgTie - revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsLose());
+            betAmountSp = betAmountSp + revision;
         }
         if(rewardSp - rewardHgTie > 20){
             Double differ = rewardHgTie - rewardSp;
             //需要调整的金额
-            Double revision = CalcUtil.div(differ, betParamVo.getTie());
-            betAmountHgTie = betAmountHgTie + revision;
+            Double revision = CalcUtil.div(differ, betParamVo.getOddsLose());
+            betAmountSp = betAmountSp - revision;
         }
-        //如果皇冠主队胜收益大于体彩收益20+
-        if(rewardHgHome - rewardSp > 20){
-            Double differ = rewardHgHome - rewardSp;
+        //如果皇冠主队胜收益大于皇冠平收益20+
+        if(rewardHgHome - rewardHgTie > 20){
+            Double differ = rewardHgHome - rewardHgTie;
             //需要调整的金额
             Double revision = CalcUtil.div(differ, betParamVo.getHome());
             betAmountHgHome = betAmountHgHome - revision;
         }
-        if(rewardSp - rewardHgHome > 20){
-            Double differ = rewardSp - rewardHgHome;
+        if(rewardHgTie - rewardHgHome > 20){
+            Double differ = rewardHgTie - rewardHgHome;
             //需要调整的金额
             Double revision = CalcUtil.div(differ, betParamVo.getHome());
             betAmountHgHome = betAmountHgHome + revision;
@@ -570,7 +584,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(CalcUtil.add(betAmountHgTie, betAmountHgHome), rebateHG);
         // 体彩收益
-        rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgHome);
+        rewardSp = CalcUtil.sub(CalcUtil.add(CalcUtil.mul(CalcUtil.sub(oddsLose, 1), betAmountSp), rebateSpAmount, rebateHgAmount), betAmountHgTie, betAmountHgHome);
 
         /** 皇冠和局收益:皇冠和局奖金 - 皇冠客队胜本金 - 体彩本金 + 体彩返水 + 皇冠返水 */
         // 皇冠奖金
@@ -648,9 +662,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：客 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：客 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -749,9 +763,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：客 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 受球胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：客 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 受球胜 @" + oddsWin + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：客 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -802,9 +816,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：主 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：主 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：主 +05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 
@@ -855,9 +869,9 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         log.info("皇冠投注：主 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
         log.info("收益：" + rewardSp.intValue() + ", 收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％");
 
-        String msg = betParamVo.getMsg() + "\n体彩投注：主 让球负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
-                + "\n皇冠投注：主 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
-                + "\n收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
+        String msg = betParamVo.getMsg() + ",  体彩投注：主 让球负 @" + oddsLose + ", 金额 " + betAmountSp.intValue()
+                + ",  皇冠投注：主 -05 @" + oddsHg + ", 金额 " + betAmountHg.intValue()
+                + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
         HttpUtils.sendPost(tgUrl, msg);
     }
 

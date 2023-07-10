@@ -353,7 +353,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                     betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
                 }
 //                HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ 比赛编号:" + smi.getMatchNum() + "         @@主负, 原始赔率 @"+bsmi.getLose() + ", 最新赔率 @" + smi.getLose());
-                String msg = "chat_id=-906665985&text=⚽⚽球赛监测⚽⚽\n比赛编号:" + spInfo.getMatchNum();
+                String msg = "chat_id=-906665985&text=⚽⚽球赛监测⚽⚽, 比赛编号:" + spInfo.getMatchNum();
                 betParamVo.setMsg(msg);
                 hgSPBallService.betCheckSingle(betParamVo);
             }
