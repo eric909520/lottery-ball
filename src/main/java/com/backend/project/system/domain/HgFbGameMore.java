@@ -90,4 +90,6 @@ public class HgFbGameMore extends BaseEntity {
     // 小3.5/4
     private String small35_4;
 
+    private Double betAmount;
+
 }

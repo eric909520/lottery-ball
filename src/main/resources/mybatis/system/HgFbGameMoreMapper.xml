@@ -32,12 +32,13 @@
         <result property="small25_3" column="small_25_3"/>
         <result property="small3_35" column="small_3_35"/>
         <result property="small35_4" column="small_35_4"/>
+        <result property="betAmount" column="bet_amount"/>
     </resultMap>
 
     <sql id="selectHgFbGameMoreVo">
         select id, lid, ecid, h_add_05, h_cut_05, c_add_05, c_cut_05, myself_h, myself_c, myself_n, total_01, total_23
              , total_46, total_7, big_15, big_25, big_35, big_15_2, big_2_25, big_25_3, big_3_35, small_25
-             , small_35, small_2_25, small_25_3, small_3_35, small_35_4
+             , small_35, small_2_25, small_25_3, small_3_35, small_35_4, bet_amount
         from hg_fb_game_more
     </sql>
 

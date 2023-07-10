@@ -50,8 +50,6 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
     private static String[] xiao_qiu = new String[]{"2.5", "3.5", "2 / 2.5", "2.5 / 3", "3 / 3.5", "3.5 / 4"};
 
-    private static Double baseAmount = 10000d;
-
     /**
      * polling today football data
      */
@@ -319,10 +317,10 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
         List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
         for (SPMatchInfo spInfo : spInfos) {
             BetParamVo betParamVo = new BetParamVo();
-            betParamVo.setBetBaseAmount(baseAmount);
             Long spId = spInfo.getId();
             HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
             HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+            betParamVo.setBetAmountHg(fbGameMore.getBetAmount());
             betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
             betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
             betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
