@@ -33,4 +33,12 @@ public class SPDataSchedule {
         });
     }
 
+
+    //    @Scheduled(cron = "0 0/2 * * * ? ")
+    private void cleanObsoleteData(){
+        threadPoolConfig.threadPoolExecutor().submit(() -> {
+            sportsBettingDataService.cleanObsoleteData();
+        });
+    }
+
 }

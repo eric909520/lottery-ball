@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -266,5 +267,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
     public void insertBetSPMatchInfo(Integer matchNum, String matchDate) {
         SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(matchNum,matchDate);
         betSPMatchInfoMapper.insertBetSPMatchInfo(spMatchInfo);
+    }
+
+    @Override
+    public void cleanObsoleteData() {
+        String weekOfDate = DateUtils.getWeekOfDate(new Date());
+        int num = Integer.valueOf(weekOfDate) * 1000;
+        spMatchInfoMapper.cleanObsoleteData(num,num+1000);
     }
 }

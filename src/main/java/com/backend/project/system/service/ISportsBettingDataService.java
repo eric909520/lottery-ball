@@ -19,4 +19,9 @@ public interface ISportsBettingDataService {
      * 将投注中的记录复制到投注表 并把投注状态设置成投注中
      */
     void insertBetSPMatchInfo(Integer matchNum,String matchDate);
+
+    /**
+     *  清理当天已经过期的数据
+     */
+    void cleanObsoleteData();
 }

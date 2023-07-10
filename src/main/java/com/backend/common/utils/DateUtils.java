@@ -55,9 +55,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return dateTimeNow(YYYY_MM_DD);
     }
 
-    public static void main(String[] args) {
-        System.out.println(getDate());
-    }
+//    public static void main(String[] args) {
+//        System.out.println(getDate());
+//    }
 
     /**
      * 获取当前日期, 默认格式为YYYY_MM_DD_HH_MM_SS
@@ -376,8 +376,26 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             return date;
         }
     }
+    /**
+     * 获取当前日期是星期几<br>
+     *
+     * @param dt
+     * @return 当前日期是星期几
+     */
+    public static String getWeekOfDate(Date dt) {
 
-    public static void main1(String[] args) {
+        String[] weekDays = {"7", "1", "2", "3", "4", "5", "6"};
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0)
+            w = 0;
+
+        return weekDays[w];
+    }
+
+    public static void main(String[] args) {
         /*try {
             String onePointTime = getOnePointTime(-1);
             System.out.println(onePointTime);
@@ -387,8 +405,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //        String s = transformDateHg("07-04 11:00a");
 //        String s = transformDateHg("07-04 1:00p");
 //        Long s = getLeagueDate("07-04 11:00a");
-        Long s = getLeagueDate("07-04 1:00p");
-        System.out.println(s);
+        String weekOfDate = getWeekOfDate(new Date());
+        System.out.println(weekOfDate);
     }
 
 }

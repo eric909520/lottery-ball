@@ -233,4 +233,7 @@
             s7=	#{s7}
             where match_num = #{matchNum} and match_date = #{matchDate}
     </update>
+    <update id="cleanObsoleteData">
+        update sp_match_info set is_obsolete = 1 where match_num > #{num} and match_num &lt; #{bigNum}
+    </update>
 </mapper>

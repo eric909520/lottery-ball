@@ -92,4 +92,6 @@ public interface SPMatchInfoMapper {
     SPMatchInfo findSPMatchInfo(Integer matchNum, String matchDate);
 
     int updateMatchInfo(SPMatchInfo spMatchInfo);
+
+    void cleanObsoleteData(int num, int bigNum);
 }
