@@ -1,5 +1,6 @@
 package com.backend.project.system.schedule;
 
+import com.backend.common.utils.http.HttpUtils;
 import com.backend.framework.config.ThreadPoolConfig;
 import com.backend.project.system.service.IHgScheduleService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,11 @@ public class HgSpHedgeSchedule {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_SP_data();
         });
+    }
+
+    public static void main(String[] args) {
+        String tgUrl = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
+        HttpUtils.sendPost(tgUrl, "chat_id=-906665985&text=⚽⚽球赛监测⚽⚽ 比赛编号:\n 123123 ");
     }
 
 }

@@ -67,7 +67,7 @@ public class AdaptationAmount {
     }
 
     /**
-     * 两个赔率金额调配
+     * 两个赔率金额调配 - 以体彩投注额为基准
      * @param oddsHg
      * @param betAmountHg
      * @param rewardSp
@@ -79,6 +79,9 @@ public class AdaptationAmount {
             return null;
         } else if (rewardSp<0 || rewardHg<0) { // 单边收益负
             Double rewardAll = CalcUtil.add(rewardSp, rewardHg);
+            if (rewardAll < 50) {
+                return null;
+            }
             // 收益差
             Double rewardSub = CalcUtil.add(Math.abs(rewardSp), Math.abs(rewardHg));
             if (rewardSub < 0) {
@@ -111,6 +114,52 @@ public class AdaptationAmount {
             }
         }
         return betAmountHg;
+    }
+
+    /**
+     * 两个赔率金额调配 - 以皇冠投注金额为基准
+     * @param oddsSp
+     * @param betAmountSp
+     * @param rewardHg
+     * @param rewardSp
+     * @return
+     */
+    public static Double amountDeployment1(Double oddsSp, Double betAmountSp, Double rewardHg, Double rewardSp) {
+        if (rewardHg <0 && rewardSp <0) {
+            return null;
+        } else if (rewardHg<0 || rewardSp<0) { // 单边收益负
+            // 收益差
+            Double rewardSub = CalcUtil.add(Math.abs(rewardHg), Math.abs(rewardSp));
+            if (rewardSub < 0) {
+                // 两边收益和小于0
+                return null;
+            } else {
+                Double hgBetAmountSub = CalcUtil.mul(rewardSub, oddsSp);
+                if (rewardHg < 0) {
+                    // 皇冠收益小于0，体彩投注额减少
+                    betAmountSp = CalcUtil.sub(betAmountSp, hgBetAmountSub);
+                } else if (rewardSp < 0) {
+                    // 体彩收益小于0，体彩投注额增加
+                    betAmountSp = CalcUtil.add(betAmountSp, hgBetAmountSub);
+                }
+            }
+        } else if (rewardHg>0 && rewardSp>0) {
+            // 体彩收益大于皇冠收益，体彩投注额减少
+            if (rewardHg < rewardSp) {
+                // 收益差
+                Double rewardSub = CalcUtil.sub(rewardSp, rewardHg);
+                Double hgBetAmountSub = CalcUtil.div(rewardSub, oddsSp);
+                betAmountSp = CalcUtil.sub(betAmountSp, hgBetAmountSub);
+            }
+            // 皇冠收益大于体彩收益，体彩投注额增加
+            if (rewardHg > rewardSp) {
+                // 收益差
+                Double rewardSub = CalcUtil.sub(rewardHg, rewardSp);
+                Double hgBetAmountSub = CalcUtil.div(rewardSub, oddsSp);
+                betAmountSp = CalcUtil.add(betAmountSp, hgBetAmountSub);
+            }
+        }
+        return betAmountSp;
     }
 
     /**

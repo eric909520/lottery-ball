@@ -314,44 +314,51 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
      */
     @Override
     public void hedge_Hg_SP_data() {
-        List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
-        for (SPMatchInfo spInfo : spInfos) {
-            BetParamVo betParamVo = new BetParamVo();
-            Long spId = spInfo.getId();
-            HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
-            HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
-            betParamVo.setBetAmountHg(fbGameMore.getBetAmount());
-            betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
-            betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
-            betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
-            betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
-            betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
-            betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
-            // 体彩让球数据
-            String handicap = spInfo.getHandicap();
-            if (StringUtils.isNotBlank(handicap)) {
-                if (handicap.indexOf("+") > -1) { // 主加，主队受球
-                    betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球胜
-                    betParamVo.setOddsShouLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队受球客胜
-                } else if (handicap.indexOf("-") > -1) { //主减，主队让球
-                    betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球胜
-                    betParamVo.setOddsRangLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队让球客胜
+        try {
+            List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
+            for (SPMatchInfo spInfo : spInfos) {
+                BetParamVo betParamVo = new BetParamVo();
+                Long spId = spInfo.getId();
+                HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+                HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+                betParamVo.setBetAmountHg(fbGameMore.getBetAmount());
+                betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
+                betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
+                betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
+                betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
+                betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
+                betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
+                // 体彩让球数据
+                String handicap = spInfo.getHandicap();
+                if (StringUtils.isNotBlank(handicap)) {
+                    if (handicap.indexOf("+") > -1) { // 主加，主队受球
+                        betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球胜
+                        betParamVo.setOddsShouLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队受球客胜
+                    } else if (handicap.indexOf("-") > -1) { //主减，主队让球
+                        betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球胜
+                        betParamVo.setOddsRangLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队让球客胜
+                    }
                 }
+                // 皇冠让球数据
+                if (StringUtils.isNotBlank(fbGameMore.getHAdd05())) {
+                    betParamVo.setHomeAdd05(Double.valueOf(fbGameMore.getHAdd05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getHCut05())) {
+                    betParamVo.setHomeCut05(Double.valueOf(fbGameMore.getHCut05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getCAdd05())) {
+                    betParamVo.setVisitAdd05(Double.valueOf(fbGameMore.getCAdd05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getCCut05())) {
+                    betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
+                }
+//                HttpUtils.sendPost(url, "chat_id=-906665985&text=⚠️⚠️水位变动⚠️⚠️ 比赛编号:" + smi.getMatchNum() + "         @@主负, 原始赔率 @"+bsmi.getLose() + ", 最新赔率 @" + smi.getLose());
+                String msg = "chat_id=-906665985&text=⚽⚽球赛监测⚽⚽\n比赛编号:" + spInfo.getMatchNum();
+                betParamVo.setMsg(msg);
+                hgSPBallService.betCheckSingle(betParamVo);
             }
-            // 皇冠让球数据
-            if (StringUtils.isNotBlank(fbGameMore.getHAdd05())) {
-                betParamVo.setHomeAdd05(Double.valueOf(fbGameMore.getHAdd05()));
-            }
-            if (StringUtils.isNotBlank(fbGameMore.getHCut05())) {
-                betParamVo.setHomeCut05(Double.valueOf(fbGameMore.getHCut05()));
-            }
-            if (StringUtils.isNotBlank(fbGameMore.getCAdd05())) {
-                betParamVo.setVisitAdd05(Double.valueOf(fbGameMore.getCAdd05()));
-            }
-            if (StringUtils.isNotBlank(fbGameMore.getCCut05())) {
-                betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
-            }
-            hgSPBallService.betCheckSingle(betParamVo);
+        } catch (Exception e) {
+            log.info("hedge_Hg_SP_data exception ----->>>>", e);
         }
     }
 
