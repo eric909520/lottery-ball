@@ -10,6 +10,9 @@ import io.lettuce.core.dynamic.annotation.Param;
 public interface HgFbGameMoreMapper {
 
     public Integer selectExist(@Param("leagueId") String leagueId, @Param("ecid") String ecid);
+
+    public HgFbGameMore selectCondition(@Param("leagueId") String leagueId, @Param("ecid") String ecid);
+
     /**
      * 写入数据
      */

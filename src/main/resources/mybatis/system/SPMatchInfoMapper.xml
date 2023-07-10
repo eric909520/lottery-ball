@@ -33,7 +33,7 @@
     </sql>
 
     <select id="selectCondition" parameterType="string" resultMap="SPMatchInfoResult">
-        select handicap from sp_match_info
+        select id, handicap from sp_match_info
         where league_abb_name = #{leagueName} and home_team_abb_name = #{homeTeam} and awa_team_abb_name = #{awayTeam}
     </select>
 
@@ -62,6 +62,10 @@
     </select>
     <select id="findSPMatchInfo" resultType="com.backend.project.system.domain.SPMatchInfo">
         SELECT * from sp_match_info WHERE match_num = #{matchNum} and match_date = #{matchDate}
+    </select>
+
+    <select id="findSPObsoleteNot" resultMap="SPMatchInfoResult">
+        SELECT * from sp_match_info WHERE is_obsolete = 0
     </select>
 
     <insert id="insertSPMatchInfos">

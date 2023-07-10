@@ -13,5 +13,11 @@ public interface IHgScheduleService {
      * polling early football data
      */
     public void pollingFootballDataEarly();
-    
+
+    /**
+     * hg - sp 数据计算
+     */
+    public void hedge_Hg_SP_data();
+
+
 }
