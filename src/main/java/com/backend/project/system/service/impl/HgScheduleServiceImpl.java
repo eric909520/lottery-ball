@@ -320,14 +320,24 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                 BetParamVo betParamVo = new BetParamVo();
                 Long spId = spInfo.getId();
                 HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+                if (hgFbLeagueData == null) {
+                    continue;
+                }
                 HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+                if (fbGameMore == null) {
+                    continue;
+                }
                 betParamVo.setBetAmountHg(fbGameMore.getBetAmount());
-                betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
-                betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
-                betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
-                betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
-                betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
-                betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
+                if (spInfo.getWin() != null) {
+                    betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
+                    betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
+                    betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
+                }
+                if (fbGameMore.getMyselfH() != null) {
+                    betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
+                    betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
+                    betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
+                }
                 // 体彩让球数据
                 String handicap = spInfo.getHandicap();
                 if (StringUtils.isNotBlank(handicap)) {
@@ -356,6 +366,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                 String msg = "chat_id=-905019287&text=⚽⚽球赛监测⚽⚽, 比赛编号:" + spInfo.getMatchNum();
                 betParamVo.setMsg(msg);
                 betParamVo.setSpId(spInfo.getId());
+                betParamVo.setNotifyFlag(1);
                 hgSPBallService.betCheckSingle(betParamVo);
             }
         } catch (Exception e) {

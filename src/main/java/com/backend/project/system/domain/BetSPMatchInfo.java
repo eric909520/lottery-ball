@@ -12,6 +12,9 @@ import java.io.Serializable;
 public class BetSPMatchInfo implements Serializable {
 
     private Long id;
+
+    private Long spId;
+
     // 比赛编号 例 周一001就是1001
     private int matchNum;
     // 联赛名称
@@ -61,12 +64,20 @@ public class BetSPMatchInfo implements Serializable {
     private String exactDate;
     //是否正在投注状态 0否 1是  默认0
     private String isBetting;
-    //最后通知时间
-    private Long notifyTime;
 
+    // 投注组合类型 BetTypeEnum
+    private String betType;
 
+    // 皇冠投注金额
+    private Double hgAmount;
 
+    // 体彩投注金额
+    private Double spAmount;
 
+    // 皇冠赔率1
+    private Double hgOdds1;
 
+    // 皇冠赔率2
+    private Double hgOdds2;
 
 }

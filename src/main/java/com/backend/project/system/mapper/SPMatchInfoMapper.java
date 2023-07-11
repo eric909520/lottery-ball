@@ -17,6 +17,11 @@ public interface SPMatchInfoMapper {
     SPMatchInfo selectCondition(@Param("leagueName") String leagueName, @Param("homeTeam") String homeTeam, @Param("awayTeam") String awayTeam);
 
     /**
+     * 查询
+     */
+    SPMatchInfo selectById(Long id);
+
+    /**
      * 保存体彩足球比赛信息
      * @param list
      * @return

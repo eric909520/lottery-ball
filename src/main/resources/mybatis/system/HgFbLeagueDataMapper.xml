@@ -6,6 +6,7 @@
 
     <resultMap type="HgFbLeagueData" id="HgFbLeagueDataResult">
         <result property="id" column="id"/>
+        <result property="spId" column="sp_id"/>
         <result property="regionName" column="region_name"/>
         <result property="regionSortName" column="region_sort_name"/>
         <result property="leagueName" column="league_name"/>
@@ -21,7 +22,7 @@
     </resultMap>
 
     <sql id="selectHgLeagueDataVo">
-        select id, region_name, region_sort_name, league_name, league_sort_name, league_id, ecid, ec_time, ec_timestamp, team_h, team_h_id, team_c, team_c_id
+        select id, sp_id, region_name, region_sort_name, league_name, league_sort_name, league_id, ecid, ec_time, ec_timestamp, team_h, team_h_id, team_c, team_c_id
         from hg_fb_league_data
     </sql>
 
@@ -37,6 +38,8 @@
     <insert id="insertData" parameterType="HgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
         insert into hg_fb_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="spId != null">sp_id,
+            </if>
             <if test="regionName != null  and regionName != ''">region_name,
             </if>
             <if test="regionSortName != null  and regionSortName != ''">region_sort_name,
@@ -63,6 +66,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="spId != null">#{spId},
+            </if>
             <if test="regionName != null  and regionName != ''">#{regionName},
             </if>
             <if test="regionSortName != null  and regionSortName != ''">#{regionSortName},

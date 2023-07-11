@@ -2,16 +2,19 @@ package com.backend.project.system.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.backend.common.utils.DateUtils;
+import com.backend.common.utils.bean.BeanUtils;
 import com.backend.common.utils.http.HttpUtils;
+import com.backend.framework.web.domain.AjaxResult;
 import com.backend.project.system.domain.BetSPMatchInfo;
 import com.backend.project.system.domain.NotifyMsg;
 import com.backend.project.system.domain.SPBKMatchInfo;
 import com.backend.project.system.domain.SPMatchInfo;
 import com.backend.project.system.domain.vo.*;
-import com.backend.project.system.enums.MsgEnum;
+import com.backend.project.system.enums.BetTypeEnum;
 import com.backend.project.system.mapper.BetSPMatchInfoMapper;
 import com.backend.project.system.mapper.NotifyMsgMapper;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
+import com.backend.project.system.service.IHgSPBallService;
 import com.backend.project.system.service.ISportsBettingDataService;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,9 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
     @Resource
     private NotifyMsgMapper notifyMsgMapper;
+
+    @Resource
+    private IHgSPBallService hgSPBallService;
 
     @org.springframework.beans.factory.annotation.Value("${tgApi.url}")
     private String tgUrl;
@@ -115,12 +121,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                             if(bsmi.getMatchNum() == smi.getMatchNum() && bsmi.getMatchDate().equals(smi.getMatchDate())){
 
                                 if(!smi.getWin().equals(bsmi.getWin())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.win.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.win.getValue(), bsmi.getId());
                                     if (msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠,  ️比赛编号:" + smi.getMatchNum() + ",  @@ 主胜,  原始赔率 @" + bsmi.getWin() + ",  最新赔率 @" + smi.getWin());
                                         NotifyMsg msg = new NotifyMsg();
-                                        msg.setMsgType(MsgEnum.win.getValue());
+                                        msg.setMsgType(BetTypeEnum.win.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
                                         msg.setBetId(bsmi.getId());
                                         //通知后更新通知时间
@@ -128,12 +134,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getDraw().equals(bsmi.getDraw())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.draw.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.draw.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 平,  原始赔率 @"+bsmi.getDraw() + ",  最新赔率 @" + smi.getDraw());
                                         NotifyMsg msg = new NotifyMsg();
-                                        msg.setMsgType(MsgEnum.draw.getValue());
+                                        msg.setMsgType(BetTypeEnum.draw.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
                                         msg.setBetId(bsmi.getId());
                                         //通知后更新通知时间
@@ -141,12 +147,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getLose().equals(bsmi.getLose())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.lose.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.lose.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 客胜,  原始赔率 @"+bsmi.getLose() + ",  最新赔率 @" + smi.getLose());
                                         NotifyMsg msg = new NotifyMsg();
-                                        msg.setMsgType(MsgEnum.lose.getValue());
+                                        msg.setMsgType(BetTypeEnum.lose.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
                                         msg.setBetId(bsmi.getId());
                                         //通知后更新通知时间
@@ -154,12 +160,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getHandicapWin().equals(bsmi.getHandicapWin())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.handicapWin.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠,  比赛编号:" + smi.getMatchNum() + ",  @@主让胜 / 主受让胜,  原始赔率 @"+bsmi.getHandicapWin() + ",  最新赔率 @" + smi.getHandicapWin());
                                         NotifyMsg msg = new NotifyMsg();
-                                        msg.setMsgType(MsgEnum.handicapWin.getValue());
+                                        msg.setMsgType(BetTypeEnum.handicapWin.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
                                         msg.setBetId(bsmi.getId());
                                         //通知后更新通知时间
@@ -167,12 +173,12 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getHandicapLose().equals(bsmi.getHandicapLose())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(MsgEnum.handicapWin.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId());
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@主让客胜 / 主受让客胜,  原始赔率 @"+bsmi.getHandicapLose() + ",  最新赔率 @" + smi.getHandicapLose());
                                         NotifyMsg msg = new NotifyMsg();
-                                        msg.setMsgType(MsgEnum.handicapLose.getValue());
+                                        msg.setMsgType(BetTypeEnum.handicapLose.getValue());
                                         msg.setNotifyTime(System.currentTimeMillis());
                                         msg.setBetId(bsmi.getId());
                                         //通知后更新通知时间
@@ -261,13 +267,14 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
     /**
      * 将投注中的记录复制到投注表(bet_sp_match_info) 并把投注状态设置成投注中
-     * @param matchNum
-     * @param matchDate
      */
     @Override
-    public void insertBetSPMatchInfo(Integer matchNum, String matchDate) {
-        SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(matchNum,matchDate);
-        betSPMatchInfoMapper.insertBetSPMatchInfo(spMatchInfo);
+    public void betStart(BetSPMatchInfo betParam) {
+        SPMatchInfo spMatchInfo =  spMatchInfoMapper.findSPMatchInfo(betParam.getMatchNum(), betParam.getMatchDate());
+        BetSPMatchInfo betSPMatchInfo = new BetSPMatchInfo();
+        BeanUtils.copyBeanProp(betSPMatchInfo, spMatchInfo);
+        betSPMatchInfo.setSpId(spMatchInfo.getId());
+        betSPMatchInfoMapper.insertBetSPMatchInfo(betSPMatchInfo);
     }
 
     @Override
@@ -276,4 +283,69 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         int num = Integer.valueOf(weekOfDate) * 1000;
         spMatchInfoMapper.cleanObsoleteData(num,num+1000);
     }
+
+    /**
+     * 录入皇冠投注数据，计算体彩投注金额
+     * @param betSPMatchInfo
+     * @return
+     */
+    @Override
+    public AjaxResult betInfoInput(BetSPMatchInfo betSPMatchInfo) {
+        String betType = betSPMatchInfo.getBetType();
+        Long spId = betSPMatchInfo.getSpId();
+        Double hgOdds1 = betSPMatchInfo.getHgOdds1();
+        Double hgAmount = betSPMatchInfo.getHgAmount();
+        SPMatchInfo spMatchInfo = spMatchInfoMapper.selectById(spId);
+        if (betType.equals(BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05.getValue())) {
+            String win = spMatchInfo.getWin();
+            BetParamVo betParamVo = new BetParamVo();
+            betParamVo.setBetAmountHg(hgAmount);
+            betParamVo.setOddsWin(Double.valueOf(win));
+            betParamVo.setVisitAdd05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPBallService.SPWin_HGVisitAdd05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountWin());
+            }
+        } else if (betType.equals(BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05.getValue())) {
+            String lose = spMatchInfo.getLose();
+            BetParamVo betParamVo = new BetParamVo();
+            betParamVo.setBetAmountHg(hgAmount);
+            betParamVo.setOddsLose(Double.valueOf(lose));
+            betParamVo.setHomeAdd05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPBallService.SPLose_HGHomeAdd05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountLose());
+            }
+        } else if (betType.equals(BetTypeEnum.hedge_SPRangLose_HGHomeCut5.getValue())) {
+            String handicapLose = spMatchInfo.getHandicapLose();
+            BetParamVo betParamVo = new BetParamVo();
+            betParamVo.setBetAmountHg(hgAmount);
+            betParamVo.setOddsRangLose(Double.valueOf(handicapLose));
+            betParamVo.setHomeCut05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPBallService.SPRangLose_HGHomeCut05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountRangLose());
+            }
+        } else if (betType.equals(BetTypeEnum.hedge_SPShouWin_HGVisitCut05.getValue())) {
+            String handicapWin = spMatchInfo.getHandicapWin();
+            BetParamVo betParamVo = new BetParamVo();
+            betParamVo.setBetAmountHg(hgAmount);
+            betParamVo.setOddsShouWin(Double.valueOf(handicapWin));
+            betParamVo.setVisitCut05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPBallService.SPShouWin_HGVisitCut05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountShouWin());
+            }
+        }
+        int result = betSPMatchInfoMapper.updateBetMatchInfo(betSPMatchInfo);
+        if (result > 0) {
+            return AjaxResult.success();
+        }
+        return AjaxResult.error();
+    }
+
 }

@@ -1,9 +1,6 @@
 package com.backend.project.system.mapper;
 
 import com.backend.project.system.domain.BetSPMatchInfo;
-import com.backend.project.system.domain.SPBKMatchInfo;
-import com.backend.project.system.domain.SPMatchInfo;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,13 +15,15 @@ public interface BetSPMatchInfoMapper {
      */
     List<BetSPMatchInfo> findBettingRecord();
 
-    void insertBetSPMatchInfo(SPMatchInfo spMatchInfo);
+    void insertBetSPMatchInfo(BetSPMatchInfo betSPMatchInfo);
 
     /**
      * 更新最后通知时间
      * @param id
      */
     void updateNotifyTime(Long id,Long timeStamp);
+
+    int updateBetMatchInfo(BetSPMatchInfo betSPMatchInfo);
 
 
 }

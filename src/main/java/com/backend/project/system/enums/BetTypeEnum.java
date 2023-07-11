@@ -1,9 +1,9 @@
 package com.backend.project.system.enums;
 
 /**
- * 通知消息类型
+ * 投注组合类型
  */
-public enum MsgEnum {
+public enum BetTypeEnum {
 
     win("win","体彩赔率-胜"),
     draw("draw","体彩赔率-平"),
@@ -24,7 +24,7 @@ public enum MsgEnum {
 
     private String desc;
 
-    MsgEnum(String value, String desc){
+    BetTypeEnum(String value, String desc){
         this.value = value;
         this.desc = desc;
     }

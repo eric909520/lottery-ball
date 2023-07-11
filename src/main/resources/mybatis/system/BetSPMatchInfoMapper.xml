@@ -6,6 +6,7 @@
 
     <resultMap type="BetSPMatchInfo" id="BetSPMatchInfoResult">
         <result property="id" column="id"/>
+        <result property="spId" column="sp_id"/>
         <result property="matchNum" column="match_num"/>
         <result property="matchDate" column="match_date"/>
         <result property="matchTime" column="match_time"/>
@@ -27,12 +28,12 @@
         <result property="s6" column="s6"/>
         <result property="s7" column="s7"/>
         <result property="isBetting" column="is_betting"/>
-        <result property="notifyTime" column="notify_time"/>
     </resultMap>
 
     <select id="findBettingRecord" resultMap="BetSPMatchInfoResult">
         select
             id,
+            sp_id,
             match_num,
             league_abb_name,
             match_date,
@@ -53,13 +54,13 @@
             s4,
             s5,
             s6,
-            s7,
-            notify_time
+            s7
         from bet_sp_match_info
         where is_betting = 1
     </select>
     <insert id="insertBetSPMatchInfo">
         insert into bet_sp_match_info(
+        sp_id,
         match_num,
         league_abb_name,
         match_date,
@@ -83,9 +84,11 @@
         s7,
         create_time,
         exact_date,
-        notify_time)
+        is_betting
+        )
         values
             (
+            #{spId},
             #{matchNum},
             #{leagueAbbName},
             #{matchDate},
@@ -113,6 +116,21 @@
     </insert>
     <update id="updateNotifyTime">
         update bet_sp_match_info set notify_time = #{timeStamp} where id = #{id}
+    </update>
+
+    <update id="updateBetMatchInfo" parameterType="BetSPMatchInfo">
+        update bet_sp_match_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="betType != null  and betType != ''">bet_type = #{betType},
+            </if>
+            <if test="hgAmount != null ">hg_amount = #{hgAmount},
+            </if>
+            <if test="spAmount != null ">sp_amount = #{spAmount},
+            </if>
+            <if test="hgOdds1 != null ">hg_odds1 = #{hgOdds1},
+            </if>
+        </trim>
+        where id = #{id} and is_betting = 1 and is_split = 0
     </update>
 
 </mapper>

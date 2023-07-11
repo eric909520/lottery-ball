@@ -107,9 +107,9 @@ public class BetParamVo extends BetHGVo implements Serializable {
 
     private Double oddsShouLose = 0D;
 
-    /**
-     * 通知消息
-     */
+    // 通知标识，0：不通知，1：通知
+    private Integer notifyFlag;
+    // 通知消息
     private String msg;
 
     // 体彩id

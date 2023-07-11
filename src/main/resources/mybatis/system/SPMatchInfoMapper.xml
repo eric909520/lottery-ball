@@ -9,6 +9,7 @@
         <result property="matchNum" column="match_num"/>
         <result property="matchDate" column="match_date"/>
         <result property="matchTime" column="match_time"/>
+        <result property="leagueAbbName" column="league_abb_name"/>
         <result property="homeTeamAbbName" column="home_team_abb_name"/>
         <result property="awaTeamAbbName" column="awa_team_abb_name"/>
         <result property="win" column="win"/>
@@ -37,30 +38,34 @@
         where league_abb_name = #{leagueName} and home_team_abb_name = #{homeTeam} and awa_team_abb_name = #{awayTeam}
     </select>
 
+    <select id="selectById" parameterType="long" resultMap="SPMatchInfoResult">
+        SELECT * from sp_match_info WHERE id = #{id}
+    </select>
+
     <select id="getTodayLeague" parameterType="string" resultType="string">
-        select league_abb_name from sp_match_info where exact_date = #{date}
+        select league_abb_name from sp_match_info where exact_date = #{date} and is_obsolete = 0
     </select>
 
     <select id="getTodayHomeTeam" parameterType="string" resultType="string">
-        select home_team_abb_name from sp_match_info where exact_date = #{date}
+        select home_team_abb_name from sp_match_info where exact_date = #{date} and is_obsolete = 0
     </select>
 
     <select id="getTodayAwayTeam" parameterType="string" resultType="string">
-        select awa_team_abb_name from sp_match_info where exact_date = #{date}
+        select awa_team_abb_name from sp_match_info where exact_date = #{date} and is_obsolete = 0
     </select>
 
     <select id="getEarlyLeague" parameterType="string" resultType="string">
-        select league_abb_name from sp_match_info where exact_date > #{date}
+        select league_abb_name from sp_match_info where exact_date > #{date} and is_obsolete = 0
     </select>
 
     <select id="getEarlyHomeTeam" parameterType="string" resultType="string">
-        select home_team_abb_name from sp_match_info where exact_date > #{date}
+        select home_team_abb_name from sp_match_info where exact_date > #{date} and is_obsolete = 0
     </select>
 
     <select id="getEarlyAwayTeam" parameterType="string" resultType="string">
-        select awa_team_abb_name from sp_match_info where exact_date > #{date}
+        select awa_team_abb_name from sp_match_info where exact_date > #{date} and is_obsolete = 0
     </select>
-    <select id="findSPMatchInfo" resultType="com.backend.project.system.domain.SPMatchInfo">
+    <select id="findSPMatchInfo" resultMap="SPMatchInfoResult">
         SELECT * from sp_match_info WHERE match_num = #{matchNum} and match_date = #{matchDate}
     </select>
 
