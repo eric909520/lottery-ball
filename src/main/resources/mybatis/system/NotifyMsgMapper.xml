@@ -14,7 +14,9 @@
         insert into notify_msg (msg_type,notify_time,bet_id) values (#{msgType},#{notifyTime},#{betId});
     </insert>
     <select id="findMsgByCondition" resultMap="NotifyMsgResult">
-        SELECT max(id), msg_type,notify_time,bet_id from notify_msg WHERE msg_type =#{type} and bet_id =#{betId}
+        SELECT id, msg_type,notify_time,bet_id from notify_msg WHERE msg_type =#{type} and bet_id =#{betId}
+        order by id desc
+        limit 1
     </select>
 
 

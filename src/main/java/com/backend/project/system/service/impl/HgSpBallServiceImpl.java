@@ -29,7 +29,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
     private String tgUrl;
 
     // 体彩固定返水比例
-    private final static double rebateSP = 0.12;
+    private final static double rebateSP = 0.07;
 
     //体彩篮球返水
     private final static double rebateSPBK = 0.07;
