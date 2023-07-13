@@ -9,10 +9,7 @@ import com.backend.project.system.service.IBallService;
 import com.backend.project.system.service.IBallTempService;
 import com.backend.project.system.service.ISportsBettingDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -123,4 +120,17 @@ public class BallOpenApiController extends BaseController {
         }
     }
 
+    /**
+     * 拆分投注金额
+     */
+    @PostMapping(value = "/splitAmount")
+    public AjaxResult splitAmount(@RequestParam Long betId) {
+        try {
+            AjaxResult ajaxResult = sportsBettingDataService.splitAmount(betId);
+            return ajaxResult;
+        } catch (Exception e) {
+            log.info("API - splitAmount exception ----->>>>", e);
+            return AjaxResult.error();
+        }
+    }
 }

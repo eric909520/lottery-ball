@@ -28,6 +28,10 @@
         <result property="s6" column="s6"/>
         <result property="s7" column="s7"/>
         <result property="isBetting" column="is_betting"/>
+        <result property="betType" column="bet_type"/>
+        <result property="hgAmount" column="hg_amount"/>
+        <result property="spAmount" column="sp_amount"/>
+
     </resultMap>
 
     <select id="findBettingRecord" resultMap="BetSPMatchInfoResult">
@@ -132,5 +136,16 @@
         </trim>
         where id = #{id} and is_betting = 1 and is_split = 0
     </update>
-
+    <select id="findBetInfoById" resultMap="BetSPMatchInfoResult">
+    select id,
+           bet_type,
+           sp_amount,
+           win,
+           draw,
+           lose,
+           handicap_win,
+           handicap_draw,
+           handicap_lose
+           from bet_sp_match_info where id =#{id} and is_split = 0
+    </select>
 </mapper>

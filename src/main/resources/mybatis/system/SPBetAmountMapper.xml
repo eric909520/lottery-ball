@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.SPBetAmountMapper">
+
+<!--    <resultMap type="AppConfig" id="AppConfigResult">-->
+<!--        <result property="id" column="id"/>-->
+<!--        <result property="cKey" column="c_key"/>-->
+<!--        <result property="cValue" column="c_value"/>-->
+<!--        <result property="type" column="type"/>-->
+<!--        <result property="remark" column="remark"/>-->
+<!--    </resultMap>-->
+
+<!--    <sql id="selectAppConfigVo">-->
+<!--        select id, c_key, c_value, type, remark from app_config-->
+<!--    </sql>-->
+
+
+    <insert id="insertSPBetAmount">
+        insert into sp_bet_amount (bet_id,amount)values
+        <foreach collection="amount" separator="," item="items">
+            (#{betId},#{items})
+        </foreach>
+    </insert>
+</mapper>

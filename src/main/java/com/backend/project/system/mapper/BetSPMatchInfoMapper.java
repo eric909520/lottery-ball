@@ -25,5 +25,10 @@ public interface BetSPMatchInfoMapper {
 
     int updateBetMatchInfo(BetSPMatchInfo betSPMatchInfo);
 
-
+    /**
+     * 根据id查询投注表信息
+     * @param betId
+     * @return
+     */
+    BetSPMatchInfo findBetInfoById(Long betId);
 }

@@ -35,4 +35,11 @@ public interface ISportsBettingDataService {
      *  清理当天已经过期的数据
      */
     void cleanObsoleteData();
+
+    /**
+     * 拆分投注额
+     * @param betId
+     * @return
+     */
+    AjaxResult splitAmount(Long betId);
 }

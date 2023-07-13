@@ -1,18 +1,17 @@
 package com.backend.project.system.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.backend.common.utils.CalcUtil;
 import com.backend.common.utils.DateUtils;
 import com.backend.common.utils.bean.BeanUtils;
 import com.backend.common.utils.http.HttpUtils;
 import com.backend.framework.web.domain.AjaxResult;
-import com.backend.project.system.domain.BetSPMatchInfo;
-import com.backend.project.system.domain.NotifyMsg;
-import com.backend.project.system.domain.SPBKMatchInfo;
-import com.backend.project.system.domain.SPMatchInfo;
+import com.backend.project.system.domain.*;
 import com.backend.project.system.domain.vo.*;
 import com.backend.project.system.enums.BetTypeEnum;
 import com.backend.project.system.mapper.BetSPMatchInfoMapper;
 import com.backend.project.system.mapper.NotifyMsgMapper;
+import com.backend.project.system.mapper.SPBetAmountMapper;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
 import com.backend.project.system.service.IHgSPBallService;
 import com.backend.project.system.service.ISportsBettingDataService;
@@ -22,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 获取体彩数据入库
@@ -43,6 +43,10 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
 
     @org.springframework.beans.factory.annotation.Value("${tgApi.url}")
     private String tgUrl;
+
+    @Resource
+    private SPBetAmountMapper spBetAmountMapper;
+    private Double limitBet = 10000d;
 
 
     @Override
@@ -346,6 +350,97 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             return AjaxResult.success();
         }
         return AjaxResult.error();
+    }
+
+    /**
+     * 拆分金额
+     * @param betId
+     * @return
+     */
+    @Override
+    public AjaxResult splitAmount(Long betId) {
+        BetSPMatchInfo betSPMatchInfo = betSPMatchInfoMapper.findBetInfoById(betId);
+        try {
+
+        if(betSPMatchInfo != null){
+            /**体彩主胜*/
+            if(BetTypeEnum.win.getValue().equals(betSPMatchInfo.getBetType())  //体彩主胜
+               || BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主胜，皇冠客+05
+               || BetTypeEnum.hedge_SPHomeWin_HGVisitWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主胜，皇冠客胜&平
+                String winStr = betSPMatchInfo.getWin();
+                generateAmount(betSPMatchInfo, winStr);
+
+                //保存投注额列表
+                /**体彩主平*/
+            }else if(BetTypeEnum.draw.getValue().equals(betSPMatchInfo.getBetType())//体彩平
+                || BetTypeEnum.hedge_SPTie_HGHomeWinAndVisitWin.getValue().equals(betSPMatchInfo.getBetType())){//体彩平，皇冠主胜&客胜"
+
+                String drawStr = betSPMatchInfo.getDraw();
+                generateAmount(betSPMatchInfo, drawStr);
+
+                /**体彩主负*/
+            }else if(BetTypeEnum.lose.getValue().equals(betSPMatchInfo.getBetType())//体彩主负
+                || BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主负，皇冠主+05胜
+                || BetTypeEnum.hedge_SPVisitWin_HGHomeWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主负，皇冠主胜&平
+                String loseStr = betSPMatchInfo.getLose();
+                generateAmount(betSPMatchInfo, loseStr);
+
+                /**主让胜/受球胜*/
+            } else if (BetTypeEnum.handicapWin.getValue().equals(betSPMatchInfo.getBetType())//体彩主让胜
+                || BetTypeEnum.hedge_SPShouWin_HGVisitCut05.getValue().equals(betSPMatchInfo.getBetType())){ //主受球胜，皇冠客-05
+                String handicapWinStr = betSPMatchInfo.getHandicapWin();
+                generateAmount(betSPMatchInfo, handicapWinStr);
+
+                /**主让负/受球负*/
+            }else if(BetTypeEnum.handicapLose.getValue().equals(betSPMatchInfo.getBetType())//体彩主让负
+                || BetTypeEnum.hedge_SPRangLose_HGHomeCut5.getValue().equals(betSPMatchInfo.getBetType())){//体彩主让球负，皇冠主-05
+                String getHandicapLoseStr = betSPMatchInfo.getHandicapLose();
+                generateAmount(betSPMatchInfo, getHandicapLoseStr);
+            }
+        }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return AjaxResult.success();
+    }
+
+    private void generateAmount(BetSPMatchInfo betSPMatchInfo, String drawStr) {
+        Double odds = Double.valueOf(drawStr);
+        Double bigBet = CalcUtil.div(limitBet, odds);
+        Double spAmount = betSPMatchInfo.getSpAmount();
+        Double betSpAmount = 0d;
+        List betList = new ArrayList();
+        //如果总投注额 - 已累计投注额 < 单注最大投注额  循环结束
+        while (spAmount - betSpAmount > bigBet) {
+            double v = randomAmount(bigBet.intValue());
+            long l = Math.round(v / 10) * 10;
+            betSpAmount = CalcUtil.add(betSpAmount, l);
+            System.out.println("已累计金额:"+betSpAmount);
+            betList.add(l);
+        }
+        Double sub = CalcUtil.sub(spAmount, betSpAmount);
+        System.out.println("已累计金额:"+betSpAmount);
+        betList.add(sub.intValue());
+        SPBetAmount spBetAmount = new SPBetAmount();
+        spBetAmount.setAmount(betList);
+        spBetAmount.setBetId(betSPMatchInfo.getId());
+        spBetAmountMapper.insertSPBetAmount(spBetAmount);
+    }
+
+    /**
+     * 随机生成
+     */
+    private  static double randomAmount(int max){
+        Random random = new Random();
+        double i = random.nextInt(max);
+        return i ;
+
+    }
+
+    public static void main(String[] args) {
+        double v = randomAmount(500);
+        System.out.println(v*10);
     }
 
 }
