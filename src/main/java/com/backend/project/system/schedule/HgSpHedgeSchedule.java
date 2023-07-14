@@ -38,10 +38,10 @@ public class HgSpHedgeSchedule {
      * hg - sp 数据计算 - 012
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-    @Scheduled(fixedDelay = 120000L)
+    @Scheduled(fixedDelay = 130000L)
     private void hedge_Hg_SP_data_012() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
-            hgScheduleService.hedge_Hg_SP_data_single();
+            hgScheduleService.hedge_Hg_SP_data_012();
         });
     }
 
