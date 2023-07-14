@@ -70,6 +70,9 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document doc = DocumentHelper.parseText(league_list_all);
             Element rootElt = doc.getRootElement();
             Element classifier = rootElt.element("classifier");
+            if (classifier == null) {
+                return;
+            }
             Iterator regionIt = classifier.elementIterator("region");
             while (regionIt.hasNext()) {
                 Element region = (Element)regionIt.next();
