@@ -14,7 +14,7 @@ public interface IHgSPBallService {
      * 012
      * @param betParamVo
      */
-    public void betCheck(BetParamVo betParamVo);
+    public void betCheck012(BetParamVo betParamVo);
 
     /**
      * 单关

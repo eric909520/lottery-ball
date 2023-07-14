@@ -313,10 +313,10 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     }
 
     /**
-     * hg - sp 数据对冲计算
+     * hg - sp 数据对冲计算 - 单关
      */
     @Override
-    public void hedge_Hg_SP_data() {
+    public void hedge_Hg_SP_data_single() {
         try {
             List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
             for (SPMatchInfo spInfo : spInfos) {
@@ -365,15 +365,76 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                 if (StringUtils.isNotBlank(fbGameMore.getCCut05())) {
                     betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
                 }
-//                HttpUtils.sendPost(url, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠️ 比赛编号:" + smi.getMatchNum() + "         @@主负, 原始赔率 @"+bsmi.getLose() + ", 最新赔率 @" + smi.getLose());
-                String msg = "chat_id=-905019287&text=⚽⚽球赛监测⚽⚽, 比赛编号:" + spInfo.getMatchNum();
+                String msg = "chat_id=-905019287&text=⚽⚽球赛监测⚽单关⚽, 比赛编号:" + spInfo.getMatchNum();
                 betParamVo.setMsg(msg);
                 betParamVo.setSpId(spInfo.getId());
                 betParamVo.setNotifyFlag(1);
                 hgSPBallService.betCheckSingle(betParamVo);
             }
         } catch (Exception e) {
-            log.info("hedge_Hg_SP_data exception ----->>>>", e);
+            log.info("hedge_Hg_SP_data_single exception ----->>>>", e);
+        }
+    }
+
+    /**
+     * hg - sp 数据对冲计算 - 012
+     */
+    @Override
+    public void hedge_Hg_SP_data_012() {
+        try {
+            List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
+            for (SPMatchInfo spInfo : spInfos) {
+                BetParamVo betParamVo = new BetParamVo();
+                Long spId = spInfo.getId();
+                HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+                if (hgFbLeagueData == null) {
+                    continue;
+                }
+                HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+                if (fbGameMore == null) {
+                    continue;
+                }
+                betParamVo.setBetAmountHg(fbGameMore.getBetAmount()); // 皇冠投注金额，基础投注额
+
+                betParamVo.setOddsZero(Double.valueOf(spInfo.getS0())); // 体彩总进球0
+                betParamVo.setOddsOne(Double.valueOf(spInfo.getS1())); // 体彩总进球1
+                betParamVo.setOddsTwo(Double.valueOf(spInfo.getS2())); // 体彩总进球2
+                betParamVo.setOddsThree(Double.valueOf(spInfo.getS3())); // 体彩总进球3
+                betParamVo.setOddsFour(Double.valueOf(spInfo.getS4())); // 体彩总进球4
+                betParamVo.setOddsFive(Double.valueOf(spInfo.getS5())); // 体彩总进球5
+                betParamVo.setOddsSix(Double.valueOf(spInfo.getS6())); // 体彩总进球6
+                betParamVo.setOddsSeven(Double.valueOf(spInfo.getS7())); // 体彩总进球7+
+
+                betParamVo.setZong0_1(Double.valueOf(fbGameMore.getTotal01())); // 皇冠总进球0-1
+                betParamVo.setZong2_3(Double.valueOf(fbGameMore.getTotal23())); // 皇冠总进球2-3
+                betParamVo.setZong4_6(Double.valueOf(fbGameMore.getTotal46())); // 皇冠总进球4-6
+                betParamVo.setZong7(Double.valueOf(fbGameMore.getTotal7())); // 皇冠总进球7+
+
+                // 皇冠大球赔率
+                betParamVo.set大15(fbGameMore.getBig15()==null ? 0 : Double.valueOf(fbGameMore.getBig15())); // 大1.5
+                betParamVo.set大25(fbGameMore.getBig25()==null ? 0 : Double.valueOf(fbGameMore.getBig25())); // 大2.5
+                betParamVo.set大35(fbGameMore.getBig35()==null ? 0 : Double.valueOf(fbGameMore.getBig35())); // 大3.5
+                betParamVo.set大15_2(fbGameMore.getBig15_2()==null ? 0 : Double.valueOf(fbGameMore.getBig15_2())); // 大1.5/2
+                betParamVo.set大2_25(fbGameMore.getBig2_25()==null ? 0 : Double.valueOf(fbGameMore.getBig2_25())); // 大2/2.5
+                betParamVo.set大25_3(fbGameMore.getBig25_3()==null ? 0 : Double.valueOf(fbGameMore.getBig25_3())); // 大2.5/3
+                betParamVo.set大3_35(fbGameMore.getBig3_35()==null ? 0 : Double.valueOf(fbGameMore.getBig3_35())); // 大3/3.5
+
+                // 皇冠小球赔率
+                betParamVo.set小25(fbGameMore.getSmall25()==null ? 0 : Double.valueOf(fbGameMore.getSmall25())); // 小2.5
+                betParamVo.set小35(fbGameMore.getSmall35()==null ? 0 : Double.valueOf(fbGameMore.getSmall35())); // 小3.5
+                betParamVo.set小2_25(fbGameMore.getSmall2_25()==null ? 0 : Double.valueOf(fbGameMore.getSmall2_25())); // 小2/2.5
+                betParamVo.set小25_3(fbGameMore.getSmall25_3()==null ? 0 : Double.valueOf(fbGameMore.getSmall25_3())); // 小2.5/3
+                betParamVo.set小3_35(fbGameMore.getSmall3_35()==null ? 0 : Double.valueOf(fbGameMore.getSmall3_35())); // 小3/3.5
+                betParamVo.set小35_4(fbGameMore.getSmall35_4()==null ? 0 : Double.valueOf(fbGameMore.getSmall35_4())); // 小3.5/4
+
+                String msg = "chat_id=-905019287&text=⚽⚽球赛监测⚽012⚽, 比赛编号:" + spInfo.getMatchNum();
+                betParamVo.setMsg(msg);
+                betParamVo.setSpId(spInfo.getId());
+                betParamVo.setNotifyFlag(1);
+                hgSPBallService.betCheck012(betParamVo);
+            }
+        } catch (Exception e) {
+            log.info("hedge_Hg_SP_data_012 exception ----->>>>", e);
         }
     }
 

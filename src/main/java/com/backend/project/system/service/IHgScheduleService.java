@@ -15,9 +15,13 @@ public interface IHgScheduleService {
     public void pollingFootballDataEarly();
 
     /**
-     * hg - sp 数据计算
+     * hg - sp 数据计算 - 单关
      */
-    public void hedge_Hg_SP_data();
+    public void hedge_Hg_SP_data_single();
 
+    /**
+     * hg - sp 数据计算 - 012
+     */
+    public void hedge_Hg_SP_data_012();
 
 }

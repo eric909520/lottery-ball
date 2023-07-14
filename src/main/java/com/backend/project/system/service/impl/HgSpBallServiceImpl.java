@@ -42,53 +42,48 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     @Override
-    public void betCheck(BetParamVo betParamVo) {
+    public void betCheck012(BetParamVo betParamVo) {
         /** 大1.5, 体彩小 01,皇冠 大1.5, 全输全赢 */
         Double 大15 = betParamVo.get大15();
         if (大15 != null && 大15 != 0) {
             log.info("      @@足球, 体彩 01, 皇冠 大1.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大15);
-            betParamVo.setBetAmountHg(betParamVo.get大15Amount());
             SP01_HG大15(betParamVo);
             log.info("");
         }
 
         /** 1、大2, 体彩小 012,皇冠 大2, 全输全赢 */
-        Double 大2 = betParamVo.get大2();
+        /*Double 大2 = betParamVo.get大2();
         if (大2 != null && 大2 != 0) {
             log.info("      @@足球, 体彩 012, 皇冠 大2 ------------------------------------------------------");
             betParamVo.setOddsHg(大2);
-            betParamVo.setBetAmountHg(betParamVo.get大2Amount());
             SP012_HG大2(betParamVo);
             log.info("");
-        }
+        }*/
 
         /** 2、大2.5, 体彩小 012,皇冠 大2.5, 全输全赢 */
         Double 大25 = betParamVo.get大25();
         if (大25 != null && 大25 != 0) {
             log.info("      @@足球, 体彩 012, 皇冠 大2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大25);
-            betParamVo.setBetAmountHg(betParamVo.get大25Amount());
             SP012_HG大25(betParamVo);
             log.info("");
         }
 
         /** 大3, 体彩小 0123,皇冠 大3, 全输全赢 */
-        Double 大3 = betParamVo.get大3();
+        /*Double 大3 = betParamVo.get大3();
         if (大3 != null && 大3 != 0) {
             log.info("      @@足球, 体彩 0123, 皇冠 大3 ------------------------------------------------------");
             betParamVo.setOddsHg(大3);
-            betParamVo.setBetAmountHg(betParamVo.get大3Amount());
             SP012_HG大3(betParamVo);
             log.info("");
-        }
+        }*/
 
         /** 3、大3.5, 体彩小 0123,皇冠 大3.5, 全输全赢 */
         Double 大35 = betParamVo.get大35();
         if (大35 != null && 大35 != 0) {
             log.info("      @@足球, 体彩 0123, 皇冠 大3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大35);
-            betParamVo.setBetAmountHg(betParamVo.get大35Amount());
             SP012_HG大35(betParamVo);
             log.info("");
         }
@@ -98,7 +93,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (大15_2 != null && 大15_2 != 0) {
             log.info("      @@足球, 体彩 012, 皇冠 大1.5/2 ------------------------------------------------------");
             betParamVo.setOddsHg(大15_2);
-            betParamVo.setBetAmountHg(betParamVo.get大15_2Amount());
             SP012_HG大15_2(betParamVo);
             log.info("");
         }
@@ -108,7 +102,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (大2_25 != null && 大2_25 != 0) {
             log.info("      @@足球, 体彩 012, 皇冠 大2/2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大2_25);
-            betParamVo.setBetAmountHg(betParamVo.get大2_25Amount());
             SP012_HG大2_25(betParamVo);
             log.info("");
         }
@@ -118,7 +111,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (大25_3 != null && 大25_3 != 0) {
             log.info("      @@足球, 体彩 0123, 皇冠 大2.5/3 ------------------------------------------------------");
             betParamVo.setOddsHg(大25_3);
-            betParamVo.setBetAmountHg(betParamVo.get大25_3Amount());
             SP012_HG大25_3(betParamVo);
             log.info("");
         }
@@ -128,7 +120,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (大3_35 != null && 大3_35 != 0) {
             log.info("      @@足球, 体彩 0123, 皇冠 大3/3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(大3_35);
-            betParamVo.setBetAmountHg(betParamVo.get大3_35Amount());
             SP012_HG大3_35(betParamVo);
             log.info("");
         }
@@ -138,7 +129,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小25 != null && 小25 != 0) {
             log.info("      @@足球, 体彩 34567+, 皇冠 小2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小25);
-            betParamVo.setBetAmountHg(betParamVo.get小25Amount());
             SP34567_HG小25(betParamVo);
             log.info("");
         }
@@ -148,7 +138,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小35 != null && 小35 != 0) {
             log.info("      @@足球, 体彩 4567+, 皇冠 小3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小35);
-            betParamVo.setBetAmountHg(betParamVo.get小35Amount());
             SP4567_HG小35(betParamVo);
             log.info("");
         }
@@ -158,7 +147,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小25_3 != null && 小25_3 != 0) {
             log.info("      @@足球, 体彩 34567+, 皇冠 小2.5/3 ------------------------------------------------------");
             betParamVo.setOddsHg(小25_3);
-            betParamVo.setBetAmountHg(betParamVo.get小25_3Amount());
             SP34567_HG小25_3(betParamVo);
             log.info("");
         }
@@ -168,7 +156,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小2_25 != null && 小2_25 != 0) {
             log.info("      @@足球, 体彩 234567+, 皇冠 小2/2.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小2_25);
-            betParamVo.setBetAmountHg(betParamVo.get小2_25Amount());
             SP234567_HG小2_25(betParamVo);
             log.info("");
         }
@@ -178,7 +165,6 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小3_35 != null && 小3_35 != 0) {
             log.info("      @@足球, 体彩 34567+, 皇冠 小3/3.5 ------------------------------------------------------");
             betParamVo.setOddsHg(小3_35);
-            betParamVo.setBetAmountHg(betParamVo.get小3_35Amount());
             SP34567_HG小3_35(betParamVo);
             log.info("");
         }
@@ -188,38 +174,37 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         if (小35_4 != null && 小35_4 != 0) {
             log.info("      @@足球, 体彩 4567+, 皇冠 小3.5/4 ------------------------------------------------------");
             betParamVo.setOddsHg(小35_4);
-            betParamVo.setBetAmountHg(betParamVo.get小35_4Amount());
             SP4567_HG小35_4(betParamVo);
             log.info("");
         }
 
         /** 皇冠总进球 */
-        Double zong0_1 = betParamVo.getZong0_1();
+        /*Double zong0_1 = betParamVo.getZong0_1();
         Double zong2_3 = betParamVo.getZong2_3();
         Double zong4_6 = betParamVo.getZong4_6();
         Double zong7 = betParamVo.getZong7();
         if (zong0_1!=0 && zong2_3!=0 && zong4_6!=0 && zong7!=0) {
-            /** 体彩0123，皇冠 1）总进球4-6,  2）总进球7+ */
+            *//** 体彩0123，皇冠 1）总进球4-6,  2）总进球7+ *//*
             log.info("      @@足球, 体彩 0123, 皇冠 ①总进球4-6,  ②总进球7+ ------------------------------------------------------");
             SP0123_HGZong4_6_7(betParamVo);
             log.info("");
 
-            /** 体彩01456，皇冠 1）总进球2-3,  2）总进球7+ */
+            *//** 体彩01456，皇冠 1）总进球2-3,  2）总进球7+ *//*
             log.info("      @@足球, 体彩 01456, 皇冠 ①总进球2-3,  ②总进球7+ ------------------------------------------------------");
             SP01456_HGZong2_3_7(betParamVo);
             log.info("");
 
-            /** 体彩017+，皇冠 1）总进球2-3,  2）总进球4-6 */
+            *//** 体彩017+，皇冠 1）总进球2-3,  2）总进球4-6 *//*
             log.info("      @@足球, 体彩 017+, 皇冠 ①总进球2-3,  ②总进球4-6 ------------------------------------------------------");
             SP017_HGZong2_3_4_6(betParamVo);
             log.info("");
 
-            /** 体彩4567+，皇冠 1）总进球0-1,  2）总进球2-3 */
+            *//** 体彩4567+，皇冠 1）总进球0-1,  2）总进球2-3 *//*
             log.info("      @@足球, 体彩 4567+, 皇冠 ①总进球0-1,  ②总进球2-3 ------------------------------------------------------");
             SP4567_HGZong0_1_2_3(betParamVo);
             log.info("");
 
-        }
+        }*/
     }
 
     /**
@@ -259,22 +244,22 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
         }*/
 
         /** 体彩主队胜，皇冠（和局、客队胜） */
-        Double home = betParamVo.getHome();
+        /*Double home = betParamVo.getHome();
         Double tie = betParamVo.getTie();
         Double visit = betParamVo.getVisit();
         if (home!=0 && tie!=0 && visit!=0) {
             log.info("       @@足球, 体彩 @主队胜, 皇冠 @和局 @客胜 -----------------------------");
             SPWin_HGTieAndLose(betParamVo);
             log.info("");
-            /** 体彩平，皇冠（主队胜、客队胜） */
+            *//** 体彩平，皇冠（主队胜、客队胜） *//*
             log.info("       @@足球, 体彩 @平, 皇冠 @主胜 @客胜 -----------------------------");
             SPTie_HGWinAndLose(betParamVo);
             log.info("");
-            /** 体彩主队负，皇冠（和局、主队胜） */
+            *//** 体彩主队负，皇冠（和局、主队胜） *//*
             log.info("       @@足球, 体彩 @主负, 皇冠 @平 @主胜 -----------------------------");
             SPLose_HGWinAndTie(betParamVo);
             log.info("");
-        }
+        }*/
 
         Double homeCut05 = betParamVo.getHomeCut05();
         Double oddsRangLose = betParamVo.getOddsRangLose();
@@ -920,27 +905,17 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP01_HG大15(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
-
         double oddsOne = betParamVo.getOddsOne();
-
         // 皇冠参数
         double oddsHg = betParamVo.getOddsHg();
-
         // 体彩返水
         double rebateSPAmount = CalcUtil.mul(CalcUtil.add(betAmountZero, betAmountOne), rebateSP);
 
@@ -979,29 +954,17 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大2(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
-
         double oddsOne = betParamVo.getOddsOne();
-
         double oddsTwo = betParamVo.getOddsTwo();
-
         // 皇冠参数
         double oddsHg = betParamVo.getOddsHg();
 
@@ -1048,22 +1011,13 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大25(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1114,26 +1068,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大3(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountThree;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
-
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
+        Double betAmountThree = betParamTemp.getBetAmountThree();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1195,25 +1137,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大35(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountThree;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
+        Double betAmountThree = betParamTemp.getBetAmountThree();
 
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
@@ -1276,22 +1207,13 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大15_2(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1348,25 +1270,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大3_35(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountThree;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
+        Double betAmountThree = betParamTemp.getBetAmountThree();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1431,22 +1342,13 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大2_25(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1505,25 +1407,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP012_HG大25_3(BetParamVo betParamVo) {
-        Double betAmountZero;
-        Double betAmountOne;
-        Double betAmountTwo;
-        Double betAmountThree;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountZero = betParamTemp.getBetAmountZero();
-            betAmountOne = betParamTemp.getBetAmountOne();
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountZero = betParamVo.getBetAmountZero();
-            betAmountOne = betParamVo.getBetAmountOne();
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountZero = betParamTemp.getBetAmountZero();
+        Double betAmountOne = betParamTemp.getBetAmountOne();
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
+        Double betAmountThree = betParamTemp.getBetAmountThree();
         // 体彩参数
         double oddsZero = betParamVo.getOddsZero();
         double oddsOne = betParamVo.getOddsOne();
@@ -1588,25 +1479,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP4567_HG小35(BetParamVo betParamVo) {
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsFour = betParamVo.getOddsFour();
         double oddsFive = betParamVo.getOddsFive();
@@ -1670,28 +1550,15 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP34567_HG小25(BetParamVo betParamVo) {
-        Double betAmountThree;
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountThree= betParamVo.getBetAmountThree();
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountThree = betParamTemp.getBetAmountThree();
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsThree = betParamVo.getOddsThree();
         double oddsFour = betParamVo.getOddsFour();
@@ -1762,31 +1629,16 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP234567_HG小2_25(BetParamVo betParamVo) {
-        Double betAmountTwo;
-        Double betAmountThree;
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountTwo = betParamTemp.getBetAmountTwo();
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountTwo = betParamVo.getBetAmountTwo();
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountTwo = betParamTemp.getBetAmountTwo();
+        Double betAmountThree = betParamTemp.getBetAmountThree();
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsTwo = betParamVo.getOddsTwo();
         double oddsThree = betParamVo.getOddsThree();
@@ -1866,28 +1718,15 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP34567_HG小25_3(BetParamVo betParamVo) {
-        Double betAmountThree;
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountThree = betParamTemp.getBetAmountThree();
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsThree = betParamVo.getOddsThree();
         double oddsFour = betParamVo.getOddsFour();
@@ -1960,28 +1799,15 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP34567_HG小3_35(BetParamVo betParamVo) {
-        Double betAmountThree;
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountThree = betParamTemp.getBetAmountThree();
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountThree = betParamVo.getBetAmountThree();
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountThree = betParamTemp.getBetAmountThree();
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsThree = betParamVo.getOddsThree();
         double oddsFour = betParamVo.getOddsFour();
@@ -2056,25 +1882,14 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
      * @param betParamVo
      */
     public void SP4567_HG小35_4(BetParamVo betParamVo) {
-        Double betAmountFour;
-        Double betAmountFive;
-        Double betAmountSix;
-        Double betAmountSeven;
-        Double betAmountHg;
-        if (betParamVo.getBetAmountZero()==0.0 && betParamVo.getBetAmountFour()==0.0) {
-            BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
-            betAmountFour = betParamTemp.getBetAmountFour();
-            betAmountFive = betParamTemp.getBetAmountFive();
-            betAmountSix = betParamTemp.getBetAmountSix();
-            betAmountSeven = betParamTemp.getBetAmountSeven();
-            betAmountHg = betParamTemp.getBetAmountHg();
-        } else {
-            betAmountFour = betParamVo.getBetAmountFour();
-            betAmountFive = betParamVo.getBetAmountFive();
-            betAmountSix = betParamVo.getBetAmountSix();
-            betAmountSeven = betParamVo.getBetAmountSeven();
-            betAmountHg = betParamVo.getBetAmountHg();
-        }
+        Double betAmountHg = betParamVo.getBetAmountHg();
+        betParamVo.setBetBaseAmount(betAmountHg);
+        // 计算体彩初始投注金额
+        BetParamVo betParamTemp = AdaptationAmount.adaptation(betParamVo);
+        Double betAmountFour = betParamTemp.getBetAmountFour();
+        Double betAmountFive = betParamTemp.getBetAmountFive();
+        Double betAmountSix = betParamTemp.getBetAmountSix();
+        Double betAmountSeven = betParamTemp.getBetAmountSeven();
         // 体彩参数
         double oddsFour = betParamVo.getOddsFour();
         double oddsFive = betParamVo.getOddsFive();
