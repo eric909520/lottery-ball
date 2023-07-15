@@ -19,7 +19,7 @@ public class SPDataSchedule {
     @Resource
     private ISportsBettingDataService sportsBettingDataService;
 
-    @Scheduled(cron = "0 0/2 * * * ? ")
+//    @Scheduled(cron = "0 0/2 * * * ? ")
 //    @Scheduled(fixedDelay = 600000L)
     private void getSPMatchDataFB() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
@@ -27,7 +27,7 @@ public class SPDataSchedule {
         });
     }
 
-    @Scheduled(cron = "0 0/2 * * * ? ")
+//    @Scheduled(cron = "0 0/2 * * * ? ")
     private void getSPMatchDataBB() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             sportsBettingDataService.getSportsBettingBKData();
@@ -35,7 +35,7 @@ public class SPDataSchedule {
     }
 
 
-        @Scheduled(cron = "0 0 23 * * ?")
+//        @Scheduled(cron = "0 0 23 * * ?")
 //    @Scheduled(fixedDelay = 600000L)
     private void cleanObsoleteData(){
         threadPoolConfig.threadPoolExecutor().submit(() -> {

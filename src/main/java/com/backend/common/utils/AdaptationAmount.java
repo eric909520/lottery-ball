@@ -14,38 +14,56 @@ public class AdaptationAmount {
         if (betParamVo.getOddsZero() != 0) {
             Double betZeroAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsZero());
             betParamTemp.setBetAmountZero(Rounding(betZeroAmount));
+            Double oddsZero = betParamVo.getOddsZero();
+            betParamTemp.setOddsZero(oddsZero);
         }
         if (betParamVo.getOddsOne() != 0) {
             Double betOneAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsOne());
             betParamTemp.setBetAmountOne(Rounding(betOneAmount));
+            Double oddsOne = betParamVo.getOddsOne();
+            betParamTemp.setOddsOne(oddsOne);
         }
         if (betParamVo.getOddsTwo() != 0) {
             Double betTwoAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsTwo());
             betParamTemp.setBetAmountTwo(Rounding(betTwoAmount));
+            Double oddsTwo = betParamVo.getOddsTwo();
+            betParamTemp.setOddsTwo(oddsTwo);
         }
         if (betParamVo.getOddsThree() != 0) {
             Double betThreeAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsThree());
             betParamTemp.setBetAmountThree(Rounding(betThreeAmount));
+            Double oddsThree = betParamVo.getOddsThree();
+            betParamTemp.setOddsThree(oddsThree);
         }
         if (betParamVo.getOddsFour() != 0) {
             Double betFourAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFour());
             betParamTemp.setBetAmountFour(Rounding(betFourAmount));
+            Double oddsFour = betParamVo.getOddsFour();
+            betParamTemp.setOddsFour(oddsFour);
         }
         if (betParamVo.getOddsFive() != 0) {
             Double betFiveAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsFive());
             betParamTemp.setBetAmountFive(Rounding(betFiveAmount));
+            Double oddsFive = betParamVo.getOddsFive();
+            betParamTemp.setOddsFive(oddsFive);
         }
         if (betParamVo.getOddsSix() != 0) {
             Double betSixAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSix());
             betParamTemp.setBetAmountSix(Rounding(betSixAmount));
+            Double oddsSix = betParamVo.getOddsSix();
+            betParamTemp.setOddsSix(oddsSix);
         }
         if (betParamVo.getOddsSeven() != 0) {
             Double betSevenAmount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsSeven());
             betParamTemp.setBetAmountSeven(Rounding(betSevenAmount));
+            Double oddsSen = betParamVo.getOddsSeven();
+            betParamTemp.setOddsSeven(oddsSen);
         }
         if (betParamVo.getOddsHg()!=null && betParamVo.getOddsHg() != 0) {
             Double HGBet = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getOddsHg()+1);
             betParamTemp.setBetAmountHg(Rounding(HGBet));
+            Double oddsHg = betParamVo.getOddsHg();
+            betParamTemp.setOddsHg(oddsHg);
         }
         if (betParamVo.getZong0_1() != 0) {
             Double amount = CalcUtil.div(betParamVo.getBetBaseAmount(), betParamVo.getZong0_1());
@@ -474,11 +492,129 @@ public class AdaptationAmount {
     }
 
 
-         public static  Double Rounding(Double d){
-             Integer round = Math.round(d.intValue() / 10) * 10;
-             return round.doubleValue();
-         }
+     public static  Double Rounding(Double d){
+         Integer round = Math.round(d.intValue() / 10) * 10;
+         return round.doubleValue();
+     }
 
+    /**
+     * 根据收益调整投注金额
+     * @param betParamVo
+     * @return
+     */
+    public static BetParamVo adaptationLastAmount(BetParamVo betParamVo){
+
+        if(betParamVo.getReward0() < 0 && betParamVo.getReward1() < 0 && betParamVo.getReward2() < 0  && betParamVo.getReward3() < 0 && betParamVo.getReward4() < 0
+                && betParamVo.getReward5() < 0 && betParamVo.getReward6() < 0 && betParamVo.getReward7() < 0 && betParamVo.getRewardHG() < 0){
+             return null;
+        }
+
+        if(betParamVo.getReward0() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward0());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsZero());
+                Double add = CalcUtil.add(betParamVo.getBetAmountZero(), subAmount);
+                betParamVo.setBetAmountZero(Rounding(add));
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsZero());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountZero(), subAmount);
+                betParamVo.setBetAmountZero(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward1() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward1());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsOne());
+                Double add = CalcUtil.add(betParamVo.getBetAmountOne(), subAmount);
+                betParamVo.setBetAmountOne(Rounding(add));
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsOne());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountOne(), subAmount);
+                betParamVo.setBetAmountOne(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward2() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward2());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsTwo());
+                Double add = CalcUtil.add(betParamVo.getBetAmountTwo(), subAmount);
+                betParamVo.setBetAmountTwo(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsTwo());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountTwo(), subAmount);
+                betParamVo.setBetAmountTwo(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward3() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward3());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsThree());
+                Double add = CalcUtil.add(betParamVo.getBetAmountThree(), subAmount);
+                betParamVo.setBetAmountThree(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsThree());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountThree(), subAmount);
+                betParamVo.setBetAmountThree(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward4() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward4());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsFour());
+                Double add = CalcUtil.add(betParamVo.getBetAmountFour(), subAmount);
+                betParamVo.setBetAmountFour(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsFour());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountFour(), subAmount);
+                betParamVo.setBetAmountFour(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward5() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward5());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsFive());
+                Double add = CalcUtil.add(betParamVo.getBetAmountFive(), subAmount);
+                betParamVo.setBetAmountFive(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsFive());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountFive(), subAmount);
+                betParamVo.setBetAmountFive(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward6() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward6());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsSix());
+                Double add = CalcUtil.add(betParamVo.getBetAmountSix(), subAmount);
+                betParamVo.setBetAmountSix(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsSix());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountSix(), subAmount);
+                betParamVo.setBetAmountSix(Rounding(add));
+            }
+        }
+        if(betParamVo.getReward7() != 0){
+            Double sub = CalcUtil.sub(betParamVo.getRewardHG(), betParamVo.getReward7());
+            if(sub > 0){
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsSeven());
+                Double add = CalcUtil.add(betParamVo.getBetAmountSeven(), subAmount);
+                betParamVo.setBetAmountSeven(add);
+            }else {
+                sub = CalcUtil.mul(sub,-1);
+                Double subAmount = CalcUtil.div(sub, betParamVo.getOddsSeven());
+                Double add = CalcUtil.sub(betParamVo.getBetAmountSeven(), subAmount);
+                betParamVo.setBetAmountSeven(Rounding(add));
+            }
+        }
+        return betParamVo;
+    }
 
 
 
