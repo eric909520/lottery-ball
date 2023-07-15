@@ -9,12 +9,24 @@
         <result property="msgType" column="msg_type"/>
         <result property="notifyTime" column="notify_time"/>
         <result property="betId" column="bet_id"/>
+        <result property="handicap" column="handicap"/>
     </resultMap>
     <insert id="insertNotifyMsg">
-        insert into notify_msg (msg_type,notify_time,bet_id) values (#{msgType},#{notifyTime},#{betId});
+        insert into notify_msg (msg_type,notify_time,bet_id, handicap) values (#{msgType},#{notifyTime},#{betId}, #{handicap});
     </insert>
     <select id="findMsgByCondition" resultMap="NotifyMsgResult">
-        SELECT id, msg_type,notify_time,bet_id from notify_msg WHERE msg_type =#{type} and bet_id =#{betId}
+        SELECT id, msg_type,notify_time,bet_id, handicap from notify_msg
+        <where>
+            <if test="type != null  and type != ''">
+                and msg_type = #{type}
+            </if>
+            <if test="betId != null ">
+                and bet_id = #{betId}
+            </if>
+            <if test="handicap != null and handicap !='' ">
+                and handicap = #{handicap}
+            </if>
+        </where>
         order by id desc
         limit 1
     </select>

@@ -7,6 +7,7 @@ import com.backend.project.system.domain.NotifyMsg;
 import com.backend.project.system.domain.vo.BetBasketballParamVo;
 import com.backend.project.system.domain.vo.BetParamVo;
 import com.backend.project.system.enums.BetTypeEnum;
+import com.backend.project.system.enums.HandicapEnum;
 import com.backend.project.system.mapper.NotifyMsgMapper;
 import com.backend.project.system.service.IHgSPDealerBallService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
 
     // 皇冠固定返水比例
     private final static double rebateHG = 0.026;
+
+    private static double baseAmount = 50000;
 
     /**
      * 012
@@ -656,6 +659,9 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
+        if (rewardSp < 0) {
+            return null;
+        }
 
         log.info("体彩投注：主 胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
@@ -764,6 +770,9 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
+        if (rewardSp < 0) {
+            return null;
+        }
 
         log.info("体彩投注：主 受球胜 @" + oddsWin + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：客 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
@@ -824,6 +833,9 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
+        if (rewardSp < 0) {
+            return null;
+        }
 
         log.info("体彩投注：主 负 @" + oddsLose + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：主 +05 @" + oddsHg + ", 投" + betAmountHg.intValue());
@@ -883,6 +895,9 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
+        if (rewardSp < 0) {
+            return null;
+        }
 
         log.info("体彩投注：主 让球负 @" + oddsLose + ", 投 " + betAmountSp.intValue());
         log.info("皇冠投注：主 -05 @" + oddsHg + ", 投" + betAmountHg.intValue());
@@ -2520,7 +2535,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * @param msg
      */
     private void nofifyMsg(Long spId, String msg, BetTypeEnum betTypeEnum) {
-        NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(betTypeEnum.getValue(), spId);
+        NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(betTypeEnum.getValue(), spId, HandicapEnum.dealer.getValue());
         long currentTime = System.currentTimeMillis();
         if (msgByCondition == null || currentTime - msgByCondition.getNotifyTime() > 600000) {
             HttpUtils.sendPost(tgUrl, msg);
@@ -2528,6 +2543,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             notifyMsg.setMsgType(betTypeEnum.getValue());
             notifyMsg.setNotifyTime(currentTime);
             notifyMsg.setBetId(spId);
+            notifyMsg.setHandicap(HandicapEnum.dealer.getValue());
             notifyMsgMapper.insertNotifyMsg(notifyMsg);
         }
     }

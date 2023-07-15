@@ -125,7 +125,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                             if(bsmi.getMatchNum() == smi.getMatchNum() && bsmi.getMatchDate().equals(smi.getMatchDate())){
 
                                 if(!smi.getWin().equals(bsmi.getWin())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.win.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.win.getValue(), bsmi.getId(), null);
                                     if (msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠,  ️比赛编号:" + smi.getMatchNum() + ",  @@ 主胜,  原始赔率 @" + bsmi.getWin() + ",  最新赔率 @" + smi.getWin());
@@ -138,7 +138,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getDraw().equals(bsmi.getDraw())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.draw.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.draw.getValue(), bsmi.getId(), null);
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 平,  原始赔率 @"+bsmi.getDraw() + ",  最新赔率 @" + smi.getDraw());
@@ -151,7 +151,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getLose().equals(bsmi.getLose())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.lose.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.lose.getValue(), bsmi.getId(), null);
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️体彩水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@ 客胜,  原始赔率 @"+bsmi.getLose() + ",  最新赔率 @" + smi.getLose());
@@ -164,7 +164,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getHandicapWin().equals(bsmi.getHandicapWin())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId(), null);
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠,  比赛编号:" + smi.getMatchNum() + ",  @@主让胜 / 主受让胜,  原始赔率 @"+bsmi.getHandicapWin() + ",  最新赔率 @" + smi.getHandicapWin());
@@ -177,7 +177,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
                                     }
                                 }
                                 if(!smi.getHandicapLose().equals(bsmi.getHandicapLose())){
-                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId());
+                                    NotifyMsg msgByCondition = notifyMsgMapper.findMsgByCondition(BetTypeEnum.handicapWin.getValue(), bsmi.getId(), null);
                                     if(msgByCondition == null || System.currentTimeMillis() - msgByCondition.getNotifyTime() > 600000) {
                                         //通知 胜平负赔率变化
                                         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚠️⚠️水位变动⚠️⚠️,  比赛编号:" + smi.getMatchNum() + ",  @@主让客胜 / 主受让客胜,  原始赔率 @"+bsmi.getHandicapLose() + ",  最新赔率 @" + smi.getHandicapLose());

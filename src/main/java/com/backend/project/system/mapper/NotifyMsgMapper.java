@@ -14,5 +14,5 @@ public interface NotifyMsgMapper {
      */
     void  insertNotifyMsg(NotifyMsg msg);
 
-    NotifyMsg findMsgByCondition(@Param("type") String type, @Param("betId") Long betId);
+    NotifyMsg findMsgByCondition(@Param("type") String type, @Param("betId") Long betId, @Param("handicap") String handicap);
 }
