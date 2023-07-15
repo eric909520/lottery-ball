@@ -45,6 +45,28 @@ public class HgSpHedgeSchedule {
         });
     }
 
+    /**
+     * hg - sp 数据计算 - 单关 - zhuang
+     */
+    //    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(fixedDelay = 120000L)
+    private void hedge_Hg_SP_data_single_dealer() {
+        threadPoolConfig.threadPoolExecutor().submit(() -> {
+            hgScheduleService.hedge_Hg_SP_data_single_dealer();
+        });
+    }
+
+    /**
+     * hg - sp 数据计算 - 012 - zhuang
+     */
+    //    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(fixedDelay = 130000L)
+    private void hedge_Hg_SP_data_012_dealer() {
+        threadPoolConfig.threadPoolExecutor().submit(() -> {
+            hgScheduleService.hedge_Hg_SP_data_012_dealer();
+        });
+    }
+
     public static void main(String[] args) {
         String tgUrl = "https://api.telegram.org/bot6347199448:AAFTxBhJL8ZrPjhxn7BL2Bj7-MdoKzySWPA/sendMessage";
         HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=⚽⚽球赛监测⚽⚽ 比赛编号: 123123 ");

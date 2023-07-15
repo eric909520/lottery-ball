@@ -14,6 +14,7 @@ import com.backend.project.system.enums.HgChooseTeamEnum;
 import com.backend.project.system.enums.HgWTypeEnum;
 import com.backend.project.system.mapper.*;
 import com.backend.project.system.service.IHgSPBallService;
+import com.backend.project.system.service.IHgSPDealerBallService;
 import com.backend.project.system.service.IHgScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,8 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     private HgFbGameMoreMapper hgFbGameMoreMapper;
     @Resource
     private IHgSPBallService hgSPBallService;
+    @Resource
+    private IHgSPDealerBallService hgSPDealerBallService;
 
     private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
     private static String[] xiao_qiu = new String[]{"2.5", "3.5", "2 / 2.5", "2.5 / 3", "3 / 3.5", "3.5 / 4"};
@@ -441,6 +444,132 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             }
         } catch (Exception e) {
             log.info("hedge_Hg_SP_data_012 exception ----->>>>", e);
+        }
+    }
+
+    /**
+     * hg - sp 数据对冲计算 - 单关
+     */
+    @Override
+    public void hedge_Hg_SP_data_single_dealer() {
+        try {
+            List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
+            for (SPMatchInfo spInfo : spInfos) {
+                BetParamVo betParamVo = new BetParamVo();
+                Long spId = spInfo.getId();
+                HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+                if (hgFbLeagueData == null) {
+                    continue;
+                }
+                HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+                if (fbGameMore == null) {
+                    continue;
+                }
+                betParamVo.setBetAmountHg(fbGameMore.getBetAmount());
+                if (spInfo.getWin() != null) {
+                    betParamVo.setOddsWin(Double.valueOf(spInfo.getWin())); // 体彩主胜
+                    betParamVo.setOddsTie(Double.valueOf(spInfo.getDraw())); // 体彩平
+                    betParamVo.setOddsLose(Double.valueOf(spInfo.getLose())); // 体彩客胜
+                }
+                if (fbGameMore.getMyselfH() != null) {
+                    betParamVo.setHome(Double.valueOf(fbGameMore.getMyselfH())); // 皇冠主胜
+                    betParamVo.setTie(Double.valueOf(fbGameMore.getMyselfN())); // 皇冠平
+                    betParamVo.setVisit(Double.valueOf(fbGameMore.getMyselfC())); // 皇冠客胜
+                }
+                // 体彩让球数据
+                String handicap = spInfo.getHandicap();
+                if (StringUtils.isNotBlank(handicap)) {
+                    if (handicap.indexOf("+") > -1) { // 主加，主队受球
+                        betParamVo.setOddsShouWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队受球胜
+                        betParamVo.setOddsShouLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队受球客胜
+                    } else if (handicap.indexOf("-") > -1) { //主减，主队让球
+                        betParamVo.setOddsRangWin(Double.valueOf(spInfo.getHandicapWin())); // 体彩主队让球胜
+                        betParamVo.setOddsRangLose(Double.valueOf(spInfo.getHandicapLose())); // 体彩主队让球客胜
+                    }
+                }
+                // 皇冠让球数据
+                if (StringUtils.isNotBlank(fbGameMore.getHAdd05())) {
+                    betParamVo.setHomeAdd05(Double.valueOf(fbGameMore.getHAdd05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getHCut05())) {
+                    betParamVo.setHomeCut05(Double.valueOf(fbGameMore.getHCut05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getCAdd05())) {
+                    betParamVo.setVisitAdd05(Double.valueOf(fbGameMore.getCAdd05()));
+                }
+                if (StringUtils.isNotBlank(fbGameMore.getCCut05())) {
+                    betParamVo.setVisitCut05(Double.valueOf(fbGameMore.getCCut05()));
+                }
+                String msg = "chat_id=-749764025&text=⚽⚽球赛监测⚽单关⚽, 比赛编号:" + spInfo.getMatchNum();
+                betParamVo.setMsg(msg);
+                betParamVo.setSpId(spInfo.getId());
+                betParamVo.setNotifyFlag(1);
+                hgSPDealerBallService.betCheckSingle(betParamVo);
+            }
+        } catch (Exception e) {
+            log.info("hedge_Hg_SP_data_single_dealer exception ----->>>>", e);
+        }
+    }
+
+    /**
+     * hg - sp 数据对冲计算 - 012
+     */
+    @Override
+    public void hedge_Hg_SP_data_012_dealer() {
+        try {
+            List<SPMatchInfo> spInfos = spMatchInfoMapper.findSPObsoleteNot();
+            for (SPMatchInfo spInfo : spInfos) {
+                BetParamVo betParamVo = new BetParamVo();
+                Long spId = spInfo.getId();
+                HgFbLeagueData hgFbLeagueData = hgFbLeagueDataMapper.selectBySpId(spId);
+                if (hgFbLeagueData == null) {
+                    continue;
+                }
+                HgFbGameMore fbGameMore = hgFbGameMoreMapper.selectCondition(hgFbLeagueData.getLeagueId(), hgFbLeagueData.getEcid());
+                if (fbGameMore == null) {
+                    continue;
+                }
+                betParamVo.setBetAmountHg(fbGameMore.getBetAmount()); // 皇冠投注金额，基础投注额
+
+                betParamVo.setOddsZero(Double.valueOf(spInfo.getS0())); // 体彩总进球0
+                betParamVo.setOddsOne(Double.valueOf(spInfo.getS1())); // 体彩总进球1
+                betParamVo.setOddsTwo(Double.valueOf(spInfo.getS2())); // 体彩总进球2
+                betParamVo.setOddsThree(Double.valueOf(spInfo.getS3())); // 体彩总进球3
+                betParamVo.setOddsFour(Double.valueOf(spInfo.getS4())); // 体彩总进球4
+                betParamVo.setOddsFive(Double.valueOf(spInfo.getS5())); // 体彩总进球5
+                betParamVo.setOddsSix(Double.valueOf(spInfo.getS6())); // 体彩总进球6
+                betParamVo.setOddsSeven(Double.valueOf(spInfo.getS7())); // 体彩总进球7+
+
+                betParamVo.setZong0_1(Double.valueOf(fbGameMore.getTotal01())); // 皇冠总进球0-1
+                betParamVo.setZong2_3(Double.valueOf(fbGameMore.getTotal23())); // 皇冠总进球2-3
+                betParamVo.setZong4_6(Double.valueOf(fbGameMore.getTotal46())); // 皇冠总进球4-6
+                betParamVo.setZong7(Double.valueOf(fbGameMore.getTotal7())); // 皇冠总进球7+
+
+                // 皇冠大球赔率
+                betParamVo.set大15(fbGameMore.getBig15()==null ? 0 : Double.valueOf(fbGameMore.getBig15())); // 大1.5
+                betParamVo.set大25(fbGameMore.getBig25()==null ? 0 : Double.valueOf(fbGameMore.getBig25())); // 大2.5
+                betParamVo.set大35(fbGameMore.getBig35()==null ? 0 : Double.valueOf(fbGameMore.getBig35())); // 大3.5
+                betParamVo.set大15_2(fbGameMore.getBig15_2()==null ? 0 : Double.valueOf(fbGameMore.getBig15_2())); // 大1.5/2
+                betParamVo.set大2_25(fbGameMore.getBig2_25()==null ? 0 : Double.valueOf(fbGameMore.getBig2_25())); // 大2/2.5
+                betParamVo.set大25_3(fbGameMore.getBig25_3()==null ? 0 : Double.valueOf(fbGameMore.getBig25_3())); // 大2.5/3
+                betParamVo.set大3_35(fbGameMore.getBig3_35()==null ? 0 : Double.valueOf(fbGameMore.getBig3_35())); // 大3/3.5
+
+                // 皇冠小球赔率
+                betParamVo.set小25(fbGameMore.getSmall25()==null ? 0 : Double.valueOf(fbGameMore.getSmall25())); // 小2.5
+                betParamVo.set小35(fbGameMore.getSmall35()==null ? 0 : Double.valueOf(fbGameMore.getSmall35())); // 小3.5
+                betParamVo.set小2_25(fbGameMore.getSmall2_25()==null ? 0 : Double.valueOf(fbGameMore.getSmall2_25())); // 小2/2.5
+                betParamVo.set小25_3(fbGameMore.getSmall25_3()==null ? 0 : Double.valueOf(fbGameMore.getSmall25_3())); // 小2.5/3
+                betParamVo.set小3_35(fbGameMore.getSmall3_35()==null ? 0 : Double.valueOf(fbGameMore.getSmall3_35())); // 小3/3.5
+                betParamVo.set小35_4(fbGameMore.getSmall35_4()==null ? 0 : Double.valueOf(fbGameMore.getSmall35_4())); // 小3.5/4
+
+                String msg = "chat_id=-749764025&text=⚽⚽球赛监测⚽012⚽, 比赛编号:" + spInfo.getMatchNum();
+                betParamVo.setMsg(msg);
+                betParamVo.setSpId(spInfo.getId());
+                betParamVo.setNotifyFlag(1);
+                hgSPDealerBallService.betCheck012(betParamVo);
+            }
+        } catch (Exception e) {
+            log.info("hedge_Hg_SP_data_012_dealer exception ----->>>>", e);
         }
     }
 

@@ -24,4 +24,14 @@ public interface IHgScheduleService {
      */
     public void hedge_Hg_SP_data_012();
 
+    /**
+     * hg - sp 数据计算 - 单关 - zhuang
+     */
+    public void hedge_Hg_SP_data_single_dealer();
+
+    /**
+     * hg - sp 数据计算 - 012 - zhuang
+     */
+    public void hedge_Hg_SP_data_012_dealer();
+
 }
