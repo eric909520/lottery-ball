@@ -18,6 +18,22 @@ public enum BetTypeEnum {
     hedge_SPTie_HGHomeWinAndVisitWin("spTie_hgHomeWinAndVisitWin","赔率组合-体彩平，皇冠主胜&客胜"),
     hedge_SPVisitWin_HGHomeWinAndTie("spVisitWin_hgHomeWinAndTie","赔率组合-体彩客胜，皇冠主胜&平"),
 
+    big_15("big_15","总进球-大1.5"),
+    big_2("big_2","总进球-大2"),
+    big_25("big_2_5","总进球-大2.5"),
+    big_2_25("big_2_25","总进球-大2/2.5"),
+    big_25_3("big_25_3","总进球-大2.5/3"),
+    big_35("big_35","总进球-大3.5"),
+    big_3_35("big_3_35","总进球-大3/3.5"),
+
+    small_25("small_25","总进球-小2.5"),
+    small_25_3("small_25_3","总进球-小2.5/3"),
+    small_35("small_35","总进球-小3.5"),
+    small_3_35("small_3_35","总进球-小3/3.5"),
+    small_35_4("small_35_4","总进球-小3.5/4"),
+
+
+
     ;
 
     private String value;
