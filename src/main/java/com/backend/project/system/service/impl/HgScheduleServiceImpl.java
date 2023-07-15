@@ -4,6 +4,7 @@ import com.backend.common.constant.UserConstants;
 import com.backend.common.utils.CalcUtil;
 import com.backend.common.utils.DateUtils;
 import com.backend.common.utils.HgApiUtils;
+import com.backend.common.utils.http.HttpUtils;
 import com.backend.project.system.domain.HgApi;
 import com.backend.project.system.domain.HgFbGameMore;
 import com.backend.project.system.domain.HgFbLeagueData;
@@ -22,6 +23,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,6 +55,9 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     private static String[] da_qiu = new String[]{"1.5", "2.5", "3.5", "1.5 / 2", "2 / 2.5", "2.5 / 3", "3 / 3.5"};
     private static String[] xiao_qiu = new String[]{"2.5", "3.5", "2 / 2.5", "2.5 / 3", "3 / 3.5", "3.5 / 4"};
 
+    @Value("${tgApi.url}")
+    private String tgUrl;
+
     /**
      * polling today football data
      */
@@ -73,9 +78,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document doc = DocumentHelper.parseText(league_list_all);
             Element rootElt = doc.getRootElement();
             Element classifier = rootElt.element("classifier");
-            if (classifier == null) {
-                return;
-            }
+            systemExit(classifier);
             Iterator regionIt = classifier.elementIterator("region");
             while (regionIt.hasNext()) {
                 Element region = (Element)regionIt.next();
@@ -98,6 +101,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                     Document docGameList = DocumentHelper.parseText(game_list);
                     Element rootEltGameList = docGameList.getRootElement();
                     Iterator ecIt = rootEltGameList.elementIterator("ec");
+                    systemExit(ecIt);
                     while (ecIt.hasNext()) {
                         Element ec = (Element)ecIt.next();
                         Element game = ec.element("game");
@@ -141,6 +145,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                         Document docGameMore = DocumentHelper.parseText(game_more);
                         Element rootEltGameMore = docGameMore.getRootElement();
                         Iterator gameIt = rootEltGameMore.elementIterator("game");
+                        systemExit(gameIt);
                         while (gameIt.hasNext()) {
                             Element gameGameMore = (Element) gameIt.next();
                             String gidGameMore = gameGameMore.elementTextTrim("gid"); // 获取准确赔率参数
@@ -212,6 +217,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document doc = DocumentHelper.parseText(league_list_all);
             Element rootElt = doc.getRootElement();
             Element classifier = rootElt.element("classifier");
+            systemExit(classifier);
             Iterator regionIt = classifier.elementIterator("region");
             while (regionIt.hasNext()) {
                 Element region = (Element)regionIt.next();
@@ -234,6 +240,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                     Document docGameList = DocumentHelper.parseText(game_list);
                     Element rootEltGameList = docGameList.getRootElement();
                     Iterator ecIt = rootEltGameList.elementIterator("ec");
+                    systemExit(ecIt);
                     while (ecIt.hasNext()) {
                         Element ec = (Element)ecIt.next();
                         Element game = ec.element("game");
@@ -277,6 +284,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                         Document docGameMore = DocumentHelper.parseText(game_more);
                         Element rootEltGameMore = docGameMore.getRootElement();
                         Iterator gameIt = rootEltGameMore.elementIterator("game");
+                        systemExit(gameIt);
                         while (gameIt.hasNext()) {
                             Element gameGameMore = (Element) gameIt.next();
                             String gidGameMore = gameGameMore.elementTextTrim("gid"); // 获取准确赔率参数
@@ -588,6 +596,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderView0_1 = DocumentHelper.parseText(order_view_0_1);
             Element rootOrderView0_1 = orderView0_1.getRootElement();
             String ioratio0_1 = rootOrderView0_1.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratio0_1);
             hgFbGameMore.setTotal01(ioratio0_1);
         }
 
@@ -598,6 +607,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderView2_3 = DocumentHelper.parseText(order_view_2_3);
             Element rootOrderView2_3 = orderView2_3.getRootElement();
             String ioratio2_3 = rootOrderView2_3.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratio2_3);
             hgFbGameMore.setTotal23(ioratio2_3);
         }
 
@@ -608,6 +618,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderView4_6 = DocumentHelper.parseText(order_view_4_6);
             Element rootOrderView4_6 = orderView4_6.getRootElement();
             String ioratio4_6 = rootOrderView4_6.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratio4_6);
             hgFbGameMore.setTotal46(ioratio4_6);
         }
 
@@ -618,6 +629,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderView7 = DocumentHelper.parseText(order_view_7);
             Element rootOrderView7 = orderView7.getRootElement();
             String ioratio7 = rootOrderView7.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratio7);
             hgFbGameMore.setTotal7(ioratio7);
         }
     }
@@ -637,6 +649,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderViewH = DocumentHelper.parseText(order_view_h);
             Element rootOrderViewH = orderViewH.getRootElement();
             String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratioH);
             hgFbGameMore.setMyselfH(ioratioH);
         }
 
@@ -647,6 +660,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderViewC = DocumentHelper.parseText(order_view_c);
             Element rootOrderViewC = orderViewC.getRootElement();
             String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratioC);
             hgFbGameMore.setMyselfC(ioratioC);
         }
 
@@ -657,6 +671,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             Document orderViewN = DocumentHelper.parseText(order_view_n);
             Element rootOrderViewN = orderViewN.getRootElement();
             String ioratioN = rootOrderViewN.elementTextTrim("ioratio"); // 水位
+            systemExit(ioratioN);
             hgFbGameMore.setMyselfN(ioratioN);
         }
     }
@@ -678,6 +693,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             String spreadH = rootOrderViewH.elementTextTrim("spread"); // 小球个数
             if (Arrays.asList(xiao_qiu).contains(spreadH)) {
                 String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位 - 小球
+                systemExit(ioratioH);
                 // 小球水位设置
                 transformSmall(hgFbGameMore, spreadH, ioratioH);
             }
@@ -692,6 +708,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             String spreadC = rootOrderViewC.elementTextTrim("spread"); // 大球个数
             if (Arrays.asList(da_qiu).contains(spreadC)) {
                 String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位 - 大球
+                systemExit(ioratioC);
                 // 大球水位设置
                 transformBig(hgFbGameMore, spreadC, ioratioC);
             }
@@ -722,6 +739,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                 Document orderViewH = DocumentHelper.parseText(order_view_h);
                 Element rootOrderViewH = orderViewH.getRootElement();
                 String ioratioH = rootOrderViewH.elementTextTrim("ioratio"); // 水位
+                systemExit(ioratioH);
 //                String spreadH = rootOrderViewH.elementTextTrim("spread"); // 让球个数
 //                String gold_gmin_h = rootOrderView.elementTextTrim("gold_gmin"); // 投注最小金额
 //                String gold_gmax_h = rootOrderView.elementTextTrim("gold_gmax"); // 投注最大金额
@@ -741,6 +759,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
                 Document orderViewC = DocumentHelper.parseText(order_view_c);
                 Element rootOrderViewC = orderViewC.getRootElement();
                 String ioratioC = rootOrderViewC.elementTextTrim("ioratio"); // 水位
+                systemExit(ioratioC);
                 if (HgChooseTeamEnum.HOME.getType().equals(strong)) {
                     // 客加spread
                     hgFbGameMore.setCAdd05(ioratioC);
@@ -790,6 +809,18 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
             hgFbGameMore.setSmall3_35(ioratioH);
         } else if (xiao_qiu[5].equals(spreadH)) {
             hgFbGameMore.setSmall35_4(ioratioH);
+        }
+    }
+
+    /**
+     * 停止程序
+     * @param obj
+     */
+    public void systemExit(Object obj) {
+        if (obj == null) {
+            HttpUtils.sendPost(tgUrl, "chat_id=-749764025&text=☠☠‼‼程序异常终止，请检查‼‼☠☠");
+            HttpUtils.sendPost(tgUrl, "chat_id=-905019287&text=☠☠‼‼程序异常终止，请检查‼‼☠☠");
+            System.exit(1);
         }
     }
 
