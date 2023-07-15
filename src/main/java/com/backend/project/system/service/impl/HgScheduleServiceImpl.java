@@ -189,10 +189,16 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
     @Override
     public void pollingFootballDataEarly() {
         try {
-            String currenDate = DateUtils.getDate();
-            List<String> earlyLeague = spMatchInfoMapper.getEarlyLeague(currenDate);
-            List<String> earlyHomeTeam = spMatchInfoMapper.getEarlyHomeTeam(currenDate);
-            List<String> earlyAwayTeam = spMatchInfoMapper.getEarlyAwayTeam(currenDate);
+            String currentDate;
+            int currentHour = DateUtils.getCurrentHour();
+            if (currentHour < 12) {
+                currentDate = DateUtils.getDateSubDays(-1);
+            } else {
+                currentDate = DateUtils.getDate();
+            }
+            List<String> earlyLeague = spMatchInfoMapper.getEarlyLeague(currentDate);
+            List<String> earlyHomeTeam = spMatchInfoMapper.getEarlyHomeTeam(currentDate);
+            List<String> earlyAwayTeam = spMatchInfoMapper.getEarlyAwayTeam(currentDate);
             HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
             HgApi hgApi2 = hgApiMapper.selectByP(HgApiEnum.get_game_list.getApi());
             HgApi hgApi3 = hgApiMapper.selectByP(HgApiEnum.get_game_more.getApi());

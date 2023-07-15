@@ -55,6 +55,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return dateTimeNow(YYYY_MM_DD);
     }
 
+    /**
+     * 获取当前日期加减day, 默认格式为yyyy-MM-dd
+     *
+     * @return String
+     */
+    public static String getDateSubDays(int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, day);
+        return parseDateToStr(YYYY_MM_DD, calendar.getTime());
+    }
+
 //    public static void main(String[] args) {
 //        System.out.println(getDate());
 //    }
@@ -395,6 +407,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return weekDays[w];
     }
 
+    public static int getCurrentHour() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        return hour;
+    }
+
     public static void main(String[] args) {
         /*try {
             String onePointTime = getOnePointTime(-1);
@@ -405,8 +423,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 //        String s = transformDateHg("07-04 11:00a");
 //        String s = transformDateHg("07-04 1:00p");
 //        Long s = getLeagueDate("07-04 11:00a");
-        String weekOfDate = getWeekOfDate(new Date());
-        System.out.println(weekOfDate);
+//        String weekOfDate = getWeekOfDate(new Date());
+//        System.out.println(weekOfDate);
+        int currentHour = getCurrentHour();
+        System.out.println(currentHour);
+        String dateSubDays = getDateSubDays(-1);
+        System.out.println(dateSubDays);
     }
 
 }
