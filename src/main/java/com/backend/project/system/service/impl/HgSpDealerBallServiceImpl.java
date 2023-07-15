@@ -659,7 +659,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
-        if (rewardSp < 0) {
+        if (rewardSp < CalcUtil.mul(CalcUtil.add(betAmountSp, betAmountHg), 0.01)) {
             return null;
         }
 
@@ -770,7 +770,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
-        if (rewardSp < 0) {
+        if (rewardSp < CalcUtil.mul(CalcUtil.add(betAmountSp, betAmountHg), 0.01)) {
             return null;
         }
 
@@ -833,7 +833,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
-        if (rewardSp < 0) {
+        if (rewardSp < CalcUtil.mul(CalcUtil.add(betAmountSp, betAmountHg), 0.01)) {
             return null;
         }
 
@@ -895,7 +895,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
         // 皇冠全输返水
         rebateHgAmount = CalcUtil.mul(betAmountHg, rebateHG);
         rewardSp = CalcUtil.sub(CalcUtil.add(bonusSp, rebateSpAmount, rebateHgAmount), betAmountHg);
-        if (rewardSp < 0) {
+        if (rewardSp < CalcUtil.mul(CalcUtil.add(betAmountSp, betAmountHg), 0.01)) {
             return null;
         }
 
