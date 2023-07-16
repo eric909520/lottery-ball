@@ -27,7 +27,7 @@ public class HgSpHedgeSchedule {
      * hg - sp 数据计算 - 单关
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 120000L)
+    @Scheduled(fixedDelay = 120000L)
     private void hedge_Hg_SP_data_single() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_SP_data_single();
@@ -49,7 +49,7 @@ public class HgSpHedgeSchedule {
      * hg - sp 数据计算 - 单关 - zhuang
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 120000L)
+    @Scheduled(fixedDelay = 120000L)
     private void hedge_Hg_SP_data_single_dealer() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_SP_data_single_dealer();
