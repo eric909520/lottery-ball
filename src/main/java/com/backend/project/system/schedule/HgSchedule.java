@@ -26,7 +26,7 @@ public class HgSchedule {
      * task - polling today football data
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 20000L)
+    @Scheduled(fixedDelay = 20000L)
     private void pollingFootballDataToday() {
 //        threadPoolConfig.threadPoolExecutor().submit(() -> {
         hgScheduleService.pollingFootballDataToday();
@@ -38,7 +38,7 @@ public class HgSchedule {
      * task - polling early football data
      */
 //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 20000L)
+    @Scheduled(fixedDelay = 20000L)
     private void pollingFootballDataEarly() {
 //        threadPoolConfig.threadPoolExecutor().submit(() -> {
         hgScheduleService.pollingFootballDataEarly();

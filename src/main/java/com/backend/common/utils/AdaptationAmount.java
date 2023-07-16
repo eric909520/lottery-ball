@@ -504,8 +504,8 @@ public class AdaptationAmount {
      */
     public static BetParamVo adaptationLastAmount(BetParamVo betParamVo){
 
-        if(betParamVo.getReward0() < 0 && betParamVo.getReward1() < 0 && betParamVo.getReward2() < 0  && betParamVo.getReward3() < 0 && betParamVo.getReward4() < 0
-                && betParamVo.getReward5() < 0 && betParamVo.getReward6() < 0 && betParamVo.getReward7() < 0 && betParamVo.getRewardHG() < 0){
+        if(betParamVo.getReward0() <= 0 && betParamVo.getReward1() <= 0 && betParamVo.getReward2() <= 0  && betParamVo.getReward3() <= 0 && betParamVo.getReward4() <= 0
+                && betParamVo.getReward5() <= 0 && betParamVo.getReward6() <= 0 && betParamVo.getReward7() <= 0 && betParamVo.getRewardHG() <= 0){
              return null;
         }
 
