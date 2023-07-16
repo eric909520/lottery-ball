@@ -34,6 +34,15 @@ public enum BetTypeEnum {
     small_3_35("small_3_35","总进球-小3/3.5"),
     small_35_4("small_35_4","总进球-小3.5/4"),
 
+    total_ball_zero("total_ball_zero","总进球 0球赔率更新"),
+    total_ball_one("total_ball_one","总进球 1球赔率更新"),
+    total_ball_two("total_ball_two","总进球 2球赔率更新"),
+    total_ball_three("total_ball_three","总进球 3球赔率更新"),
+    total_ball_four("total_ball_four","总进球 4球赔率更新"),
+    total_ball_five("total_ball_five","总进球 5球赔率更新"),
+    total_ball_six("total_ball_six","总进球 6球赔率更新"),
+    total_ball_seven("total_ball_seven","总进球 7球赔率更新"),
+
 
 
     ;
