@@ -24,12 +24,18 @@ public interface ISportsBettingDataService {
     void betStart(BetSPMatchInfo betSPMatchInfo);
 
     /**
-     * 录入皇冠投注数据，计算体彩投注金额
+     * 录入皇冠投注数据，计算体彩投注金额 - 体彩
      * @param betSPMatchInfo
      * @return
      */
     AjaxResult betInfoInput(BetSPMatchInfo betSPMatchInfo);
 
+    /**
+     * 录入皇冠投注数据，计算体彩投注金额 - zhuang
+     * @param betSPMatchInfo
+     * @return
+     */
+    AjaxResult betInfoInputDealer(BetSPMatchInfo betSPMatchInfo);
 
     /**
      *  清理当天已经过期的数据

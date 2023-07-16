@@ -129,9 +129,25 @@
             </if>
             <if test="hgAmount != null ">hg_amount = #{hgAmount},
             </if>
+            <if test="hgOdds1 != null ">hg_odds1 = #{hgOdds1},
+            </if>
             <if test="spAmount != null ">sp_amount = #{spAmount},
             </if>
-            <if test="hgOdds1 != null ">hg_odds1 = #{hgOdds1},
+            <if test="spAmount0 != null ">sp_amount0 = #{spAmount0},
+            </if>
+            <if test="spAmount1 != null ">sp_amount1 = #{spAmount1},
+            </if>
+            <if test="spAmount2 != null ">sp_amount2 = #{spAmount2},
+            </if>
+            <if test="spAmount3 != null ">sp_amount3 = #{spAmount3},
+            </if>
+            <if test="spAmount4 != null ">sp_amount4 = #{spAmount4},
+            </if>
+            <if test="spAmount5 != null ">sp_amount5 = #{spAmount5},
+            </if>
+            <if test="spAmount6 != null ">sp_amount6 = #{spAmount6},
+            </if>
+            <if test="spAmount7 != null ">sp_amount7 = #{spAmount7},
             </if>
         </trim>
         where id = #{id} and is_betting = 1 and is_split = 0

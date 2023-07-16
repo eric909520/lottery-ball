@@ -392,7 +392,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgVisit), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPHomeWin_HGVisitWinAndTie);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spHomeWin_hgVisitWinAndTie);
         }
     }
 
@@ -504,7 +504,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgHome, betAmountHgVisit), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPTie_HGHomeWinAndVisitWin);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spTie_hgHomeWinAndVisitWin);
         }
     }
     /** 体彩主队负，皇冠（和局、主队胜） */
@@ -614,7 +614,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgHome), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPVisitWin_HGHomeWinAndTie);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spVisitWin_hgHomeWinAndTie);
         }
     }
 
@@ -676,7 +676,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spHomeWin_hgVisitAdd05);
         }
         return betParamVo;
     }
@@ -787,7 +787,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPShouWin_HGVisitCut05);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spShouWin_hgVisitCut05);
         }
         return betParamVo;
     }
@@ -850,7 +850,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spVisitWin_hgHomeAdd05);
         }
         return betParamVo;
     }
@@ -912,7 +912,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPRangLose_HGHomeCut5);
+            notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spRangLose_hgHomeCut05);
         }
         return betParamVo;
     }
@@ -922,7 +922,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 01,皇冠 全输全赢
      * @param betParamVo
      */
-    public void SP01_HG大15(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP01_HG大15(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -964,7 +965,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
 
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1008,6 +1009,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_15);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1072,7 +1074,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 012,皇冠 全输全赢
      * @param betParamVo
      */
-    public void SP012_HG大25(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大25(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1119,7 +1122,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
 
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1165,6 +1168,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_25);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1241,7 +1245,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 0123,皇冠 大3.5 全输全赢
      * @param betParamVo
      */
-    public void SP012_HG大35(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大35(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1297,7 +1302,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
 
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1343,7 +1348,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_35);
         }
-
+        return betParamTemp;
     }
 
     /**
@@ -1351,7 +1356,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 012,皇冠 大1.5/2, 2球体彩赢，皇冠赢一半
      * @param betParamVo
      */
-    public void SP012_HG大15_2(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大15_2(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1398,7 +1404,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
 
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1445,6 +1451,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_15_2);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1452,7 +1459,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 0123,皇冠 大3/3.5 3球体彩赢，皇冠输一半
      * @param betParamVo
      */
-    public void SP012_HG大3_35(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大3_35(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1511,7 +1519,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1571,7 +1579,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_3_35);
         }
-
+        return betParamTemp;
     }
 
     /**
@@ -1579,7 +1587,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 012,皇冠 大2/2.5, 2球皇冠输一半
      * @param betParamVo
      */
-    public void SP012_HG大2_25(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大2_25(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1632,7 +1641,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1691,6 +1700,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_2_25);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1698,7 +1708,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩小 0123,皇冠 大2.5/3, 3球体彩赢，皇冠赢一半
      * @param betParamVo
      */
-    public void SP012_HG大25_3(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP012_HG大25_3(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1758,7 +1769,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountZero = betParamTemp.getBetAmountZero();
         betAmountOne = betParamTemp.getBetAmountOne();
@@ -1823,6 +1834,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.big_25_3);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1830,7 +1842,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 4567+,皇冠 小3.5 全输全赢
      * @param betParamVo
      */
-    public void SP4567_HG小35(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP4567_HG小35(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -1888,7 +1901,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountFour = betParamTemp.getBetAmountFour();
         betAmountFive = betParamTemp.getBetAmountFive();
@@ -1943,6 +1956,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_35);
         }
+        return betParamTemp;
     }
 
     /**
@@ -1950,7 +1964,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 34567+,皇冠 小2.5 全输全赢
      * @param betParamVo
      */
-    public void SP34567_HG小25(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP34567_HG小25(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -2016,7 +2031,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountThree = betParamTemp.getBetAmountThree();
         betAmountFour = betParamTemp.getBetAmountFour();
@@ -2075,6 +2090,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_25);
         }
+        return betParamTemp;
     }
 
     /**
@@ -2082,7 +2098,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 234567+,皇冠 小2/2.5, 2球体彩赢，皇冠输一半
      * @param betParamVo
      */
-    public void SP234567_HG小2_25(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP234567_HG小2_25(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -2157,7 +2174,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountTwo = betParamTemp.getBetAmountTwo();
         betAmountThree = betParamTemp.getBetAmountThree();
@@ -2233,6 +2250,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_2_25);
         }
+        return betParamTemp;
     }
 
     /**
@@ -2240,7 +2258,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 34567+,皇冠 小2.5/3, 3球体彩赢，皇冠输一半
      * @param betParamVo
      */
-    public void SP34567_HG小25_3(BetParamVo betParamVo) {
+    public BetParamVo SP34567_HG小25_3(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -2308,7 +2326,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountThree = betParamTemp.getBetAmountThree();
         betAmountFour = betParamTemp.getBetAmountFour();
@@ -2379,6 +2397,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_25_3);
         }
+        return betParamTemp;
     }
 
     /**
@@ -2386,7 +2405,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 34567+,皇冠 小3/3.5, 3球体彩赢，皇冠赢一半
      * @param betParamVo
      */
-    public void SP34567_HG小3_35(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP34567_HG小3_35(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -2455,7 +2475,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountThree = betParamTemp.getBetAmountThree();
         betAmountFour = betParamTemp.getBetAmountFour();
@@ -2526,6 +2546,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_3_35);
         }
+        return betParamTemp;
     }
 
     /**
@@ -2533,7 +2554,8 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
      * 体彩大 4567+,皇冠 小3.5/4, 4球体彩赢，皇冠输一半
      * @param betParamVo
      */
-    public void SP4567_HG小35_4(BetParamVo betParamVo) {
+    @Override
+    public BetParamVo SP4567_HG小35_4(BetParamVo betParamVo) {
         Double betAmountHg = betParamVo.getBetAmountHg();
         betParamVo.setBetBaseAmount(betAmountHg);
         // 计算体彩初始投注金额
@@ -2593,7 +2615,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
          */
         betParamTemp = AdaptationAmount.adaptationLastAmount(betParamTemp);
         if (betParamTemp == null) {
-            return;
+            return null;
         }
         betAmountFour = betParamTemp.getBetAmountFour();
         betAmountFive = betParamTemp.getBetAmountFive();
@@ -2657,6 +2679,7 @@ public class HgSpDealerBallServiceImpl implements IHgSPDealerBallService {
             // 消息通知
             notifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.small_35_4);
         }
+        return betParamTemp;
     }
 
     /**

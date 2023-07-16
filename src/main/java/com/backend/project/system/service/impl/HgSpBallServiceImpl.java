@@ -387,7 +387,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgVisit), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPHomeWin_HGVisitWinAndTie);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spHomeWin_hgVisitWinAndTie);
         }
     }
 
@@ -499,7 +499,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgHome, betAmountHgVisit), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPTie_HGHomeWinAndVisitWin);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spTie_hgHomeWinAndVisitWin);
         }
     }
     /** 体彩主队负，皇冠（和局、主队胜） */
@@ -609,7 +609,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHgTie, betAmountHgHome), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPVisitWin_HGHomeWinAndTie);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spVisitWin_hgHomeWinAndTie);
         }
     }
 
@@ -671,7 +671,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spHomeWin_hgVisitAdd05);
         }
         return betParamVo;
     }
@@ -782,7 +782,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPShouWin_HGVisitCut05);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spShouWin_hgVisitCut05);
         }
         return betParamVo;
     }
@@ -845,7 +845,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spVisitWin_hgHomeAdd05);
         }
         return betParamVo;
     }
@@ -907,7 +907,7 @@ public class HgSpBallServiceImpl implements IHgSPBallService {
                     + ",  收益：" + rewardSp.intValue() + ",  收益率：" + CalcUtil.mul(CalcUtil.div(rewardSp, CalcUtil.add(betAmountSp, betAmountHg), 4), 100) + "％";
 
             // 消息通知
-            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.hedge_SPRangLose_HGHomeCut5);
+            nofifyMsg(betParamVo.getSpId(), msg, BetTypeEnum.spRangLose_hgHomeCut05);
         }
         return betParamVo;
     }

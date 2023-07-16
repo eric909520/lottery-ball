@@ -71,8 +71,32 @@ public class BetSPMatchInfo implements Serializable {
     // 皇冠投注金额
     private Double hgAmount;
 
-    // 体彩投注金额
+    // 体彩投注金额 - 单关
     private Double spAmount;
+
+    // 体彩投注金额 - 0球
+    private Double spAmount0;
+
+    // 体彩投注金额 - 1球
+    private Double spAmount1;
+
+    // 体彩投注金额 - 2球
+    private Double spAmount2;
+
+    // 体彩投注金额 - 3球
+    private Double spAmount3;
+
+    // 体彩投注金额 - 4球
+    private Double spAmount4;
+
+    // 体彩投注金额 - 5球
+    private Double spAmount5;
+
+    // 体彩投注金额 - 6球
+    private Double spAmount6;
+
+    // 体彩投注金额 - 7+球
+    private Double spAmount7;
 
     // 皇冠赔率1
     private Double hgOdds1;

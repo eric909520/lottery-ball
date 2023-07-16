@@ -14,6 +14,7 @@ import com.backend.project.system.mapper.NotifyMsgMapper;
 import com.backend.project.system.mapper.SPBetAmountMapper;
 import com.backend.project.system.mapper.SPMatchInfoMapper;
 import com.backend.project.system.service.IHgSPBallService;
+import com.backend.project.system.service.IHgSPDealerBallService;
 import com.backend.project.system.service.ISportsBettingDataService;
 import org.springframework.stereotype.Service;
 
@@ -34,18 +35,16 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
     private SPMatchInfoMapper spMatchInfoMapper;
     @Resource
     private BetSPMatchInfoMapper betSPMatchInfoMapper;
-
     @Resource
     private NotifyMsgMapper notifyMsgMapper;
-
     @Resource
     private IHgSPBallService hgSPBallService;
-
-    @org.springframework.beans.factory.annotation.Value("${tgApi.url}")
-    private String tgUrl;
-
+    @Resource
+    private IHgSPDealerBallService hgSPDealerBallService;
     @Resource
     private SPBetAmountMapper spBetAmountMapper;
+    @org.springframework.beans.factory.annotation.Value("${tgApi.url}")
+    private String tgUrl;
     private Double limitBet = 10000d;
 
 
@@ -407,7 +406,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
     }
 
     /**
-     * 录入皇冠投注数据，计算体彩投注金额
+     * 录入皇冠投注数据，计算体彩投注金额 - 体彩
      * @param betSPMatchInfo
      * @return
      */
@@ -418,7 +417,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         Double hgOdds1 = betSPMatchInfo.getHgOdds1();
         Double hgAmount = betSPMatchInfo.getHgAmount();
         SPMatchInfo spMatchInfo = spMatchInfoMapper.selectById(spId);
-        if (betType.equals(BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05.getValue())) {
+        if (betType.equals(BetTypeEnum.spHomeWin_hgVisitAdd05.getValue())) {
             String win = spMatchInfo.getWin();
             BetParamVo betParamVo = new BetParamVo();
             betParamVo.setBetAmountHg(hgAmount);
@@ -429,7 +428,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             if (betParamResult != null) {
                 betSPMatchInfo.setSpAmount(betParamResult.getBetAmountWin());
             }
-        } else if (betType.equals(BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05.getValue())) {
+        } else if (betType.equals(BetTypeEnum.spVisitWin_hgHomeAdd05.getValue())) {
             String lose = spMatchInfo.getLose();
             BetParamVo betParamVo = new BetParamVo();
             betParamVo.setBetAmountHg(hgAmount);
@@ -440,7 +439,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             if (betParamResult != null) {
                 betSPMatchInfo.setSpAmount(betParamResult.getBetAmountLose());
             }
-        } else if (betType.equals(BetTypeEnum.hedge_SPRangLose_HGHomeCut5.getValue())) {
+        } else if (betType.equals(BetTypeEnum.spRangLose_hgHomeCut05.getValue())) {
             String handicapLose = spMatchInfo.getHandicapLose();
             BetParamVo betParamVo = new BetParamVo();
             betParamVo.setBetAmountHg(hgAmount);
@@ -451,7 +450,7 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             if (betParamResult != null) {
                 betSPMatchInfo.setSpAmount(betParamResult.getBetAmountRangLose());
             }
-        } else if (betType.equals(BetTypeEnum.hedge_SPShouWin_HGVisitCut05.getValue())) {
+        } else if (betType.equals(BetTypeEnum.spShouWin_hgVisitCut05.getValue())) {
             String handicapWin = spMatchInfo.getHandicapWin();
             BetParamVo betParamVo = new BetParamVo();
             betParamVo.setBetAmountHg(hgAmount);
@@ -461,6 +460,246 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
             BetParamVo betParamResult = hgSPBallService.SPShouWin_HGVisitCut05(betParamVo);
             if (betParamResult != null) {
                 betSPMatchInfo.setSpAmount(betParamResult.getBetAmountShouWin());
+            }
+        }
+        int result = betSPMatchInfoMapper.updateBetMatchInfo(betSPMatchInfo);
+        if (result > 0) {
+            return AjaxResult.success();
+        }
+        return AjaxResult.error();
+    }
+
+    /**
+     * 录入皇冠投注数据，计算体彩投注金额 - zhuang
+     * @param betSPMatchInfo
+     * @return
+     */
+    @Override
+    public AjaxResult betInfoInputDealer(BetSPMatchInfo betSPMatchInfo) {
+        String betType = betSPMatchInfo.getBetType();
+        Long spId = betSPMatchInfo.getSpId();
+        Double hgOdds1 = betSPMatchInfo.getHgOdds1();
+        Double hgAmount = betSPMatchInfo.getHgAmount();
+        SPMatchInfo spMatchInfo = spMatchInfoMapper.selectById(spId);
+        BetParamVo betParamVo = new BetParamVo();
+        betParamVo.setBetAmountHg(hgAmount);
+        if (betType.equals(BetTypeEnum.spHomeWin_hgVisitAdd05.getValue())) {
+            String win = spMatchInfo.getWin();
+            betParamVo.setOddsWin(Double.valueOf(win));
+            betParamVo.setVisitAdd05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SPWin_HGVisitAdd05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountWin());
+            }
+        } else if (betType.equals(BetTypeEnum.spVisitWin_hgHomeAdd05.getValue())) {
+            String lose = spMatchInfo.getLose();
+            betParamVo.setOddsLose(Double.valueOf(lose));
+            betParamVo.setHomeAdd05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SPLose_HGHomeAdd05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountLose());
+            }
+        } else if (betType.equals(BetTypeEnum.spRangLose_hgHomeCut05.getValue())) {
+            String handicapLose = spMatchInfo.getHandicapLose();
+            betParamVo.setOddsRangLose(Double.valueOf(handicapLose));
+            betParamVo.setHomeCut05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SPRangLose_HGHomeCut05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountRangLose());
+            }
+        } else if (betType.equals(BetTypeEnum.spShouWin_hgVisitCut05.getValue())) {
+            String handicapWin = spMatchInfo.getHandicapWin();
+            betParamVo.setOddsShouWin(Double.valueOf(handicapWin));
+            betParamVo.setVisitCut05(hgOdds1);
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SPShouWin_HGVisitCut05(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount(betParamResult.getBetAmountShouWin());
+            }
+        } else if (betType.equals(BetTypeEnum.big_15.getValue())) {
+            betParamVo.set大15(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP01_HG大15(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+            }
+        } else if (betType.equals(BetTypeEnum.big_15_2.getValue())) {
+            betParamVo.set大15_2(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大15_2(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+            }
+        } else if (betType.equals(BetTypeEnum.big_25.getValue())) {
+            betParamVo.set大25(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大25(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+            }
+        } else if (betType.equals(BetTypeEnum.big_2_25.getValue())) {
+            betParamVo.set大2_25(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大2_25(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+            }
+        } else if (betType.equals(BetTypeEnum.big_25_3.getValue())) {
+            betParamVo.set大25_3(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大25_3(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+            }
+        } else if (betType.equals(BetTypeEnum.big_35.getValue())) {
+            betParamVo.set大35(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大35(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+            }
+        } else if (betType.equals(BetTypeEnum.big_3_35.getValue())) {
+            betParamVo.set大3_35(hgOdds1);
+            betParamVo.setOddsZero(Double.valueOf(spMatchInfo.getS0()));
+            betParamVo.setOddsOne(Double.valueOf(spMatchInfo.getS1()));
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP012_HG大3_35(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount0(betParamResult.getBetAmountZero());
+                betSPMatchInfo.setSpAmount1(betParamResult.getBetAmountOne());
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+            }
+        } else if (betType.equals(BetTypeEnum.small_25.getValue())) {
+            betParamVo.set小25(hgOdds1);
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP34567_HG小25(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
+            }
+        } else if (betType.equals(BetTypeEnum.small_2_25.getValue())) {
+            betParamVo.set小2_25(hgOdds1);
+            betParamVo.setOddsTwo(Double.valueOf(spMatchInfo.getS2()));
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP234567_HG小2_25(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount2(betParamResult.getBetAmountTwo());
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
+            }
+        } else if (betType.equals(BetTypeEnum.small_25_3.getValue())) {
+            betParamVo.set小25_3(hgOdds1);
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP34567_HG小25_3(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
+            }
+        } else if (betType.equals(BetTypeEnum.small_35.getValue())) {
+            betParamVo.set小35(hgOdds1);
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP4567_HG小35(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
+            }
+        } else if (betType.equals(BetTypeEnum.small_3_35.getValue())) {
+            betParamVo.set小3_35(hgOdds1);
+            betParamVo.setOddsThree(Double.valueOf(spMatchInfo.getS3()));
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP34567_HG小3_35(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount3(betParamResult.getBetAmountThree());
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
+            }
+        } else if (betType.equals(BetTypeEnum.small_35_4.getValue())) {
+            betParamVo.set小35_4(hgOdds1);
+            betParamVo.setOddsFour(Double.valueOf(spMatchInfo.getS4()));
+            betParamVo.setOddsFive(Double.valueOf(spMatchInfo.getS5()));
+            betParamVo.setOddsSix(Double.valueOf(spMatchInfo.getS6()));
+            betParamVo.setOddsSeven(Double.valueOf(spMatchInfo.getS7()));
+            betParamVo.setNotifyFlag(0);
+            BetParamVo betParamResult = hgSPDealerBallService.SP4567_HG小35_4(betParamVo);
+            if (betParamResult != null) {
+                betSPMatchInfo.setSpAmount4(betParamResult.getBetAmountFour());
+                betSPMatchInfo.setSpAmount5(betParamResult.getBetAmountFive());
+                betSPMatchInfo.setSpAmount6(betParamResult.getBetAmountSix());
+                betSPMatchInfo.setSpAmount7(betParamResult.getBetAmountSeven());
             }
         }
         int result = betSPMatchInfoMapper.updateBetMatchInfo(betSPMatchInfo);
@@ -483,35 +722,35 @@ public class SportsBettingDataServiceImpl implements ISportsBettingDataService {
         if(betSPMatchInfo != null){
             /**体彩主胜*/
             if(BetTypeEnum.win.getValue().equals(betSPMatchInfo.getBetType())  //体彩主胜
-               || BetTypeEnum.hedge_SPHomeWin_HGVisitAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主胜，皇冠客+05
-               || BetTypeEnum.hedge_SPHomeWin_HGVisitWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主胜，皇冠客胜&平
+               || BetTypeEnum.spHomeWin_hgVisitAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主胜，皇冠客+05
+               || BetTypeEnum.spHomeWin_hgVisitWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主胜，皇冠客胜&平
                 String winStr = betSPMatchInfo.getWin();
                 generateAmount(betSPMatchInfo, winStr);
 
                 //保存投注额列表
                 /**体彩主平*/
             }else if(BetTypeEnum.draw.getValue().equals(betSPMatchInfo.getBetType())//体彩平
-                || BetTypeEnum.hedge_SPTie_HGHomeWinAndVisitWin.getValue().equals(betSPMatchInfo.getBetType())){//体彩平，皇冠主胜&客胜"
+                || BetTypeEnum.spTie_hgHomeWinAndVisitWin.getValue().equals(betSPMatchInfo.getBetType())){//体彩平，皇冠主胜&客胜"
 
                 String drawStr = betSPMatchInfo.getDraw();
                 generateAmount(betSPMatchInfo, drawStr);
 
                 /**体彩主负*/
             }else if(BetTypeEnum.lose.getValue().equals(betSPMatchInfo.getBetType())//体彩主负
-                || BetTypeEnum.hedge_SPVisitWin_HGHomeAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主负，皇冠主+05胜
-                || BetTypeEnum.hedge_SPVisitWin_HGHomeWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主负，皇冠主胜&平
+                || BetTypeEnum.spVisitWin_hgHomeAdd05.getValue().equals(betSPMatchInfo.getBetType()) //体彩主负，皇冠主+05胜
+                || BetTypeEnum.spVisitWin_hgHomeWinAndTie.getValue().equals(betSPMatchInfo.getBetType())){//体彩主负，皇冠主胜&平
                 String loseStr = betSPMatchInfo.getLose();
                 generateAmount(betSPMatchInfo, loseStr);
 
                 /**主让胜/受球胜*/
             } else if (BetTypeEnum.handicapWin.getValue().equals(betSPMatchInfo.getBetType())//体彩主让胜
-                || BetTypeEnum.hedge_SPShouWin_HGVisitCut05.getValue().equals(betSPMatchInfo.getBetType())){ //主受球胜，皇冠客-05
+                || BetTypeEnum.spShouWin_hgVisitCut05.getValue().equals(betSPMatchInfo.getBetType())){ //主受球胜，皇冠客-05
                 String handicapWinStr = betSPMatchInfo.getHandicapWin();
                 generateAmount(betSPMatchInfo, handicapWinStr);
 
                 /**主让负/受球负*/
             }else if(BetTypeEnum.handicapLose.getValue().equals(betSPMatchInfo.getBetType())//体彩主让负
-                || BetTypeEnum.hedge_SPRangLose_HGHomeCut5.getValue().equals(betSPMatchInfo.getBetType())){//体彩主让球负，皇冠主-05
+                || BetTypeEnum.spRangLose_hgHomeCut05.getValue().equals(betSPMatchInfo.getBetType())){//体彩主让球负，皇冠主-05
                 String getHandicapLoseStr = betSPMatchInfo.getHandicapLose();
                 generateAmount(betSPMatchInfo, getHandicapLoseStr);
             }
