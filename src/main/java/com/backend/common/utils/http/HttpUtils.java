@@ -20,8 +20,6 @@ import org.dom4j.Element;
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -434,11 +432,8 @@ public class HttpUtils {
      * @param headers 请求头参数
      * @param content 参数
      * @return
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     * @throws IOException
      */
-    public static String sendJsonToHttpsPost(String url, HashMap<String, String> headers, String content) {
+    public static String doPostJson1(String url, HashMap<String, String> headers, String content) throws Exception {
         try {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, new TrustManager[]{new TrustAnyTrustManager()},
@@ -454,6 +449,7 @@ public class HttpUtils {
             for (String key : headers.keySet()) {
                 conn.setRequestProperty(key, headers.get(key));
             }
+            conn.setRequestMethod("POST");
             conn.connect();
             DataOutputStream out = new DataOutputStream(conn.getOutputStream());
             out.write(content.getBytes("UTF8"));
@@ -471,10 +467,47 @@ public class HttpUtils {
                 is.close();
                 return outStream.toString();
             }
+            return null;
         } catch (Exception e) {
-            log.info("sendJsonToHttpsPost exception ----->>>>", e);
+            throw new RuntimeException("doPostJson 请求异常---" + e);
         }
-        return null;
+    }
+
+    /**
+     * post方式请求服务器(https协议)
+     *
+     * @param link     接口地址
+     * @param headers 请求头参数
+     * @param content 参数
+     * @return
+     */
+    public static String doPostJson(String link, HashMap<String, String> headers, String content) throws Exception {
+        try {
+            URL url = new URL(link);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            con.setRequestProperty("Accept", "application/json");
+            for (String key : headers.keySet()) {
+                con.setRequestProperty(key, headers.get(key));
+            }
+            con.setDoOutput(true);
+            try(OutputStream os = con.getOutputStream()) {
+                byte[] input = content.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            try(BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                return response.toString();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("doPostJson 请求异常---" + e);
+        }
     }
 
     private static class TrustAnyTrustManager implements X509TrustManager {
@@ -502,7 +535,7 @@ public class HttpUtils {
     public static void main(String[] args) {
         String url = "https://svr.hahrsp.com/sport/get_match_list";
         HashMap<String, String> headers = new HashMap<>();
-        headers.put("Token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTA1MjI1ODksImlzcyI6IkJsYWRlTWFzdGVyIiwibmJmIjoxNjkwNDM2MTc5LCJ1aWQiOjk2Mzg4Nywic2VlZCI6InM4NGhnOHQ0ZHVvbXp3NGYifQ.QAGc-xpyMmZL4a_I0eDJvj4QN5fdxESwELldgGE9u-s");
+        headers.put("Token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTA1Mzk4MjYsImlzcyI6IkJsYWRlTWFzdGVyIiwibmJmIjoxNjkwNDUzNDE2LCJ1aWQiOjk2Mzg4Nywic2VlZCI6IndwcWtycnQ2cDZmYTQwbmcifQ.dIkYs9EfhpZyof4Ii7g4aJgsjcmlHfFtWmCBpOYwjl8");
         headers.put("Uid", "963887");
         String json = "{\n" +
                 "  \"SportType\": 1,\n" +
@@ -511,7 +544,12 @@ public class HttpUtils {
                 "  \"Uid\": 963887,\n" +
                 "  \"Seq\": 10027\n" +
                 "}";
-        String s = sendJsonToHttpsPost(url, headers, json);
+        String s = null;
+        try {
+            s = doPostJson(url, headers, json);
+        } catch (Exception e) {
+            log.info("doPostJson exception ----->>>>", e);
+        }
         System.out.println(s);
     }
 

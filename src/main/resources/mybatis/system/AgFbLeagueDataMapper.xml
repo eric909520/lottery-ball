@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.AgFbLeagueDataMapper">
+
+    <resultMap type="AgFbLeagueData" id="AgFbLeagueDataResult">
+        <result property="id" column="id"/>
+        <result property="sportType" column="sport_type"/>
+        <result property="leagueName" column="league_name"/>
+        <result property="leagueId" column="league_id"/>
+        <result property="matchId" column="match_id"/>
+        <result property="kickoffTime" column="kickoff_time"/>
+        <result property="kickoffTimestamp" column="kickoff_timestamp"/>
+        <result property="teamH" column="team_h"/>
+        <result property="teamHId" column="team_h_id"/>
+        <result property="teamA" column="team_a"/>
+        <result property="teamAId" column="team_a_id"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <sql id="selectAgLeagueDataVo">
+        select id, sport_type, league_name, league_id, match_id, kickoff_time, kickoff_timestamp, team_h, team_h_id, team_a, team_a_id, status
+        from ag_fb_league_data
+    </sql>
+
+    <select id="selectByMatchId" parameterType="string" resultType="integer">
+        select 1 from ag_fb_league_data where match_id = #{matchId}
+    </select>
+
+    <insert id="insertData" parameterType="AgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
+        insert into ag_fb_league_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sportType != null">sport_type,
+            </if>
+            <if test="leagueName != null  and leagueName != ''">league_name,
+            </if>
+            <if test="leagueId != null  and leagueId != ''">league_id,
+            </if>
+            <if test="matchId != null  and matchId != ''">match_id,
+            </if>
+            <if test="kickoffTime != null  and kickoffTime != ''">kickoff_time,
+            </if>
+            <if test="kickoffTimestamp != null  and kickoffTimestamp != ''">kickoff_timestamp,
+            </if>
+            <if test="teamH != null  and teamH != ''">team_h,
+            </if>
+            <if test="teamHId != null  and teamHId != ''">team_h_id,
+            </if>
+            <if test="teamA != null  and teamA != ''">team_a,
+            </if>
+            <if test="teamAId != null  and teamAId != ''">team_a_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sportType != null">#{sportType},
+            </if>
+            <if test="leagueName != null  and leagueName != ''">#{leagueName},
+            </if>
+            <if test="leagueId != null  and leagueId != ''">#{leagueId},
+            </if>
+            <if test="matchId != null  and matchId != ''">#{matchId},
+            </if>
+            <if test="kickoffTime != null  and kickoffTime != ''">#{kickoffTime},
+            </if>
+            <if test="kickoffTimestamp != null  and kickoffTimestamp != ''">#{kickoffTimestamp},
+            </if>
+            <if test="teamH != null  and teamH != ''">#{teamH},
+            </if>
+            <if test="teamHId != null  and teamHId != ''">#{teamHId},
+            </if>
+            <if test="teamA != null  and teamA != ''">#{teamA},
+            </if>
+            <if test="teamAId != null  and teamAId != ''">#{teamAId},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="rollStatus" parameterType="long">
+        update ag_fb_league_data set status = 1 where status = 0 and #{currentTime} > kickoff_timestamp
+    </update>
+
+    <update id="finishStatus" parameterType="long">
+        update ag_fb_league_data set status = 2 where status = 1 and #{currentTime} - kickoff_timestamp > 7200
+    </update>
+
+</mapper>

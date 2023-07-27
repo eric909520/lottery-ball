@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  *
  * @author
- * @date 2020-06-24
  */
 @Data
 public class HgApi extends BaseEntity {
