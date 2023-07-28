@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.backend.project.system.mapper.AgFbLeagueDataMapper">
+<mapper namespace="com.backend.project.system.mapper.AgLeagueDataMapper">
 
-    <resultMap type="AgFbLeagueData" id="AgFbLeagueDataResult">
+    <resultMap type="AgLeagueData" id="AgLeagueDataResult">
         <result property="id" column="id"/>
         <result property="sportType" column="sport_type"/>
         <result property="leagueName" column="league_name"/>
@@ -21,15 +21,15 @@
 
     <sql id="selectAgLeagueDataVo">
         select id, sport_type, league_name, league_id, match_id, kickoff_time, kickoff_timestamp, team_h, team_h_id, team_a, team_a_id, status
-        from ag_fb_league_data
+        from ag_league_data
     </sql>
 
     <select id="selectByMatchId" parameterType="string" resultType="integer">
-        select 1 from ag_fb_league_data where match_id = #{matchId}
+        select 1 from ag_league_data where match_id = #{matchId}
     </select>
 
-    <insert id="insertData" parameterType="AgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
-        insert into ag_fb_league_data
+    <insert id="insertData" parameterType="AgLeagueData" useGeneratedKeys="true" keyProperty="id">
+        insert into ag_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sportType != null">sport_type,
             </if>
@@ -77,11 +77,11 @@
     </insert>
 
     <update id="rollStatus" parameterType="long">
-        update ag_fb_league_data set status = 1 where status = 0 and #{currentTime} > kickoff_timestamp
+        update ag_league_data set status = 1 where status = 0 and #{currentTime} > kickoff_timestamp
     </update>
 
     <update id="finishStatus" parameterType="long">
-        update ag_fb_league_data set status = 2 where status = 1 and #{currentTime} - kickoff_timestamp > 7200
+        update ag_league_data set status = 2 where status = 1 and #{currentTime} - kickoff_timestamp > 7200
     </update>
 
 </mapper>

@@ -5,12 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.backend.common.utils.AgApiUtils;
 import com.backend.project.system.domain.AgApi;
-import com.backend.project.system.domain.AgFbLeagueData;
+import com.backend.project.system.domain.AgLeagueData;
 import com.backend.project.system.enums.AgApiEnum;
 import com.backend.project.system.enums.AgMarketTypeEnum;
 import com.backend.project.system.enums.AgSportTypeEnum;
 import com.backend.project.system.mapper.AgApiMapper;
-import com.backend.project.system.mapper.AgFbLeagueDataMapper;
+import com.backend.project.system.mapper.AgLeagueDataMapper;
 import com.backend.project.system.service.IAgScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
     @Resource
     private AgApiMapper agApiMapper;
     @Resource
-    private AgFbLeagueDataMapper agFbLeagueDataMapper;
+    private AgLeagueDataMapper agLeagueDataMapper;
 
     /**
      * polling today football league data
@@ -37,7 +37,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             agApi.setSportType(AgSportTypeEnum.football.getType());
             agApi.setMarketType(AgMarketTypeEnum.today.getType());
             agApi.setPageIndex(1);
-            JSONObject jsonObject = getTodayFootballLeagueData(agApi);
+            JSONObject jsonObject = getFootballLeagueData(agApi);
             if (jsonObject == null) return;
             int totalPage = jsonObject.getIntValue("TotalPage");
             if (totalPage < 2) {
@@ -45,14 +45,14 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             }
             for (int i = 2; i <= totalPage; i++) {
                 agApi.setPageIndex(i);
-                getTodayFootballLeagueData(agApi);
+                getFootballLeagueData(agApi);
             }
         } catch (Exception e) {
             log.info("ag - pollingTodayFootballLeagueData exception ----->>>>", e);
         }
     }
 
-    public JSONObject getTodayFootballLeagueData(AgApi agApi) {
+    public JSONObject getFootballLeagueData(AgApi agApi) {
         String match_list = AgApiUtils.get_match_list(agApi);
         JSONObject jsonObject =  JSON.parseObject(match_list);
         int ret = jsonObject.getIntValue("Ret");
@@ -65,7 +65,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             JSONObject match = JSON.parseObject(iterator.next().toString());
             String leagueName = match.getString("LeagueName");
             String matchID = match.getString("MatchID");
-            Integer exist = agFbLeagueDataMapper.selectByMatchId(matchID);
+            Integer exist = agLeagueDataMapper.selectByMatchId(matchID);
             if (exist != null) {
                 continue;
             }
@@ -76,9 +76,9 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             String homeTeamID = match.getString("HomeTeamID");
             String awayTeamName = match.getString("AwayTeamName");
             String awayTeamID = match.getString("AwayTeamID");
-            AgFbLeagueData agFbLeagueData = new AgFbLeagueData(AgSportTypeEnum.football.getType(), leagueName, leagueID
+            AgLeagueData agLeagueData = new AgLeagueData(AgSportTypeEnum.football.getType(), leagueName, leagueID
                     , matchID, kickoffTime, kickoffTimeStamp, homeTeamName, homeTeamID, awayTeamName, awayTeamID);
-            agFbLeagueDataMapper.insertData(agFbLeagueData);
+            agLeagueDataMapper.insertData(agLeagueData);
         }
         return jsonObject;
     }
@@ -93,7 +93,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             agApi.setSportType(AgSportTypeEnum.football.getType());
             agApi.setMarketType(AgMarketTypeEnum.early.getType());
             agApi.setPageIndex(1);
-            JSONObject jsonObject = getTodayFootballLeagueData(agApi);
+            JSONObject jsonObject = getFootballLeagueData(agApi);
             if (jsonObject == null) return;
             int totalPage = jsonObject.getIntValue("TotalPage");
             if (totalPage < 2) {
@@ -101,7 +101,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
             }
             for (int i = 2; i <= totalPage; i++) {
                 agApi.setPageIndex(i);
-                getTodayFootballLeagueData(agApi);
+                getFootballLeagueData(agApi);
             }
         } catch (Exception e) {
             log.info("ag - pollingEarlyFootballLeagueData exception ----->>>>", e);
@@ -113,7 +113,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
      */
     public void rollStatus() {
         long currentTime = System.currentTimeMillis() / 1000;
-        agFbLeagueDataMapper.rollStatus(currentTime);
+        agLeagueDataMapper.rollStatus(currentTime);
     }
 
     /**
@@ -121,7 +121,7 @@ public class AgScheduleServiceImpl implements IAgScheduleService {
      */
     public void finishStatus() {
         long currentTime = System.currentTimeMillis() / 1000;
-        agFbLeagueDataMapper.finishStatus(currentTime);
+        agLeagueDataMapper.finishStatus(currentTime);
     }
 
 }

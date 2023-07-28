@@ -25,8 +25,8 @@ public class AgSchedule {
      * 今日足球联赛数据
      * task - polling today football league data
      */
-//    @Scheduled(cron="0 0/30 * * * ?")
-    @Scheduled(fixedDelay = 20000L)
+    @Scheduled(cron="0 0/30 * * * ?")
+//    @Scheduled(fixedDelay = 20000L)
     private void pollingFootballDataToday() {
 //        threadPoolConfig.threadPoolExecutor().submit(() -> {
         agScheduleService.pollingTodayFootballLeagueData();
@@ -37,8 +37,8 @@ public class AgSchedule {
      * 早盘足球联赛数据
      * task - polling early football league data
      */
-//    @Scheduled(cron="0 5 0/6 * * ? ")
-    @Scheduled(fixedDelay = 20000L)
+    @Scheduled(cron="0 5 0/6 * * ? ")
+//    @Scheduled(fixedDelay = 20000L)
     private void pollingFootballDataEarly() {
 //        threadPoolConfig.threadPoolExecutor().submit(() -> {
         agScheduleService.pollingEarlyFootballLeagueData();
@@ -59,7 +59,7 @@ public class AgSchedule {
     /**
      * 球赛结束
      */
-    @Scheduled(cron="0 0/30 * * * ? ")
+    @Scheduled(cron="10 0/30 * * * ? ")
 //    @Scheduled(fixedDelay = 20000L)
     private void finishStatus() {
 //        threadPoolConfig.threadPoolExecutor().submit(() -> {

@@ -1,16 +1,16 @@
 package com.backend.project.system.mapper;
 
-import com.backend.project.system.domain.AgFbLeagueData;
+import com.backend.project.system.domain.AgLeagueData;
 
 /**
  *
  * @author
  */
-public interface AgFbLeagueDataMapper {
+public interface AgLeagueDataMapper {
 
     public Integer selectByMatchId(String matchId);
 
-    public int insertData(AgFbLeagueData agFbLeagueData);
+    public int insertData(AgLeagueData agLeagueData);
 
     /**
      * 球赛开始 更新状态 - 滚球

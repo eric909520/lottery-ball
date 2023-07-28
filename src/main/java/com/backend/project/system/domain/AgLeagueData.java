@@ -7,7 +7,7 @@ import lombok.Data;
  * @author
  */
 @Data
-public class AgFbLeagueData extends BaseEntity {
+public class AgLeagueData extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -34,9 +34,9 @@ public class AgFbLeagueData extends BaseEntity {
 
     private Integer status;
 
-    public AgFbLeagueData() {}
+    public AgLeagueData() {}
 
-    public AgFbLeagueData(Integer sportType, String leagueName, String leagueId, String matchId, String kickoffTime
+    public AgLeagueData(Integer sportType, String leagueName, String leagueId, String matchId, String kickoffTime
             , Long kickoffTimestamp, String teamH, String teamHId, String teamA, String teamAId) {
         this.sportType = sportType;
         this.leagueName = leagueName;
