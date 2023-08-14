@@ -34,4 +34,26 @@ public interface IHgScheduleService {
      */
     public void hedge_Hg_SP_data_012_dealer();
 
+    /**
+     * 今日足球数据 - AG
+     * polling today football data
+     */
+    public void pollingFootballDataToday_AG();
+
+    /**
+     * 早盘足球数据 - AG
+     * polling early football data
+     */
+    public void pollingFootballDataEarly_AG();
+
+    /**
+     * hg - ag 数据计算 - 单关
+     */
+    public void hedge_Hg_Ag_data_single();
+
+    /**
+     * hg - ag 数据计算 - 012
+     */
+    public void hedge_Hg_Ag_data_012();
+
 }

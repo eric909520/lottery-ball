@@ -16,4 +16,6 @@ public interface HgFbLeagueDataMapper {
      */
     public int insertData(HgFbLeagueData hgFbLeagueData);
 
+    public HgFbLeagueData selectCondition(@Param("leagueName") String leagueName, @Param("teamH") String teamH, @Param("teamC") String teamC);
+
 }

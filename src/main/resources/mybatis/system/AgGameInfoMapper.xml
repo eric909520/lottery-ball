@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.AgGameInfoMapper">
+
+    <resultMap type="AgGameInfo" id="AgGameInfoResult">
+        <result property="id" column="id"/>
+        <result property="matchId" column="match_id"/>
+        <result property="myselfH" column="myself_h"/>
+        <result property="myselfN" column="myself_n"/>
+        <result property="myselfA" column="myself_a"/>
+        <result property="homeAdd" column="home_add"/>
+        <result property="homeCut" column="home_cut"/>
+        <result property="awayAdd" column="away_add"/>
+        <result property="awayCut" column="away_cut"/>
+        <result property="s0" column="s0"/>
+        <result property="s1" column="s1"/>
+        <result property="s2" column="s2"/>
+        <result property="s3" column="s3"/>
+        <result property="s4" column="s4"/>
+        <result property="s5" column="s5"/>
+        <result property="s6" column="s6"/>
+    </resultMap>
+
+    <sql id="selectAppConfigVo">
+        select id, match_id, myself_h, myself_n, myself_a, home_add, home_cut, away_add, away_cut
+             , s0, s1, s2, s3, s4, s5, s6 from ag_game_info
+    </sql>
+
+    <select id="selectExisit" parameterType="string" resultType="integer">
+        select 1 from ag_league_data where match_id = #{matchId}
+    </select>
+
+    <select id="selectByMatchId" parameterType="string" resultMap="AgGameInfoResult">
+        <include refid="selectAppConfigVo"></include>
+        where match_id = #{matchId}
+    </select>
+
+    <insert id="insertData" parameterType="AgGameInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into ag_game_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="matchId != null  and matchId != ''">match_id,
+            </if>
+            <if test="myselfH != null  and myselfH != ''">myself_h,
+            </if>
+            <if test="myselfN != null  and myselfN != ''">myself_n,
+            </if>
+            <if test="myselfA != null  and myselfA != ''">myself_a,
+            </if>
+            <if test="homeAdd != null  and homeAdd != ''">home_add,
+            </if>
+            <if test="homeCut != null  and homeCut != ''">home_cut,
+            </if>
+            <if test="awayAdd != null  and awayAdd != ''">away_add,
+            </if>
+            <if test="awayCut != null  and awayCut != ''">away_cut,
+            </if>
+            <if test="s0 != null  and s0 != ''">s0,
+            </if>
+            <if test="s1 != null  and s1 != ''">s1,
+            </if>
+            <if test="s2 != null  and s2 != ''">s2,
+            </if>
+            <if test="s3 != null  and s3 != ''">s3,
+            </if>
+            <if test="s4 != null  and s4 != ''">s4,
+            </if>
+            <if test="s5 != null  and s5 != ''">s5,
+            </if>
+            <if test="s6 != null  and s6 != ''">s6,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="matchId != null  and matchId != ''">#{matchId},
+            </if>
+            <if test="myselfH != null  and myselfH != ''">#{myselfH},
+            </if>
+            <if test="myselfN != null  and myselfN != ''">#{myselfN},
+            </if>
+            <if test="myselfA != null  and myselfA != ''">#{myselfA},
+            </if>
+            <if test="homeAdd != null  and homeAdd != ''">#{homeAdd},
+            </if>
+            <if test="homeCut != null  and homeCut != ''">#{homeCut},
+            </if>
+            <if test="awayAdd != null  and awayAdd != ''">#{awayAdd},
+            </if>
+            <if test="awayCut != null  and awayCut != ''">#{awayCut},
+            </if>
+            <if test="s0 != null  and s0 != ''">#{s0},
+            </if>
+            <if test="s1 != null  and s1 != ''">#{s1},
+            </if>
+            <if test="s2 != null  and s2 != ''">#{s2},
+            </if>
+            <if test="s3 != null  and s3 != ''">#{s3},
+            </if>
+            <if test="s4 != null  and s4 != ''">#{s4},
+            </if>
+            <if test="s5 != null  and s5 != ''">#{s5},
+            </if>
+            <if test="s6 != null  and s6 != ''">#{s6},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateData" parameterType="AgGameInfo">
+        update ag_game_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="matchId != null  and matchId != ''">match_id = #{matchId},
+            </if>
+            <if test="myselfH != null  and myselfH != ''">myself_h = #{myselfH},
+            </if>
+            <if test="myselfN != null  and myselfN != ''">myself_n = #{myselfN},
+            </if>
+            <if test="myselfA != null  and myselfA != ''">myself_a = #{myselfA},
+            </if>
+            <if test="homeAdd != null  and homeAdd != ''">home_add = #{homeAdd},
+            </if>
+            <if test="homeCut != null  and homeCut != ''">home_cut = #{homeCut},
+            </if>
+            <if test="awayAdd != null  and awayAdd != ''">away_add = #{awayAdd},
+            </if>
+            <if test="awayCut != null  and awayCut != ''">away_cut = #{awayCut},
+            </if>
+            <if test="s0 != null  and s0 != ''">s0 = #{s0},
+            </if>
+            <if test="s1 != null  and s1 != ''">s1 = #{s1},
+            </if>
+            <if test="s2 != null  and s2 != ''">s2 = #{s2},
+            </if>
+            <if test="s3 != null  and s3 != ''">s3 = #{s3},
+            </if>
+            <if test="s4 != null  and s4 != ''">s4 = #{s4},
+            </if>
+            <if test="s5 != null  and s5 != ''">s5 = #{s5},
+            </if>
+            <if test="s6 != null  and s6 != ''">s6 = #{s6},
+            </if>
+        </trim>
+        where match_id = #{matchId}
+    </update>
+
+</mapper>

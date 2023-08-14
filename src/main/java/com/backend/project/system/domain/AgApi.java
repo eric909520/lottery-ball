@@ -26,4 +26,6 @@ public class AgApi extends BaseEntity {
 
     private Integer pageIndex;
 
+    private String matchId;
+
 }

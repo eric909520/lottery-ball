@@ -46,6 +46,16 @@ public class AgSchedule {
     }
 
     /**
+     * 获取比赛信息
+     */
+    @Scheduled(fixedDelay = 30000L)
+    private void getGameInfo() {
+//        threadPoolConfig.threadPoolExecutor().submit(() -> {
+        agScheduleService.getGameInfo();
+//        });
+    }
+
+    /**
      * 开赛 - 滚球
      */
     @Scheduled(cron="10 0/30 * * * ? ")

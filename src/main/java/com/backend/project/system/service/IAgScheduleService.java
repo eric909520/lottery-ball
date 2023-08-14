@@ -15,6 +15,11 @@ public interface IAgScheduleService {
     public void pollingEarlyFootballLeagueData();
 
     /**
+     * 比赛信息
+     */
+    public void getGameInfo();
+
+    /**
      * 球赛开始 更新状态 - 滚球
      */
     public void rollStatus();

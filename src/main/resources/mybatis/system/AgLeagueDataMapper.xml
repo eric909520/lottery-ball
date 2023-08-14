@@ -28,6 +28,16 @@
         select 1 from ag_league_data where match_id = #{matchId}
     </select>
 
+    <select id="selectAll" resultMap="AgLeagueDataResult">
+        <include refid="selectAgLeagueDataVo"></include>
+        where status = 0
+    </select>
+
+    <select id="selectNormalList" resultMap="AgLeagueDataResult">
+        <include refid="selectAgLeagueDataVo"></include>
+        where status != 2
+    </select>
+
     <insert id="insertData" parameterType="AgLeagueData" useGeneratedKeys="true" keyProperty="id">
         insert into ag_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">

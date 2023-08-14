@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.backend.project.system.mapper.DictTeamHgAgMapper">
+
+    <select id="selectByAg" parameterType="String" resultType="string">
+        select hg from dict_team_hg_ag
+        where ag = #{ag};
+    </select>
+
+</mapper>

@@ -35,6 +35,11 @@
         where sp_id = #{spId}
     </select>
 
+    <select id="selectCondition" parameterType="string" resultMap="HgFbLeagueDataResult">
+        <include refid="selectHgLeagueDataVo"/>
+        where league_name = #{leagueName} and team_h = #{teamH} and team_c = #{teamC}
+    </select>
+
     <insert id="insertData" parameterType="HgFbLeagueData" useGeneratedKeys="true" keyProperty="id">
         insert into hg_fb_league_data
         <trim prefix="(" suffix=")" suffixOverrides=",">

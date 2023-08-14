@@ -39,7 +39,7 @@ public class AgApiUtils {
     }
 
     /**
-     * 比赛列表
+     * 比赛信息
      * @param agApi
      * @return
      */
@@ -50,11 +50,8 @@ public class AgApiUtils {
             headerMap.put("Token", agApi.getToken());
             headerMap.put("Uid", agApi.getUId());
             String json = "{\n" +
-                    "  \"SportType\": " + agApi.getSportType() +
-                    "  \"MarketType\": " + agApi.getMarketType() +
-                    "  \"PageIndex\": " + agApi.getPageIndex() +
-                    "  \"Uid\": " + agApi.getUId() +
-                    "  \"Seq\": 10017\n" +
+                    "  \"MatchID\": " + agApi.getMatchId() + "," +
+                    "  \"IsParlay\": false\n" +
                     "}";
             String data = HttpUtils.doPostJson(url, headerMap, json);
             return data;
