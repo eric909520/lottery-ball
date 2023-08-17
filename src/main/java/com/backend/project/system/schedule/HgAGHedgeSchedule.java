@@ -5,6 +5,7 @@ import com.backend.project.system.service.IHgScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 
@@ -25,7 +26,7 @@ public class HgAGHedgeSchedule {
      * hg - sp 数据计算 - 单关
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 120000L)
+    @Scheduled(fixedDelay = 120000L)
     private void hedge_Hg_SP_data_single() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_Ag_data_single();
@@ -36,7 +37,7 @@ public class HgAGHedgeSchedule {
      * hg - sp 数据计算 - 012
      */
     //    @Scheduled(cron="0 0/1 * * * ?")
-//    @Scheduled(fixedDelay = 130000L)
+    @Scheduled(fixedDelay = 130000L)
     private void hedge_Hg_SP_data_012() {
         threadPoolConfig.threadPoolExecutor().submit(() -> {
             hgScheduleService.hedge_Hg_Ag_data_012();

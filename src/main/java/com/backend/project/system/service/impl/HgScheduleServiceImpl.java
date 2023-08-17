@@ -836,7 +836,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
      * polling today football data AG
      */
     @Override
-    public void pollingFootballDataToday_AG() {
+    public void pollingFootballDataToday_All() {
         try {
             HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
             HgApi hgApi2 = hgApiMapper.selectByP(HgApiEnum.get_game_list.getApi());
@@ -949,7 +949,7 @@ public class HgScheduleServiceImpl implements IHgScheduleService {
      * polling early football data
      */
     @Override
-    public void pollingFootballDataEarly_AG() {
+    public void pollingFootballDataEarly_All() {
         try {
             HgApi hgApi1 = hgApiMapper.selectByP(HgApiEnum.get_league_list_All.getApi());
             HgApi hgApi2 = hgApiMapper.selectByP(HgApiEnum.get_game_list.getApi());

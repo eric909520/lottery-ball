@@ -38,13 +38,13 @@ public interface IHgScheduleService {
      * 今日足球数据 - AG
      * polling today football data
      */
-    public void pollingFootballDataToday_AG();
+    public void pollingFootballDataToday_All();
 
     /**
      * 早盘足球数据 - AG
      * polling early football data
      */
-    public void pollingFootballDataEarly_AG();
+    public void pollingFootballDataEarly_All();
 
     /**
      * hg - ag 数据计算 - 单关
